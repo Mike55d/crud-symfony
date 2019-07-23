@@ -49,10 +49,6 @@ class ChildsController extends Controller
     public function newAction(Request $request)
     {
         $em =$this->getDoctrine()->getManager(); 
-        //calcular edad
-        $cumpleanos = new \DateTime("1996-08-23");
-        $hoy = new \DateTime();
-        $edad = $hoy->diff($cumpleanos);
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
@@ -63,6 +59,10 @@ class ChildsController extends Controller
             $child = new Childs;
             $child->setName($request->get('name'));
             $child->setBirthday(new \DateTime($request->get('date')));
+            //calcular edad de la fecha de nacimiento
+            $cumpleaños = new \DateTime($request->get('date'));
+            $hoy = new \DateTime();
+            $edad = $hoy->diff($cumpleaños);
             $child->setAge($edad->y);
             $child->setPhone($request->get('phone'));
             $child->setEmail($request->get('email'));
@@ -110,10 +110,6 @@ class ChildsController extends Controller
     public function editAction(Request $request , Childs $child )
     {
         $em =$this->getDoctrine()->getManager(); 
-        //calcular edad
-        $cumpleanos = new \DateTime("1996-08-23");
-        $hoy = new \DateTime();
-        $edad = $hoy->diff($cumpleanos);
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
@@ -123,6 +119,10 @@ class ChildsController extends Controller
         if ($request->get('name')) {
             $child->setName($request->get('name'));
             $child->setBirthday(new \DateTime($request->get('date')));
+             //calcular edad de la fecha de nacimiento
+            $cumpleaños = new \DateTime($request->get('date'));
+            $hoy = new \DateTime();
+            $edad = $hoy->diff($cumpleaños);
             $child->setAge($edad->y);
             $child->setPhone($request->get('phone'));
             $child->setEmail($request->get('email'));
