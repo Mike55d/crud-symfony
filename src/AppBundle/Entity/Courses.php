@@ -28,6 +28,12 @@ class Courses
      */
     private $name;
 
+    /**
+    * @ORM\ManyToOne(targetEntity="Sede")
+    * @ORM\JoinColumn(name="sede", referencedColumnName="id")
+    */
+    private $sede;
+
 
     /**
      * Get id
@@ -62,5 +68,28 @@ class Courses
     {
         return $this->name;
     }
-}
 
+    /**
+     * Set sede
+     *
+     * @param \AppBundle\Entity\Sede $sede
+     *
+     * @return Courses
+     */
+    public function setSede(\AppBundle\Entity\Sede $sede = null)
+    {
+        $this->sede = $sede;
+
+        return $this;
+    }
+
+    /**
+     * Get sede
+     *
+     * @return \AppBundle\Entity\Sede
+     */
+    public function getSede()
+    {
+        return $this->sede;
+    }
+}

@@ -35,6 +35,12 @@ class Route
      */
     private $description;
 
+    /**
+    * @ORM\ManyToOne(targetEntity="Sede")
+    * @ORM\JoinColumn(name="sede", referencedColumnName="id")
+    */
+    private $sede;
+
 
     /**
      * Get id
@@ -93,5 +99,28 @@ class Route
     {
         return $this->description;
     }
-}
 
+    /**
+     * Set sede
+     *
+     * @param \AppBundle\Entity\Sede $sede
+     *
+     * @return Route
+     */
+    public function setSede(\AppBundle\Entity\Sede $sede = null)
+    {
+        $this->sede = $sede;
+
+        return $this;
+    }
+
+    /**
+     * Get sede
+     *
+     * @return \AppBundle\Entity\Sede
+     */
+    public function getSede()
+    {
+        return $this->sede;
+    }
+}

@@ -1,0 +1,45 @@
+.content{
+	padding-top: 50px;
+}
+
+.image{
+	min-height: 200px;
+	margin-bottom: 10px;
+	padding-top: 20px;
+}
+
+.activo{
+	margin-top: 5px;
+	font-weight: bold;
+	padding-top: 15px;
+}
+
+.mr-10{
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.mb-10{
+	margin-bottom: 5px;
+}
+
+.mt-10{
+	margin-top: 15px;
+}
+
+.m-r-10{
+	margin-right: 15px;
+}
+
+.max{
+	max-height: 60px;
+	width: auto;
+}
+
+.max:hover{
+	max-height: 180px;
+	width: auto;
+	position: absolute;
+	right: 0;
+	z-index: 1000;
+}

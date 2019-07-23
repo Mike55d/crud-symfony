@@ -1,0 +1,58 @@
+{% extends "::base.html.twig" %}
+{% block css %}
+<!-- DataTables CSS -->
+<link href="{{ asset ('sb-admin/vendor/datatables-plugins/dataTables.bootstrap.css')}}" rel="stylesheet">
+<!-- DataTables Responsive CSS -->
+<link href="{{ asset ('sb-admin/vendor/datatables-responsive/dataTables.responsive.css')}}" rel="stylesheet">
+{% endblock %}
+{% block body %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Listado de niños
+	</div>
+		<div class="panel-body">
+			<table class="table table-striped table-bordered table-hover" id="tableChilds">
+				<thead>
+					<tr>
+						<th>Nombre</th>
+						<th>Correo</th>
+						<th>Edad</th>
+						<th>Telefono</th>
+						<th>Foto</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody class="text-center">
+					{% for child in childs %}
+					    <tr>
+					    	<td>{{child.name}}</td>
+					    	<td>{{child.email}}</td>
+					    	<td>{{child.age}}</td>
+					    	<td>{{child.phone}}</td>
+					    	<td>
+					    		<img class=" max" src="{{ asset ('img/allImg/'~child.image)}}" alt="">
+					    	</td>
+					    	<td>
+					    		<a href="{{ path ('childs_edit',{id:child.id})}}" class="btn btn-sm btn-warning">Editar</a>
+					    		<a href="{{ path ('childs_del',{id:child.id})}}" class="btn btn-sm btn-danger">Eliminar</a>
+					    	</td>
+					    </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<!-- DataTables JavaScript -->
+<script src="{{ asset ('sb-admin/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{ asset ('sb-admin/vendor/datatables-plugins/dataTables.bootstrap.min.js')}}"></script>
+
+ <script>
+    $(document).ready(function() {
+        $('#tableChilds').DataTable({
+            responsive: true
+        });
+    });
+    </script>
+{% endblock %}

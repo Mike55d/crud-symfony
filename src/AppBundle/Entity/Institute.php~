@@ -99,28 +99,5 @@ class Institute
     {
         return $this->address;
     }
-
-    /**
-     * Set sede
-     *
-     * @param \AppBundle\Entity\Sede $sede
-     *
-     * @return Institute
-     */
-    public function setSede(\AppBundle\Entity\Sede $sede = null)
-    {
-        $this->sede = $sede;
-
-        return $this;
-    }
-
-    /**
-     * Get sede
-     *
-     * @return \AppBundle\Entity\Sede
-     */
-    public function getSede()
-    {
-        return $this->sede;
-    }
 }
+

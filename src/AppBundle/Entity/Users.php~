@@ -43,6 +43,12 @@ class Users implements AdvancedUserInterface
      */
     private $password;
 
+     /**
+     * @var string
+     *
+     */
+    private $plainPassword;
+
     /**
      * @var bool
      *
@@ -84,6 +90,12 @@ class Users implements AdvancedUserInterface
      * @ORM\Column(name="rola", type="string", length=255  )
      */
     private $rola;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="Sede")
+    * @ORM\JoinColumn(name="sede", referencedColumnName="id")
+    */
+    private $sede;
 
 
     /**
@@ -334,8 +346,31 @@ public function isAccountNonExpired()
 
     public function isEnabled()
     {
-        return $this->Active;
+        return $this->active;
     }
 
-}
 
+    /**
+     * Set rola
+     *
+     * @param string $rola
+     *
+     * @return Users
+     */
+    public function setRola($rola)
+    {
+        $this->rola = $rola;
+
+        return $this;
+    }
+
+    /**
+     * Get rola
+     *
+     * @return string
+     */
+    public function getRola()
+    {
+        return $this->rola;
+    }
+}

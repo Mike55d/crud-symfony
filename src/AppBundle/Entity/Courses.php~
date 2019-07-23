@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Grupo
+ * Courses
  *
- * @ORM\Table(name="grupo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\GrupoRepository")
+ * @ORM\Table(name="courses")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CoursesRepository")
  */
-class Grupo
+class Courses
 {
     /**
      * @var int
@@ -50,7 +50,7 @@ class Grupo
      *
      * @param string $name
      *
-     * @return Grupo
+     * @return Courses
      */
     public function setName($name)
     {
@@ -68,28 +68,5 @@ class Grupo
     {
         return $this->name;
     }
-
-    /**
-     * Set sede
-     *
-     * @param \AppBundle\Entity\Sede $sede
-     *
-     * @return Grupo
-     */
-    public function setSede(\AppBundle\Entity\Sede $sede = null)
-    {
-        $this->sede = $sede;
-
-        return $this;
-    }
-
-    /**
-     * Get sede
-     *
-     * @return \AppBundle\Entity\Sede
-     */
-    public function getSede()
-    {
-        return $this->sede;
-    }
 }
+

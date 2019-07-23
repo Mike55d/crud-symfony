@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Institute
+ * Route
  *
- * @ORM\Table(name="institute")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\InstituteRepository")
+ * @ORM\Table(name="route")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\RouteRepository")
  */
-class Institute
+class Route
 {
     /**
      * @var int
@@ -31,9 +31,9 @@ class Institute
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="description", type="string", length=255)
      */
-    private $address;
+    private $description;
 
     /**
     * @ORM\ManyToOne(targetEntity="Sede")
@@ -57,7 +57,7 @@ class Institute
      *
      * @param string $name
      *
-     * @return Institute
+     * @return Route
      */
     public function setName($name)
     {
@@ -77,50 +77,27 @@ class Institute
     }
 
     /**
-     * Set address
+     * Set description
      *
-     * @param string $address
+     * @param string $description
      *
-     * @return Institute
+     * @return Route
      */
-    public function setAddress($address)
+    public function setDescription($description)
     {
-        $this->address = $address;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get address
+     * Get description
      *
      * @return string
      */
-    public function getAddress()
+    public function getDescription()
     {
-        return $this->address;
-    }
-
-    /**
-     * Set sede
-     *
-     * @param \AppBundle\Entity\Sede $sede
-     *
-     * @return Institute
-     */
-    public function setSede(\AppBundle\Entity\Sede $sede = null)
-    {
-        $this->sede = $sede;
-
-        return $this;
-    }
-
-    /**
-     * Get sede
-     *
-     * @return \AppBundle\Entity\Sede
-     */
-    public function getSede()
-    {
-        return $this->sede;
+        return $this->description;
     }
 }
+

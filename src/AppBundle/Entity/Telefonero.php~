@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Institute
+ * Telefonero
  *
- * @ORM\Table(name="institute")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\InstituteRepository")
+ * @ORM\Table(name="telefonero")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TelefoneroRepository")
  */
-class Institute
+class Telefonero
 {
     /**
      * @var int
@@ -31,9 +31,16 @@ class Institute
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255)
      */
-    private $address;
+    private $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255)
+     */
+    private $image;
 
     /**
     * @ORM\ManyToOne(targetEntity="Sede")
@@ -57,7 +64,7 @@ class Institute
      *
      * @param string $name
      *
-     * @return Institute
+     * @return Telefonero
      */
     public function setName($name)
     {
@@ -77,50 +84,51 @@ class Institute
     }
 
     /**
-     * Set address
+     * Set phone
      *
-     * @param string $address
+     * @param string $phone
      *
-     * @return Institute
+     * @return Telefonero
      */
-    public function setAddress($address)
+    public function setPhone($phone)
     {
-        $this->address = $address;
+        $this->phone = $phone;
 
         return $this;
     }
 
     /**
-     * Get address
+     * Get phone
      *
      * @return string
      */
-    public function getAddress()
+    public function getPhone()
     {
-        return $this->address;
+        return $this->phone;
     }
 
     /**
-     * Set sede
+     * Set image
      *
-     * @param \AppBundle\Entity\Sede $sede
+     * @param string $image
      *
-     * @return Institute
+     * @return Telefonero
      */
-    public function setSede(\AppBundle\Entity\Sede $sede = null)
+    public function setImage($image)
     {
-        $this->sede = $sede;
+        $this->image = $image;
 
         return $this;
     }
 
     /**
-     * Get sede
+     * Get image
      *
-     * @return \AppBundle\Entity\Sede
+     * @return string
      */
-    public function getSede()
+    public function getImage()
     {
-        return $this->sede;
+        return $this->image;
     }
 }
+

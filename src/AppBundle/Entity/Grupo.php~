@@ -68,28 +68,5 @@ class Grupo
     {
         return $this->name;
     }
-
-    /**
-     * Set sede
-     *
-     * @param \AppBundle\Entity\Sede $sede
-     *
-     * @return Grupo
-     */
-    public function setSede(\AppBundle\Entity\Sede $sede = null)
-    {
-        $this->sede = $sede;
-
-        return $this;
-    }
-
-    /**
-     * Get sede
-     *
-     * @return \AppBundle\Entity\Sede
-     */
-    public function getSede()
-    {
-        return $this->sede;
-    }
 }
+

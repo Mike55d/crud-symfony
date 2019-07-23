@@ -8,20 +8,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
-
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset ('sb-admin/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href=".{{ asset ('sb-admin/vendor/metisMenu/metisMenu.min.css')}}" rel="stylesheet">
+    <link href="{{ asset ('sb-admin/vendor/metisMenu/metisMenu.min.css')}}" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="{{ asset ('sb-admin/dist/css/sb-admin-2.css')}}" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="{{ asset ('sb-admin/vendor/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset ('css/styles.css')}}">
+    {% block css %}{% endblock %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,7 +46,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+            <a class="navbar-brand" href="{{ path ('homepage')}}">Apostolado</a>
         </div>
         <!-- /.navbar-header -->
 
@@ -73,17 +75,40 @@
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Niños</a>
+                    <a href="/childs"><i class="fa fa-dashboard"></i>Niños<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="{{path ('childs_new')}}">Nuevo</a>
+                        </li>
+                        <li>
+                            <a href="{{ path ('childs_index')}}">Primera Vez</a>
+                        </li>
+                        <li>
+                            <a href="{{ path ('childs_discard')}}">Descartados</a>
+                        </li>
+                        
+                    </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                    <li>
+                    <a href="#"><i class="fa fa-dashboard"></i>Telefoneros<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="{{path ('telefoneros_new')}}">Nuevo</a>
+                        </li>
+                        <li>
+                            <a href="{{ path ('telefoneros_index')}}">Lista</a>
+                        </li>
+                    </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                    <li>
+                        <a href=""><i class="fa fa-dashboard fa-fw"></i> Rutas</a>
                     </li>
                     <li>
-                        <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Telefoneros</a>
+                        <a href=""><i class="fa fa-dashboard fa-fw"></i> Reportes</a>
                     </li>
-                    <li>
-                        <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Rutas</a>
-                    </li>
-                    <li>
-                        <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Reportes</a>
-                    </li>
+
                     
                 </ul>
             </div>
@@ -95,7 +120,7 @@
 
     <!-- Page Content -->
     <div id="page-wrapper">
-        <div class="container-fluid">
+        <div class="content">
             {% block body %}{% endblock %}
 
             <!-- /.row -->
@@ -107,18 +132,20 @@
 </div>
 <!-- /#wrapper -->
 
-{% block javascripts %}{% endblock %}
-<!-- jQuery -->
-<script src="{{ asset ('sb-admin/vendor/jquery/jquery.min.js')}}"></script>
+<!-- jQuery 
+-->
+<script src="{{ asset ('sb-admin/vendor/jquery/jquery.js')}}"></script>
 
 <!-- Bootstrap Core JavaScript -->
 <script src="{{ asset ('sb-admin/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 
-<!-- Metis Menu Plugin JavaScript -->
+<!-- Metis Menu Plugin JavaScript 
+-->
 <script src="{{ asset ('sb-admin/vendor/metisMenu/metisMenu.min.js')}}"></script>
 
 <!-- Custom Theme JavaScript -->
 <script src="{{ asset ('sb-admin/dist/js/sb-admin-2.js')}}"></script>
+{% block javascripts %}{% endblock %}
 
 </body>
 
