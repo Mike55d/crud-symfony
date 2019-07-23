@@ -34,12 +34,13 @@
 .max{
 	max-height: 60px;
 	width: auto;
+	transition: transform .2s; /* Animation */
 }
 
 .max:hover{
-	max-height: 180px;
+	transform: scale(3.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 	width: auto;
 	position: absolute;
-	right: 0;
+	right: 30%;
 	z-index: 1000;
 }
