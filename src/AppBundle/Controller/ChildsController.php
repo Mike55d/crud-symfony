@@ -22,7 +22,7 @@ class ChildsController extends Controller
         $sede = $this->get('security.token_storage')
         ->getToken()->getUser()->getSede(); 
         $childs = $em->getRepository('AppBundle:Childs')
-        ->findBy(['type'=>'first','sede'=> $sede]); 
+        ->findBy(['type'=>'first','sede'=> $sede],['id'=> 'ASC']); 
         return $this->render('AppBundle:Childs:index.html.twig', array(
             'childs' => $childs
         ));
@@ -54,7 +54,7 @@ class ChildsController extends Controller
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
-        $route = $em->getRepository('AppBundle:Route')->findAll();
+        $route = $em->getRepository('AppBundle:Ruta')->findAll();
         $telefonero = $em->getRepository('AppBundle:Telefonero')->findAll();
         // datos autocompletar 
         $childs = $em->getRepository('AppBundle:Childs')
@@ -94,12 +94,14 @@ class ChildsController extends Controller
             $child->setLat($request->get('lat'));
             $child->setLng($request->get('lng'));
             //insertar imagen
-            $file = $request->files->get('image');
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move($this->getParameter('images'),$fileName);
-            $child->setImage($fileName);
-            //$child->setType('first');
-            //$child->setSede($sede);
+            if ($request->files->get('image')) {
+               $file = $request->files->get('image');
+               $fileName = md5(uniqid()).'.'.$file->guessExtension();
+               $file->move($this->getParameter('images'),$fileName);
+               $child->setImage($fileName);
+           }
+            $child->setType('first');
+            $child->setSede($sede);
 
             $em->persist($child);
             $em->flush();
@@ -129,7 +131,7 @@ class ChildsController extends Controller
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
-        $route = $em->getRepository('AppBundle:Route')->findAll();
+        $route = $em->getRepository('AppBundle:Ruta')->findAll();
         $telefonero = $em->getRepository('AppBundle:Telefonero')->findAll();
         $next = $em->getRepository('AppBundle:Childs')->nextIdFirst($child->getId(),$sede);
         $back = $em->getRepository('AppBundle:Childs')->backIdFirst($child->getId(),$sede);

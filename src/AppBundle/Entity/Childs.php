@@ -179,7 +179,7 @@ class Childs
     private $telefonero;
 
 /**
-    * @ORM\ManyToOne(targetEntity="Route")
+    * @ORM\ManyToOne(targetEntity="Ruta")
     * @ORM\JoinColumn(name="route", referencedColumnName="id")
     */
     private $route;

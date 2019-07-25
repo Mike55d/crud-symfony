@@ -41,10 +41,14 @@
 	transform: scale(3.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 	width: auto;
 	position: absolute;
-	right: 30%;
+	right: 23%;
 	z-index: 1000;
 }
 
 .next-back-btn{
 	width: 200px;
+}
+
+.pad-top-telefonero{
+	padding-top: 100px;
 }

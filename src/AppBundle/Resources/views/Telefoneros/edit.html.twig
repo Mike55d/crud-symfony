@@ -1,7 +1,52 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}AppBundle:Telefoneros:edit{% endblock %}
-
 {% block body %}
-<h1>Welcome to the Telefoneros:edit page</h1>
+<div class="panel panel-default">
+	<div class="panel-heading">Editar Telefonero</div>
+	<div class="panel-body">
+		<div class="row">
+			<form method="post" enctype="multipart/form-data">
+				<div class="col-md-8 pad-top-telefonero">
+					<div class="col-md-6"><label for="">Nombre</label><input required name="name" value="{{telefonero.name}}" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Telefono</label><input required name="phone" value="{{telefonero.phone}}" class="form-control" type="text"></div>
+					<button class="btn btn-warning mt-10">Editar</button>
+				</div>
+				<div class="col-md-4">
+					<div class="col-md-12 image"><img id="imgSalida" width="280" src="{{ asset ('img/allImg/'~telefonero.image)}}" /></div>
+					<div class="col-md-12 mb-10"><input class="form-control" name="image" id="file-input" type="file" /></div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 {% endblock %}
+{% block javascripts %}
+<script>
+    // Mostrar imagenes
+    $(window).on('load' ,function(){
+
+    	$(function() {
+    		$('#file-input').change(function(e) {
+    			addImage(e); 
+    		});
+
+    		function addImage(e){
+    			var file = e.target.files[0],
+    			imageType = /image.*/;
+
+    			if (!file.type.match(imageType))
+    				return;
+
+    			var reader = new FileReader();
+    			reader.onload = fileOnload;
+    			reader.readAsDataURL(file);
+    		}
+
+    		function fileOnload(e) {
+    			var result=e.target.result;
+    			$('#imgSalida').attr("src",result);
+    		}
+    	});
+    });
+    </script>
+    {% endblock %}
