@@ -1,18 +1,32 @@
 {% extends "::base.html.twig" %}
-
 {% block title %}Editar niño{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock %}
 {% block body %}
+<div class="row mb-10">
+	<div class="col-md-6">
+	{% if back %}
+		<a href="{{path ('childs_edit',{'id':back[0].id})}}" class="btn btn-warning center-block next-back-btn">Anterior</a>
+	{% endif %}
+	</div>
+	<div class="col-md-6">
+	{% if next %}
+		<a href="{{path ('childs_edit',{'id':next[0].id})}}" class="btn btn-success center-block next-back-btn">Siguiente</a>
+	{% endif %}
+	</div>
+</div>
 <div class="panel panel-default">
 	<div class="panel-heading">Editar Niño</div>
 	<div class="panel-body">
-		<form method="post" enctype="multipart/form-data" action="{{ path ('childs_new')}}">
+		<form method="post" enctype="multipart/form-data" >
 			<div class="col-md-8">
 				<div class="row">
-					<div class="col-md-4"><label for="">Nombre</label><input value="{{child.name}}" class="form-control" name="name" type="text"></div>
-					<div class="col-md-4"><label for="">Fecha de Nacimiento</label><input value="{{child.birthday| date('Y-m-d')}}" name="date" class="form-control" type="date"></div>
-					<div class="col-md-4"><label for="">Telefono</label><input value="{{child.phone}}" name="phone" class="form-control" type="text"></div>
-					<div class="col-md-12"><label for="">Email</label><input value="{{child.email}}" name="email" class="form-control" type="text"></div>
-					<div class="col-md-12"><label for="">Direccion</label><input value="{{child.address}}" type="text" name="address" class="form-control" id="searchTextField"></div>
+					<div class="col-md-4"><label for="">Nombre</label><input required id="name" value="{{child.name}}" class="form-control" name="name" type="text"></div>
+					<div class="col-md-4"><label for="">Fecha de Nacimiento</label><input required value="{{child.birthday| date('Y-m-d')}}" name="date" class="form-control" type="date"></div>
+					<div class="col-md-4"><label for="">Telefono</label><input required id="phone" value="{{child.phone}}" name="phone" class="form-control" type="text"></div>
+					<div class="col-md-12"><label for="">Email</label><input required id="email" value="{{child.email}}" name="email" class="form-control" type="text"></div>
+					<div class="col-md-12"><label for="">Direccion</label><input required value="{{child.address}}" type="text" name="address" class="form-control" id="searchTextField"></div>
 					<div class="col-md-12">
 						<div class="col-md-6"><label for="">Lat</label><input value="{{child.lat}}" name="lat" readonly type="text" class="MapLat form-control"></div>
 						<div class="col-md-6"><label for="">Long</label><input value="{{child.lng}}" name="lng" readonly type="text" class="MapLon form-control"></div>
@@ -20,8 +34,8 @@
 					<div class="col-md-12">
 						<div id="map_canvas" style="height: 200px;width: 100%;margin: 0.6em; margin-right: 20px"></div>
 					</div>
-					<div class="col-md-6"><label for="">Barrio</label><input value="{{child.barrio}}" name="barrio" class="form-control" type="text"></div>
-					<div class="col-md-6"><label for="">Nombre padres</label><input value="{{child.parents}}" name="parents" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Barrio</label><input required value="{{child.barrio}}" name="barrio" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Nombre padres</label><input required id="parents" value="{{child.parents}}" name="parents" class="form-control" type="text"></div>
 					<div class="col-md-6"><label for="">Grado</label>
 						<select name="grade" class="form-control" id="">
 							<option {% if child.grade %}selected{% endif %} value="A">A</option>
@@ -57,7 +71,7 @@
 							{% endfor %}
 						</select>
 					</div>
-					<div class="checkbox col-md-6"><label class="activo"><input name="active"  type="checkbox">Activo</label></div>
+					<div class="checkbox col-md-6"><label class="activo"><input class="form-control" name="active"  type="checkbox">Activo</label></div>
 					<div class="col-md-12"><label for="">Observaciones</label><textarea name="observations" class="form-control" id="" cols="5" rows="2">{{child.observations}}</textarea></div>
 					<div class="col-md-12 mt-10"><button class="btn btn-success m-r-10">Editar</button></div>
 				</div>
@@ -92,17 +106,32 @@
 {% endblock %}
 
 {% block javascripts %}
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
 <script src="http://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 {# Google Api key #}
 {# Script Mapa #}
 <script src="{{ asset ('js/googleMapsEdit.js')}}"></script>
-
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+$( function() {
+	//autocompletar
+    var availableNames = {{childNames | json_encode | raw}};
+    var availablePhones = {{childPhones | json_encode | raw}};
+    var availableEmails = {{childEmails | json_encode | raw}};
+    var availableParents = {{childParents | json_encode | raw}};
+    $( "#name" ).autocomplete({
+      source: availableNames
+    });
+    $( "#phone" ).autocomplete({
+      source: availablePhones
+    });
+    $( "#email" ).autocomplete({
+      source: availableEmails
+    });
+    $( "#parents" ).autocomplete({
+      source: availableParents
+    });
+  } );
 // Mostrar imagenes
 $(window).on('load' ,function(){
 

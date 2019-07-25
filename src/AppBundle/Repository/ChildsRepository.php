@@ -10,4 +10,36 @@ namespace AppBundle\Repository;
  */
 class ChildsRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function nextIdFirst($id,$sede){
+
+		$em = $this->getEntityManager(); 
+		$qb = $em->createQueryBuilder();
+		$qb->select('c')
+		   ->from('AppBundle:Childs', 'c')
+		   ->where('c.type = :first AND c.id > :id AND c.sede = :sede ')
+		   //->andWhere('c.id > :id')
+		   ->setParameter('id', $id)
+		   ->setParameter('sede', $sede)
+		   ->setParameter('first', 'first')
+		   ->setMaxResults(1)
+		   ->orderBy('c.id', 'ASC');
+	  $query = $qb->getQuery();
+	  return $query->getResult();
+	}
+	public function backIdFirst($id,$sede){
+
+		$em = $this->getEntityManager(); 
+		$qb = $em->createQueryBuilder();
+		$qb->select('c')
+		   ->from('AppBundle:Childs', 'c')
+		   ->where('c.type = :first AND c.id < :id AND c.sede = :sede ')
+		   //->andWhere('c.id > :id')
+		   ->setParameter('id', $id)
+		   ->setParameter('sede', $sede)
+		   ->setParameter('first', 'first')
+		   ->setMaxResults(1)
+		   ->orderBy('c.id', 'DESC');
+	  $query = $qb->getQuery();
+	  return $query->getResult();
+	}
 }

@@ -49,12 +49,20 @@ class ChildsController extends Controller
     public function newAction(Request $request)
     {
         $em =$this->getDoctrine()->getManager(); 
+        $sede = $this->get('security.token_storage')
+        ->getToken()->getUser()->getSede();
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
         $route = $em->getRepository('AppBundle:Route')->findAll();
         $telefonero = $em->getRepository('AppBundle:Telefonero')->findAll();
-
+        // datos autocompletar 
+        $childs = $em->getRepository('AppBundle:Childs')
+        ->findBy(['type'=>'first','sede'=> $sede]);
+        foreach ($childs as $child) $childNames[]= $child->getName();
+        foreach ($childs as $child) $childPhones[]= $child->getPhone();
+        foreach ($childs as $child) $childEmails[]= $child->getEmail();
+        foreach ($childs as $child) $childParents[]= $child->getParents();
         if ($request->get('name')) {
             $child = new Childs;
             $child->setName($request->get('name'));
@@ -77,8 +85,8 @@ class ChildsController extends Controller
             $child->setRoute($request->get('route'));
             $child->setTelefonero($em->getRepository('AppBundle:Telefonero')
                 ->find($request->get('telefonero')));
-            $child->setObservations($request->get('observations'));
-            $child->setComments($request->get('comments'));
+            $child->setObservations($request->get('observations') ?? 'ninguna');
+            $child->setComments($request->get('comments') ?? 'ninguno');
             $child->setRecojer($request->get('recojer'));
             $child->setConfirmar($request->get('confirmar'));
             $child->setLLega($request->get('llega'));
@@ -90,6 +98,8 @@ class ChildsController extends Controller
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
             $file->move($this->getParameter('images'),$fileName);
             $child->setImage($fileName);
+            //$child->setType('first');
+            //$child->setSede($sede);
 
             $em->persist($child);
             $em->flush();
@@ -100,7 +110,11 @@ class ChildsController extends Controller
             'grupos' => $grupo,
             'institutes' => $institute,
             'routes' => $route,
-            'telefoneros' => $telefonero
+            'telefoneros' => $telefonero,
+            'childNames'=>$childNames,
+            'childPhones'=>$childPhones,
+            'childEmails'=>$childEmails,
+            'childParents'=>$childParents
         ));
     }
 
@@ -110,11 +124,22 @@ class ChildsController extends Controller
     public function editAction(Request $request , Childs $child )
     {
         $em =$this->getDoctrine()->getManager(); 
+        $sede = $this->get('security.token_storage')
+        ->getToken()->getUser()->getSede();
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
         $route = $em->getRepository('AppBundle:Route')->findAll();
         $telefonero = $em->getRepository('AppBundle:Telefonero')->findAll();
+        $next = $em->getRepository('AppBundle:Childs')->nextIdFirst($child->getId(),$sede);
+        $back = $em->getRepository('AppBundle:Childs')->backIdFirst($child->getId(),$sede);
+        $childs = $em->getRepository('AppBundle:Childs')
+        ->findBy(['type'=>'first','sede'=> $sede]);
+        // datos autocompletar 
+        foreach ($childs as $Child) $childNames[]= $Child->getName();
+        foreach ($childs as $Child) $childPhones[]= $Child->getPhone();
+        foreach ($childs as $Child) $childEmails[]= $Child->getEmail();
+        foreach ($childs as $Child) $childParents[]= $Child->getParents();
 
         if ($request->get('name')) {
             $child->setName($request->get('name'));
@@ -146,23 +171,30 @@ class ChildsController extends Controller
             $child->setLat($request->get('lat'));
             $child->setLng($request->get('lng'));
             //insertar imagen
-            $file = $request->files->get('image');
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move($this->getParameter('images'),$fileName);
-            $child->setImage($fileName);
-
-            $em->persist($child);
-            $em->flush();
-            return $this->redirectToRoute('childs_index');
-        }
-        return $this->render('AppBundle:Childs:edit.html.twig', array(
-            'grupos' => $grupo,
-            'institutes' => $institute,
-            'routes' => $route,
-            'telefoneros' => $telefonero,
-            'child'=> $child
-        ));
-    }
+            if ($request->files->get('image')) {
+               $file = $request->files->get('image');
+               $fileName = md5(uniqid()).'.'.$file->guessExtension();
+               $file->move($this->getParameter('images'),$fileName);
+               $child->setImage($fileName);
+           }
+           $em->persist($child);
+           $em->flush();
+           return $this->redirectToRoute('childs_index');
+       }
+       return $this->render('AppBundle:Childs:edit.html.twig', array(
+        'child'=> $child,
+        'grupos' => $grupo,
+        'institutes' => $institute,
+        'routes' => $route,
+        'telefoneros' => $telefonero,
+        'next'=>$next,
+        'back'=>$back,
+        'childNames'=>$childNames,
+        'childPhones'=>$childPhones,
+        'childEmails'=>$childEmails,
+        'childParents'=>$childParents
+    ));
+   }
 
     /**
      * @Route("/{id}/del" , name="childs_del")

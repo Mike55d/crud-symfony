@@ -129,28 +129,28 @@ class Childs
     /**
      * @var json_array
      *
-     * @ORM\Column(name="recojer", type="json_array", length=255)
+     * @ORM\Column(name="recojer", type="json_array", length=255 , nullable=true)
      */
     private $recojer;
 
     /**
      * @var json_array
      *
-     * @ORM\Column(name="confirmar", type="json_array", length=255)
+     * @ORM\Column(name="confirmar", type="json_array", length=255 , nullable=true)
      */
     private $confirmar;
 
     /**
      * @var json_array
      *
-     * @ORM\Column(name="llega", type="json_array", length=255)
+     * @ORM\Column(name="llega", type="json_array", length=255 , nullable=true)
      */
     private $llega;
 
     /**
      * @var json_array
      *
-     * @ORM\Column(name="noViene", type="json_array", length=255)
+     * @ORM\Column(name="noViene", type="json_array", length=255 , nullable=true)
      */
     private $noViene;
 
