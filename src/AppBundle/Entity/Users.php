@@ -63,12 +63,6 @@ class Users implements AdvancedUserInterface
      */
     private $phone;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255)
-     */
-    private $email;
 
     /**
      * @var string
@@ -156,12 +150,22 @@ class Users implements AdvancedUserInterface
         return $this->name;
     }
 
-   /**
+    public function getPlainPassword()
+    {
+    return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+
+    /**
      * Set password
      *
      * @param string $password
      *
-     * @return User
+     * @return user
      */
     public function setPassword($password)
     {
@@ -178,29 +182,6 @@ class Users implements AdvancedUserInterface
     public function getPassword()
     {
         return $this->password;
-    }
-     /**
-     * Get plainPassword
-     *
-     * @return string
-     */
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    /**
-     * Set plainPassword
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPlainPassword($password)
-    {
-        $this->plainPassword = $password;
-
-        return $this;
     }
 
     /**
@@ -251,29 +232,6 @@ class Users implements AdvancedUserInterface
         return $this->phone;
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Users
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
 
     /**
      * Set image
@@ -320,7 +278,7 @@ class Users implements AdvancedUserInterface
      */
     public function getRoles()
     {
-        return $this->roles;
+        return $this->roles[0];
     }
 
      public function getSalt(){

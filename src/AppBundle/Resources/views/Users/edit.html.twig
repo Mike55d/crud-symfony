@@ -1,7 +1,18 @@
 {% extends "::base.html.twig" %}
-
-{% block title %}AppBundle:Users:edit{% endblock %}
+{% form_theme form 'theme/themeForm.html.twig' %}
 
 {% block body %}
-<h1>Welcome to the Users:edit page</h1>
+<div class="panel panel-default">
+	<div class="panel-heading">Editar Usuario</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				{{form_start(form)}}
+				{{form_widget(form)}}
+				<button class="btn btn-warning">Editar</button>
+				{{form_end(form)}}
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
