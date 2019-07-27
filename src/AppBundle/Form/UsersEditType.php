@@ -25,8 +25,7 @@ class UsersEditType extends AbstractType
         ->add('name')
         ->add('active',CheckboxType::class)
         ->add('phone')
-        ->add('roles',ChoiceType::class,['choices'=>['ADMIN'=>'ROLE_ADMIN',
-                                                     'USER'=>'ROLE_USER']])
+        ->add('sede')
         ;
     }/**
      * {@inheritdoc}

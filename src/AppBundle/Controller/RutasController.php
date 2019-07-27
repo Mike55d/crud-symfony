@@ -73,9 +73,10 @@ class RutasController extends Controller
      */
     public function delAction(Ruta $ruta)
     {
-        return $this->render('AppBundle:Routes:del.html.twig', array(
-            // ...
-        ));
+       $em = $this->getDoctrine()->getManager();
+        $em->remove($ruta);
+        $em->flush();
+        return $this->redirectToRoute('rutas_index');
     }
 
 }

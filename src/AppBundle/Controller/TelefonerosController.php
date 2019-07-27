@@ -90,9 +90,10 @@ class TelefonerosController extends Controller
      */
     public function delAction(Telefonero $telefonero)
     {
-        return $this->render('AppBundle:Telefoneros:del.html.twig', array(
-            // ...
-        ));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($telefonero);
+        $em->flush();
+        return $this->redirectToRoute('telefoneros_index');
     }
 
 }

@@ -28,8 +28,9 @@ class UsersType extends AbstractType
             'type' => PasswordType::class,
             'first_options' => array('label' => 'Password'),
             'second_options' => array('label' => 'Repeat Password')))
-        ->add('active',CheckboxType::class)
+        ->add('active',CheckboxType::class,['data'=>true])
         ->add('phone')
+        ->add('sede')
         ->add('image',FileType::class)
         ->add('roles',ChoiceType::class,['choices'=>['ADMIN'=>'ROLE_ADMIN',
                                                      'USER'=>'ROLE_USER']])

@@ -72,9 +72,10 @@ class GruposController extends Controller
      */
     public function delAction(Grupo $grupo)
     {
-        return $this->render('AppBundle:Grupos:del.html.twig', array(
-            // ...
-        ));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($grupo);
+        $em->flush();
+        return $this->redirectToRoute('grupos_index');
     }
 
 }

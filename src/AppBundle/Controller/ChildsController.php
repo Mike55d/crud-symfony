@@ -203,9 +203,10 @@ class ChildsController extends Controller
      */
     public function delAction(Childs $child)
     {
-        return $this->render('AppBundle:Childs:del.html.twig', array(
-            // ...
-        ));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($child);
+        $em->flush();
+        return $this->redirectToRoute('childs_index');
     }
 
 }

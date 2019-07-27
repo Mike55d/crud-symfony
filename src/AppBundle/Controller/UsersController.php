@@ -82,9 +82,10 @@ use AppBundle\Form\UsersEditType;
      */
     public function delAction(Users $user)
     {
-        return $this->render('AppBundle:Routes:del.html.twig', array(
-            // ...
-        ));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+        return $this->redirectToRoute('users_index');
     }
 
 }

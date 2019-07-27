@@ -278,7 +278,7 @@ class Users implements AdvancedUserInterface
      */
     public function getRoles()
     {
-        return $this->roles[0];
+        return $this->roles;
     }
 
      public function getSalt(){

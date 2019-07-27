@@ -5,8 +5,7 @@ security:
         AppBundle\Entity\Users: bcrypt
 
     role_hierarchy:
-        ROLE_USER: ROLE_USER
-        ROLE_ADMIN:       ROLE_ADMIN
+        ROLE_ADMIN: ROLE_ADMIN
         ROLE_SUPER_ADMIN: ROLE_SUPER_ADMIN
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
@@ -37,4 +36,4 @@ security:
 
     access_control:
             - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/, roles: ROLE_USER }
+            - { path: ^/, roles: ROLE_ADMIN }
