@@ -97,7 +97,7 @@ class ChildsController extends Controller
             if ($request->files->get('image')) {
                $file = $request->files->get('image');
                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-               $file->move($this->getParameter('images'),$fileName);
+               $file->move($this->getParameter('childs'),$fileName);
                $child->setImage($fileName);
            }
             $child->setType('first');
@@ -176,7 +176,7 @@ class ChildsController extends Controller
             if ($request->files->get('image')) {
                $file = $request->files->get('image');
                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-               $file->move($this->getParameter('images'),$fileName);
+               $file->move($this->getParameter('childs'),$fileName);
                $child->setImage($fileName);
            }
            $em->persist($child);

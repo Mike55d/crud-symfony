@@ -32,13 +32,13 @@ class GruposController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $sede = $this->get('security.token_storage')
         ->getToken()->getUser()->getSede();
         $grupo = new Grupo();
         $form = $this->createForm(GrupoType::class, $grupo);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $grupo->setSede($sede);
             $em->persist($grupo);
             $em->flush();

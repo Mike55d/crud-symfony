@@ -42,7 +42,7 @@ use AppBundle\Form\UsersEditType;
             $em = $this->getDoctrine()->getManager();
             $file = $user->getImage();
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move($this->getParameter('images'),$fileName);
+            $file->move($this->getParameter('profiles'),$fileName);
             $user->setImage($fileName);
             $password = $this->get('security.password_encoder')
             ->encodePassword($user, $user->getPlainPassword());

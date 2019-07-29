@@ -24,28 +24,28 @@ class Childs
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255 , nullable=true)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255 , nullable=true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string", length=255 , nullable=true)
+     * @ORM\Column(name="image", type="string", length=255 , nullable=true )
      */
     private $image;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="address", type="string", length=255 , nullable=true)
      */
     private $address;
 
@@ -59,7 +59,7 @@ class Childs
     /**
      * @var string
      *
-     * @ORM\Column(name="parents", type="string", length=255)
+     * @ORM\Column(name="parents", type="string", length=255 , nullable=true)
      */
     private $parents;
 
@@ -73,114 +73,134 @@ class Childs
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255 , nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comments", type="string", length=255)
+     * @ORM\Column(name="comments", type="string", length=255 , nullable=true)
      */
     private $comments;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="observations", type="string", length=255)
+     * @ORM\Column(name="observations", type="string", length=255 , nullable=true)
      */
     private $observations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="barrio", type="string", length=255)
+     * @ORM\Column(name="barrio", type="string", length=255 , nullable=true)
      */
     private $barrio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lat", type="string", length=255)
+     * @ORM\Column(name="colegio", type="string", length=255 , nullable=true)
+     */
+    private $colegio;
+
+        /**
+     * @var integer
+     *
+     * @ORM\Column(name="activo", type="integer", length=255 , nullable=true)
+     */
+    private $activo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lat", type="string", length=255 , nullable=true)
      */
     private $lat;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lng", type="string", length=255)
+     * @ORM\Column(name="lng", type="string", length=255 , nullable=true)
      */
     private $lng;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="grade", type="string", length=255)
+     * @ORM\Column(name="grade", type="string", length=255 , nullable=true)
      */
     private $grade;
 
         /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255 , nullable=true)
+     * @ORM\Column(name="type", type="string", length=255 , nullable=true )
      */
     private $type;
 
     /**
      * @var json_array
      *
-     * @ORM\Column(name="recojer", type="json_array", length=255 , nullable=true)
+     * @ORM\Column(name="recojer", type="json_array", length=255 , nullable=true )
      */
     private $recojer;
 
     /**
      * @var json_array
      *
-     * @ORM\Column(name="confirmar", type="json_array", length=255 , nullable=true)
+     * @ORM\Column(name="confirmar", type="json_array", length=255 , nullable=true )
      */
     private $confirmar;
 
     /**
      * @var json_array
      *
-     * @ORM\Column(name="llega", type="json_array", length=255 , nullable=true)
+     * @ORM\Column(name="llega", type="json_array", length=255 , nullable=true )
      */
     private $llega;
 
     /**
      * @var json_array
      *
-     * @ORM\Column(name="noViene", type="json_array", length=255 , nullable=true)
+     * @ORM\Column(name="noViene", type="json_array", length=255 , nullable=true )
      */
     private $noViene;
 
     /**
     * @ORM\ManyToOne(targetEntity="Sede")
-    * @ORM\JoinColumn(name="sede", referencedColumnName="id")
+    * @ORM\JoinColumn(name="sede", referencedColumnName="id" , nullable=true)
     */
     private $sede;
 
     /**
     * @ORM\ManyToOne(targetEntity="Grupo")
-    * @ORM\JoinColumn(name="grupo", referencedColumnName="id")
+    * @ORM\JoinColumn(name="grupo", referencedColumnName="id" , nullable=true)
     */
     private $grupo;
 
+        /**
+    * @ORM\ManyToOne(targetEntity="Courses")
+    * @ORM\JoinColumn(name="course", referencedColumnName="id" , nullable=true)
+    */
+    private $course;
+
     /**
     * @ORM\ManyToOne(targetEntity="Institute")
-    * @ORM\JoinColumn(name="institute", referencedColumnName="id")
+    * @ORM\JoinColumn(name="institute", referencedColumnName="id" , nullable=true)
     */
     private $institute;
 
     /**
     * @ORM\ManyToOne(targetEntity="Telefonero")
-    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id")
+    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id" , nullable=true)
     */
     private $telefonero;
 
 /**
     * @ORM\ManyToOne(targetEntity="Ruta")
-    * @ORM\JoinColumn(name="route", referencedColumnName="id")
+    * @ORM\JoinColumn(name="route", referencedColumnName="id" , nullable=true)
     */
     private $route;
 
@@ -769,5 +789,77 @@ class Childs
     public function getLng()
     {
         return $this->lng;
+    }
+
+    /**
+     * Set colegio
+     *
+     * @param string $colegio
+     *
+     * @return Childs
+     */
+    public function setColegio($colegio)
+    {
+        $this->colegio = $colegio;
+
+        return $this;
+    }
+
+    /**
+     * Get colegio
+     *
+     * @return string
+     */
+    public function getColegio()
+    {
+        return $this->colegio;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param integer $activo
+     *
+     * @return Childs
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return integer
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set course
+     *
+     * @param \AppBundle\Entity\Courses $course
+     *
+     * @return Childs
+     */
+    public function setCourse(\AppBundle\Entity\Courses $course = null)
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * Get course
+     *
+     * @return \AppBundle\Entity\Courses
+     */
+    public function getCourse()
+    {
+        return $this->course;
     }
 }

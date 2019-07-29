@@ -59,7 +59,7 @@ class Users implements AdvancedUserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255 , nullable=true)
      */
     private $phone;
 
@@ -67,7 +67,7 @@ class Users implements AdvancedUserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string", length=255)
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
     private $image;
 
@@ -90,6 +90,13 @@ class Users implements AdvancedUserInterface
     * @ORM\JoinColumn(name="sede", referencedColumnName="id")
     */
     private $sede;
+
+        /**
+    * @ORM\ManyToOne(targetEntity="Telefonero")
+    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id" , nullable=true)
+    */
+
+    private $telefonero;
 
 
     /**
@@ -354,5 +361,29 @@ public function isAccountNonExpired()
     public function getSede()
     {
         return $this->sede;
+    }
+
+    /**
+     * Set telefonero
+     *
+     * @param \AppBundle\Entity\Telefonero $telefonero
+     *
+     * @return Users
+     */
+    public function setTelefonero(\AppBundle\Entity\Telefonero $telefonero = null)
+    {
+        $this->telefonero = $telefonero;
+
+        return $this;
+    }
+
+    /**
+     * Get telefonero
+     *
+     * @return \AppBundle\Entity\Telefonero
+     */
+    public function getTelefonero()
+    {
+        return $this->telefonero;
     }
 }

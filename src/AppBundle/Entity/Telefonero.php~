@@ -31,14 +31,14 @@ class Telefonero
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string", length=255)
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
     private $image;
 
@@ -47,6 +47,14 @@ class Telefonero
     * @ORM\JoinColumn(name="sede", referencedColumnName="id")
     */
     private $sede;
+
+
+    /**
+    * @ORM\ManyToOne(targetEntity="Telefonero")
+    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id")
+    */
+
+    private $telefonero;
 
 
     /**
@@ -130,5 +138,28 @@ class Telefonero
     {
         return $this->image;
     }
-}
 
+    /**
+     * Set sede
+     *
+     * @param \AppBundle\Entity\Sede $sede
+     *
+     * @return Telefonero
+     */
+    public function setSede(\AppBundle\Entity\Sede $sede = null)
+    {
+        $this->sede = $sede;
+
+        return $this;
+    }
+
+    /**
+     * Get sede
+     *
+     * @return \AppBundle\Entity\Sede
+     */
+    public function getSede()
+    {
+        return $this->sede;
+    }
+}

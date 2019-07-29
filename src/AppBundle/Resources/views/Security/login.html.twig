@@ -5,24 +5,24 @@
 		<div class="col-md-4 col-md-offset-4">
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Please Sign In</h3>
+					<h3 class="panel-title">Ingresar</h3>
 				</div>
 				<div class="panel-body">
 					<form role="form" method="POST" id="loginform" action="{{ path ('login')}}" >
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" placeholder="E-mail" name="_username" type="email" autofocus>
+								<input class="form-control" placeholder="correo" name="_username" type="email" autofocus>
 							</div>
 							<div class="form-group">
-								<input class="form-control" placeholder="Password" name="_password" type="password" value="">
+								<input class="form-control" placeholder="contraseña" name="_password" type="password" value="">
 							</div>
 							<div class="checkbox">
 								<label>
-									<input name="remember" type="checkbox" value="Remember Me">Remember Me
+									<input name="remember" type="checkbox" value="Remember Me">recordarme
 								</label>
 							</div>
 							<!-- Change this to a button or input when using this as a form -->
-							<button  class="btn btn-lg btn-success btn-block">Login</button>
+							<button  class="btn btn-lg btn-success btn-block">Ingresar</button>
 						</fieldset>
 					</form>
 					{% if error %}

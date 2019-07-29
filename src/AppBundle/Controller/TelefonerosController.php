@@ -45,7 +45,7 @@ class TelefonerosController extends Controller
            if ($request->files->get('image')) {
                $file = $request->files->get('image');
                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-               $file->move($this->getParameter('images'),$fileName);
+               $file->move($this->getParameter('telefoneros'),$fileName);
                $telefonero->setImage($fileName);
            }
            $em->persist($telefonero);
@@ -73,7 +73,7 @@ class TelefonerosController extends Controller
            if ($request->files->get('image')) {
                $file = $request->files->get('image');
                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-               $file->move($this->getParameter('images'),$fileName);
+               $file->move($this->getParameter('telefoneros'),$fileName);
                $telefonero->setImage($fileName);
            }
            $em->persist($telefonero);
@@ -92,6 +92,22 @@ class TelefonerosController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($telefonero);
+        $em->flush();
+        return $this->redirectToRoute('telefoneros_index');
+    }
+
+     /**
+     * @Route("/sePw" , name="setPw")
+     */
+    public function setPwAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $childs = $em->getRepository('AppBundle:Childs')->findAll(); 
+        foreach ($childs as $child) {
+          if (!$child->getType()) {
+           $child->setType('discard');
+          }
+        }
         $em->flush();
         return $this->redirectToRoute('telefoneros_index');
     }
