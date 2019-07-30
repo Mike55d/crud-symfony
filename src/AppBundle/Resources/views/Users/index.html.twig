@@ -6,9 +6,18 @@
 <link href="{{ asset ('sb-admin/vendor/datatables-responsive/dataTables.responsive.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
-<div class="mb-10">
-	<button class="btn btn-danger">Desactivar usuarios</button>
-	<button class="btn btn-success">Activar usuarios</button>
+<div class="row">
+	<div class="mb-10 col-md-8">
+	<a href="{{ path ('users_disable')}}" class="btn btn-danger">Desactivar usuarios</a>
+	<a href="{{ path ('users_activate')}}" class="btn btn-success">Activar usuarios</a>
+</div>
+	<div class="col-md-4">
+		{% for flash_message in app.session.flashBag.get('notice') %}
+				<div class="flash-notice">
+					<h6>{{ flash_message }}</h6>
+				</div>
+	{% endfor %}
+	</div>
 </div>
 <div class="panel panel-default">
 	<div class="panel-heading">

@@ -34,7 +34,9 @@ class UsersEditType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Users'
+            'data_class' => 'AppBundle\Entity\Users',
+            'allow_extra_fields' => true
+            
         ));
     }
 

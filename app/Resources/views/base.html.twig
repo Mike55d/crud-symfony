@@ -136,7 +136,7 @@
                         </li>
 
                     <li>
-                        <a href="#"><i class="fa fa-eraser fa-fw"></i> Limpiar registros</a>
+                        <a href="#" data-toggle="modal" data-target="#confirm"><i class="fa fa-eraser fa-fw"></i> Limpiar registros</a>
                     </li>
 
                     <li>
@@ -178,7 +178,26 @@
     <div id="page-wrapper">
         <div class="content">
             {% block body %}{% endblock %}
-
+            <!-- Modal -->
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Seguro que quieres limpiar los registros ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <a href="{{ path ('childs_clean')}}" id="href-modal" class="btn btn-primary">Limpiar</a>
+            </div>
+        </div>
+    </div>
+</div>
             <!-- /.row -->
         </div>
         <!-- /.container-fluid -->

@@ -68,12 +68,16 @@ use AppBundle\Form\UsersEditType;
         $form = $this->createForm(UsersEditType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles($request->get('roles'));
+            if ($request->get('roles') == 'ROLE_USER') $user->setRola('USER');
+            if ($request->get('roles') == 'ROLE_ADMIN') $user->setRola('ADMIN');
             $em->flush();
             return $this->redirectToRoute('users_index');
         }
 
         return $this->render('AppBundle:Users:edit.html.twig', array(
-            'form'=> $form->createView()
+            'form'=> $form->createView(),
+            'user'=> $user
         ));
     }
 
@@ -85,6 +89,32 @@ use AppBundle\Form\UsersEditType;
         $em = $this->getDoctrine()->getManager();
         $em->remove($user);
         $em->flush();
+        return $this->redirectToRoute('users_index');
+    }
+
+    /**
+     * @Route("/activateUsers" , name="users_activate")
+     */
+    public function activateAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository('AppBundle:Users')->findAll(); 
+        foreach ($users as $user) $user->setActive(1);
+        $em->flush();
+        $this->addFlash('notice','Usuarios Activados');
+        return $this->redirectToRoute('users_index');
+    }
+
+    /**
+     * @Route("/disableUsers" , name="users_disable")
+     */
+    public function disableAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository('AppBundle:Users')->findByRola('USER'); 
+        foreach ($users as $user) $user->setActive(0);
+        $em->flush();
+        $this->addFlash('notice','Usuarios Desactivados');
         return $this->redirectToRoute('users_index');
     }
 

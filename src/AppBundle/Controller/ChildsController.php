@@ -253,4 +253,34 @@ class ChildsController extends Controller
         return $this->redirectToRoute('childs_index');
     }
 
+ /**
+     * @Route("/clean" , name="childs_clean")
+     */
+    public function cleanAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede(); 
+        $childsFirst = $em->getRepository('AppBundle:Childs')
+        ->findBy(['sede'=> $sede , 'type'=> 'first']);
+        $childsFrequent = $em->getRepository('AppBundle:Childs')
+        ->findBy(['sede'=> $sede , 'type'=> 'frequent']);  
+        foreach ($childsFirst as $child){
+            $child->setRecojer(null);
+            $child->setConfirmar(null);
+            $child->setLlega(null);
+            $child->setNoViene(null);
+        }
+        foreach ($childsFrequent as $child){
+            $child->setRecojer(null);
+            $child->setConfirmar(null);
+            $child->setLlega(null);
+            $child->setNoViene(null);
+        }
+        $this->addFlash('notice','Se han limpiado los registros');
+        $em->flush();
+        return $this->redirectToRoute('homepage');
+    }
+
 }

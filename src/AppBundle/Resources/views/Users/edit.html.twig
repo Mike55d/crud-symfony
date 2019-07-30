@@ -9,6 +9,10 @@
 			<div class="col-md-4 col-md-offset-4">
 				{{form_start(form)}}
 				{{form_widget(form)}}
+				<select class="form-control" name="roles" id="">
+					<option {% if 'ROLE_ADMIN' in user.roles %}selected{% endif %} value="ROLE_ADMIN">ADMIN</option>
+					<option {% if 'ROLE_USER' in user.roles %}selected{% endif %} value="ROLE_USER">USER</option>
+				</select><br>
 				<button class="btn btn-warning">Editar</button>
 				{{form_end(form)}}
 			</div>
