@@ -19,14 +19,24 @@ class ChildsController extends Controller
     public function indexAction()
     {   
         $em =$this->getDoctrine()->getManager();
-        $sede = $this->get('security.token_storage')
-        ->getToken()->getUser()->getSede(); 
-        $childs = $em->getRepository('AppBundle:Childs')
-        ->findBy(['type'=>'first','sede'=> $sede],['id'=> 'ASC']); 
-        return $this->render('AppBundle:Childs:index.html.twig', array(
-            'childs' => $childs
-        ));
-    }
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede(); 
+        $query = ['type'=>'first','sede'=> $sede];
+        if ($user->getRola() == 'USER') 
+        {
+            $query = [
+                'type'=>'first',
+                'sede'=> $sede,
+                'telefonero'=>$user->getTelefonero()];
+            }
+            $childs = $em->getRepository('AppBundle:Childs')
+            ->findBy($query,['id'=> 'ASC']); 
+            return $this->render('AppBundle:Childs:index.html.twig', array(
+                'childs' => $childs,
+                'lista'=> 'first'
+            ));
+        }
 
     /**
      * @Route("/descartados" , name="childs_discard")
@@ -37,11 +47,37 @@ class ChildsController extends Controller
         $sede = $this->get('security.token_storage')
         ->getToken()->getUser()->getSede(); 
         $childs = $em->getRepository('AppBundle:Childs')
-        ->findBy(['type'=>'discard','sede'=> $sede]);  
+        ->findBy(['type'=>'discard','sede'=> $sede],['id'=> 'ASC']);  
         return $this->render('AppBundle:Childs:index.html.twig', array(
-            'childs' => $childs
+            'childs' => $childs,
+            'lista'=> 'discard'
         ));
     }
+
+    /**
+     * @Route("/frecuentes" , name="childs_frequent")
+     */
+    public function frequentAction()
+    {   
+        $em =$this->getDoctrine()->getManager(); 
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede(); 
+        $query = ['type'=>'frequent','sede'=> $sede];
+        if ($user->getRola() == 'USER') 
+        {
+            $query = [
+                'type'=>'frequent',
+                'sede'=> $sede,
+                'telefonero'=>$user->getTelefonero()];
+            }
+            $childs = $em->getRepository('AppBundle:Childs')
+            ->findBy($query,['id'=> 'ASC']);   
+            return $this->render('AppBundle:Childs:index.html.twig', array(
+                'childs' => $childs,
+                'lista'=> 'frequent'
+            ));
+        }
 
     /**
      * @Route("/new" , name="childs_new")
@@ -55,7 +91,7 @@ class ChildsController extends Controller
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
         $route = $em->getRepository('AppBundle:Ruta')->findAll();
-        $telefonero = $em->getRepository('AppBundle:Telefonero')->findAll();
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
         // datos autocompletar 
         $childs = $em->getRepository('AppBundle:Childs')
         ->findBy(['type'=>'first','sede'=> $sede]);
@@ -100,41 +136,48 @@ class ChildsController extends Controller
                $file->move($this->getParameter('childs'),$fileName);
                $child->setImage($fileName);
            }
-            $child->setType('first');
-            $child->setSede($sede);
+           $child->setType('first');
+           $child->setSede($sede);
 
-            $em->persist($child);
-            $em->flush();
-            return $this->redirectToRoute('childs_index');
-        }
+           $em->persist($child);
+           $em->flush();
+           return $this->redirectToRoute('childs_index');
+       }
 
-        return $this->render('AppBundle:Childs:new.html.twig', array(
-            'grupos' => $grupo,
-            'institutes' => $institute,
-            'routes' => $route,
-            'telefoneros' => $telefonero,
-            'childNames'=>$childNames,
-            'childPhones'=>$childPhones,
-            'childEmails'=>$childEmails,
-            'childParents'=>$childParents
-        ));
-    }
+       return $this->render('AppBundle:Childs:new.html.twig', array(
+        'grupos' => $grupo,
+        'institutes' => $institute,
+        'routes' => $route,
+        'telefoneros' => $telefoneros,
+        'childNames'=>$childNames,
+        'childPhones'=>$childPhones,
+        'childEmails'=>$childEmails,
+        'childParents'=>$childParents
+    ));
+   }
 
     /**
-     * @Route("/{id}/edit" , name="childs_edit")
+     * @Route("/{lista}/{id}/edit" , name="childs_edit")
      */
-    public function editAction(Request $request , Childs $child )
+    public function editAction(Request $request , Childs $child ,$lista )
     {
         $em =$this->getDoctrine()->getManager(); 
-        $sede = $this->get('security.token_storage')
-        ->getToken()->getUser()->getSede();
+        $user= $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede();
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
         $route = $em->getRepository('AppBundle:Ruta')->findAll();
-        $telefonero = $em->getRepository('AppBundle:Telefonero')->findAll();
-        $next = $em->getRepository('AppBundle:Childs')->nextIdFirst($child->getId(),$sede);
-        $back = $em->getRepository('AppBundle:Childs')->backIdFirst($child->getId(),$sede);
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
+        $telefonero = null;
+        if ($user->getRola() == 'USER') {
+            $telefonero = $user->getTelefonero();
+        }
+        $next = $em->getRepository('AppBundle:Childs')
+        ->nextId($child->getId(),$sede,$lista,$telefonero);
+        $back = $em->getRepository('AppBundle:Childs')
+        ->backId($child->getId(),$sede,$lista,$telefonero);
         $childs = $em->getRepository('AppBundle:Childs')
         ->findBy(['type'=>'first','sede'=> $sede]);
         // datos autocompletar 
@@ -188,9 +231,10 @@ class ChildsController extends Controller
         'grupos' => $grupo,
         'institutes' => $institute,
         'routes' => $route,
-        'telefoneros' => $telefonero,
+        'telefoneros' => $telefoneros,
         'next'=>$next,
         'back'=>$back,
+        'lista'=> $lista,
         'childNames'=>$childNames,
         'childPhones'=>$childPhones,
         'childEmails'=>$childEmails,

@@ -4,15 +4,21 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 {% endblock %}
 {% block body %}
+{% set editar = '' %}
+{% set editSelect = '' %}
+{% if app.user.rola == 'USER' %}
+{% set editar = 'readonly' %}
+{% set editSelect = 'disabled' %}
+{% endif %}
 <div class="row mb-10">
 	<div class="col-md-6">
 	{% if back %}
-		<a href="{{path ('childs_edit',{'id':back[0].id})}}" class="btn btn-warning center-block next-back-btn">Anterior</a>
+		<a href="{{path ('childs_edit',{'id':back[0].id ,lista : lista})}}" class="btn btn-warning center-block next-back-btn">Anterior</a>
 	{% endif %}
 	</div>
 	<div class="col-md-6">
 	{% if next %}
-		<a href="{{path ('childs_edit',{'id':next[0].id})}}" class="btn btn-success center-block next-back-btn">Siguiente</a>
+		<a href="{{path ('childs_edit',{'id':next[0].id ,lista : lista})}}" class="btn btn-success center-block next-back-btn">Siguiente</a>
 	{% endif %}
 	</div>
 </div>
@@ -22,59 +28,59 @@
 		<form method="post" enctype="multipart/form-data" >
 			<div class="col-md-8">
 				<div class="row">
-					<div class="col-md-4"><label for="">Nombre</label><input required id="name" value="{{child.name}}" class="form-control" name="name" type="text"></div>
-					<div class="col-md-4"><label for="">Fecha de Nacimiento</label><input required value="{{child.birthday| date('Y-m-d')}}" name="date" class="form-control" type="date"></div>
-					<div class="col-md-4"><label for="">Telefono</label><input required id="phone" value="{{child.phone}}" name="phone" class="form-control" type="text"></div>
-					<div class="col-md-12"><label for="">Email</label><input required id="email" value="{{child.email}}" name="email" class="form-control" type="text"></div>
-					<div class="col-md-12"><label for="">Direccion</label><input required value="{{child.address}}" type="text" name="address" class="form-control" id="searchTextField"></div>
+					<div class="col-md-4"><label for="">Nombre</label><input {{editar}} required id="name" value="{{child.name}}" class="form-control" name="name" type="text"></div>
+					<div class="col-md-4"><label for="">Fecha de Nacimiento</label><input {{editar}} required value="{{child.birthday| date('Y-m-d')}}" name="date" class="form-control" type="date"></div>
+					<div class="col-md-4"><label for="">Telefono</label><input {{editar}} required id="phone" value="{{child.phone}}" name="phone" class="form-control" type="text"></div>
+					<div class="col-md-12"><label for="">Email</label><input {{editar}} required id="email" value="{{child.email}}" name="email" class="form-control" type="text"></div>
+					<div class="col-md-12"><label for="">Direccion</label><input {{editar}} required value="{{child.address}}" type="text" name="address" class="form-control" id="searchTextField"></div>
 					<div class="col-md-12">
-						<div class="col-md-6"><label for="">Lat</label><input value="{{child.lat}}" name="lat" readonly type="text" class="MapLat form-control"></div>
-						<div class="col-md-6"><label for="">Long</label><input value="{{child.lng}}" name="lng" readonly type="text" class="MapLon form-control"></div>
+						<div class="col-md-6"><label for="">Lat</label><input {{editar}} value="{{child.lat}}" name="lat" readonly type="text" class="MapLat form-control"></div>
+						<div class="col-md-6"><label for="">Long</label><input {{editar}} value="{{child.lng}}" name="lng" readonly type="text" class="MapLon form-control"></div>
 					</div>
 					<div class="col-md-12">
 						<div id="map_canvas" style="height: 200px;width: 100%;margin: 0.6em; margin-right: 20px"></div>
 					</div>
-					<div class="col-md-6"><label for="">Barrio</label><input required value="{{child.barrio}}" name="barrio" class="form-control" type="text"></div>
-					<div class="col-md-6"><label for="">Nombre padres</label><input required id="parents" value="{{child.parents}}" name="parents" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Barrio</label><input {{editar}} required value="{{child.barrio}}" name="barrio" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Nombre padres</label><input {{editar}} required id="parents" value="{{child.parents}}" name="parents" class="form-control" type="text"></div>
 					<div class="col-md-6"><label for="">Grado</label>
-						<select name="grade" class="form-control" id="">
+						<select {{editSelect}} name="grade" class="form-control" id="">
 							<option {% if child.grade %}selected{% endif %} value="A">A</option>
 							<option {% if child.grade %}selected{% endif %} value="B">B</option>
 							<option {% if child.grade %}selected{% endif %} value="C">C</option>
 						</select>
 					</div>
 					<div class="col-md-6"><label for="">Grupo</label>
-						<select name="grupo" class="form-control" id="">
+						<select {{editSelect}} name="grupo" class="form-control" id="">
 							{% for grupo in grupos %}
 							<option {% if child.grupo %}selected{% endif %} value="{{grupo.id}}">{{grupo.name}}</option>
 							{% endfor %}
 						</select>
 					</div>
 					<div class="col-md-6"><label for="">Colegio</label>
-						<input class="form-control" name="colegio" value="{{child.colegio}}" type="text">
+						<input {{editSelect}} class="form-control" name="colegio" value="{{child.colegio}}" type="text">
 					</div>
 					<div class="col-md-6"><label for="">Ruta</label>
-						<select name="institute" class="form-control" id="">
+						<select {{editSelect}} name="institute" class="form-control" id="">
 							{% for route in routes %}
 							<option {% if child.route %}selected{% endif %} value="{{route.id}}">{{route.name}}</option>
 							{% endfor %}
 						</select>
 					</div>
 					<div class="col-md-6"><label for="">Telefonero</label>
-						<select name="telefonero" class="form-control" id="">
+						<select {{editSelect}} name="telefonero" class="form-control" id="">
 							{% for telefonero in telefoneros %}
 							<option {% if child.telefonero %}selected{% endif %} value="{{telefonero.id}}">{{telefonero.name}}</option>
 							{% endfor %}
 						</select>
 					</div>
-					<div class="checkbox col-md-6"><label class="activo"><input class="form-control" name="active"  type="checkbox">Activo</label></div>
+					<div class="checkbox col-md-6"><label class="activo"><input class="form-control" name="active" {{editSelect}}  type="checkbox">Activo</label></div>
 					<div class="col-md-12"><label for="">Observaciones</label><textarea name="observations" class="form-control" id="" cols="5" rows="2">{{child.observations}}</textarea></div>
 					<div class="col-md-12 mt-10"><button class="btn btn-success m-r-10">Editar</button></div>
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="col-md-12 image"><img id="imgSalida" width="280" src="{{ asset ('img/childs/'~child.image)}}" /></div>
-				<div class="col-md-12 mb-10"><input class="form-control" name="image" id="file-input" type="file" /></div>
+				<div class="col-md-12 mb-10"><input {{editar}} class="form-control" name="image" id="file-input" type="file" /></div>
 				<div class="col-md-12"><label for="">Comentarios</label><textarea  name="comments" class="form-control" id="" cols="5" rows="2">{{child.comments}}</textarea></div>
 				<div class="panel panel-default">
 					<div class="panel-body ">

@@ -105,7 +105,7 @@ class TelefonerosController extends Controller
         $childs = $em->getRepository('AppBundle:Childs')->findAll(); 
         foreach ($childs as $child) {
           if (!$child->getType()) {
-           $child->setType('discard');
+           $child->setType('frequent');
           }
         }
         $em->flush();

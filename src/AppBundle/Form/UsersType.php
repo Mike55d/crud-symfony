@@ -31,6 +31,7 @@ class UsersType extends AbstractType
         ->add('active',CheckboxType::class,['data'=>true])
         ->add('phone')
         ->add('sede')
+        ->add('telefonero')
         ->add('image',FileType::class)
         ->add('roles',ChoiceType::class,['choices'=>['ADMIN'=>'ROLE_ADMIN',
                                                      'USER'=>'ROLE_USER']])

@@ -10,7 +10,7 @@ namespace AppBundle\Repository;
  */
 class ChildsRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function nextIdFirst($id,$sede){
+	public function nextId($id,$sede,$lista,$telefonero){
 
 		$em = $this->getEntityManager(); 
 		$qb = $em->createQueryBuilder();
@@ -20,13 +20,18 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		   //->andWhere('c.id > :id')
 		   ->setParameter('id', $id)
 		   ->setParameter('sede', $sede)
-		   ->setParameter('first', 'first')
+		   ->setParameter('first', $lista)
 		   ->setMaxResults(1)
 		   ->orderBy('c.id', 'ASC');
+		   if ($telefonero) {
+		   	$qb->andWhere('c.telefonero = :telefonero')
+		   	->setParameter('telefonero',$telefonero);
+		   }
 	  $query = $qb->getQuery();
 	  return $query->getResult();
 	}
-	public function backIdFirst($id,$sede){
+
+	public function backId($id,$sede,$lista,$telefonero){
 
 		$em = $this->getEntityManager(); 
 		$qb = $em->createQueryBuilder();
@@ -36,9 +41,13 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		   //->andWhere('c.id > :id')
 		   ->setParameter('id', $id)
 		   ->setParameter('sede', $sede)
-		   ->setParameter('first', 'first')
+		   ->setParameter('first', $lista)
 		   ->setMaxResults(1)
 		   ->orderBy('c.id', 'DESC');
+		   if ($telefonero) {
+		   	$qb->andWhere('c.telefonero = :telefonero')
+		   	->setParameter('telefonero',$telefonero);
+		   }
 	  $query = $qb->getQuery();
 	  return $query->getResult();
 	}

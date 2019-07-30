@@ -26,6 +26,7 @@ class UsersEditType extends AbstractType
         ->add('active',CheckboxType::class)
         ->add('phone')
         ->add('sede')
+        ->add('telefonero')
         ;
     }/**
      * {@inheritdoc}

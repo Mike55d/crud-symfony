@@ -155,4 +155,8 @@ class Telefonero
         return $this->sede;
     }
 
+    public function __toString(){
+      return $this->name;
+    }
+
 }
