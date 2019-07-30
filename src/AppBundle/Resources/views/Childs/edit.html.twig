@@ -11,15 +11,18 @@
 {% set editSelect = 'disabled' %}
 {% endif %}
 <div class="row mb-10">
-	<div class="col-md-6">
+	<div class="col-md-4">
 	{% if back %}
-		<a href="{{path ('childs_edit',{'id':back[0].id ,lista : lista})}}" class="btn btn-warning center-block next-back-btn">Anterior</a>
+		<a onclick="sendform()" href="{{path ('childs_edit',{'id':back[0].id ,lista : lista})}}" class="btn btn-warning center-block next-back-btn">Anterior</a>
 	{% endif %}
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-4">
 	{% if next %}
-		<a href="{{path ('childs_edit',{'id':next[0].id ,lista : lista})}}" class="btn btn-success center-block next-back-btn">Siguiente</a>
+		<a onclick="sendform()" href="{{path ('childs_edit',{'id':next[0].id ,lista : lista})}}"  class="btn btn-success center-block next-back-btn">Siguiente</a>
 	{% endif %}
+	</div>
+	<div class="col-md-4">
+	<a href="{{anterior}}" class="btn btn-primary center-block next-back-btn">Volver</a>
 	</div>
 </div>
 <div class="panel panel-default">
@@ -28,14 +31,15 @@
 		<form method="post" enctype="multipart/form-data" >
 			<div class="col-md-8">
 				<div class="row">
+					<input name="id" value="{{child.id}}" type="hidden">
 					<div class="col-md-4"><label for="">Nombre</label><input {{editar}} required id="name" value="{{child.name}}" class="form-control" name="name" type="text"></div>
 					<div class="col-md-4"><label for="">Fecha de Nacimiento</label><input {{editar}} required value="{{child.birthday| date('Y-m-d')}}" name="date" class="form-control" type="date"></div>
 					<div class="col-md-4"><label for="">Telefono</label><input {{editar}} required id="phone" value="{{child.phone}}" name="phone" class="form-control" type="text"></div>
 					<div class="col-md-12"><label for="">Email</label><input {{editar}} required id="email" value="{{child.email}}" name="email" class="form-control" type="text"></div>
 					<div class="col-md-12"><label for="">Direccion</label><input {{editar}} required value="{{child.address}}" type="text" name="address" class="form-control" id="searchTextField"></div>
 					<div class="col-md-12">
-						<div class="col-md-6"><label for="">Lat</label><input {{editar}} value="{{child.lat}}" name="lat" readonly type="text" class="MapLat form-control"></div>
-						<div class="col-md-6"><label for="">Long</label><input {{editar}} value="{{child.lng}}" name="lng" readonly type="text" class="MapLon form-control"></div>
+						<div class="col-md-6"><input {{editar}} value="{{child.lat}}" name="lat"  type="hidden" class="MapLat form-control"></div>
+						<div class="col-md-6"><input {{editar}} value="{{child.lng}}" name="lng"  type="hidden" class="MapLon form-control"></div>
 					</div>
 					<div class="col-md-12">
 						<div id="map_canvas" style="height: 200px;width: 100%;margin: 0.6em; margin-right: 20px"></div>
@@ -84,21 +88,24 @@
 				<div class="col-md-12"><label for="">Comentarios</label><textarea  name="comments" class="form-control" id="" cols="5" rows="2">{{child.comments}}</textarea></div>
 				<div class="panel panel-default">
 					<div class="panel-body ">
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="recojer[]" value="4" {% if 4 in child.recojer %} checked {% endif %}  type="checkbox">Recojer viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="recojer[]" value="5" {% if 5 in child.recojer %} checked {% endif %}  type="checkbox">Recojer sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="recojer[]" value="6" {% if 6 in child.recojer %} checked {% endif %}  type="checkbox">Recojer domingo</label></div></div>
-
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="confirmar[]" value="4" {% if 4 in child.confirmar %} checked {% endif %}  type="checkbox">Confirmar viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="confirmar[]" value="5" {% if 5 in child.confirmar %} checked {% endif %}  type="checkbox">Confirmar sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="confirmar[]" value="6" {% if 6 in child.confirmar %} checked {% endif %}  type="checkbox">Confirmar domingo</label></div></div>
-
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="llega[]" value="4" {% if 4 in child.llega %} checked {% endif %}  type="checkbox">Llega viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="llega[]" value="5" {% if 5 in child.llega %} checked {% endif %}  type="checkbox">Llega sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="llega[]" value="6" {% if 6 in child.llega %} checked {% endif %}  type="checkbox">Llega domingo</label></div></div>
-
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="noViene[]" value="4" {% if 4 in child.noViene %} checked {% endif %}  type="checkbox">No viene viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="noViene[]" value="5" {% if 5 in child.noViene %} checked {% endif %}  type="checkbox">No viene sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="noViene[]" value="6" {% if 6 in child.noViene %} checked {% endif %}  type="checkbox">No viene domingo</label></div></div>
+						<div class="col-md-4 mr-10">
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.viernes == 'recojer' %} checked {% endif %} name="viernes" value="recojer"  type="radio">Recojer viernes</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.viernes == 'confirmar' %} checked {% endif %} name="viernes" value="confirmar"  type="radio">Confirmar viernes</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.viernes == 'llega' %} checked {% endif %} name="viernes" value="llega"  type="radio">Llega viernes</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.viernes == 'noViene' %} checked {% endif %} name="viernes" value="noViene"  type="radio">No viene viernes</label></div></div>
+						</div>
+						<div class="col-md-4 mr-10">
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.sabado == 'recojer' %} checked {% endif %} name="sabado" value="recojer"  type="radio">Recojer sabado</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.sabado == 'confirmar' %} checked {% endif %} name="sabado" value="confirmar"  type="radio">Confirmar sabado</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.sabado == 'llega' %} checked {% endif %} name="sabado" value="llega"  type="radio">Llega sabado</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.sabado == 'noViene' %} checked {% endif %} name="sabado" value="noViene"  type="radio">No viene sabado</label></div></div>
+						</div>
+						<div class="col-md-4 mr-10">
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.domingo == 'recojer' %} checked {% endif %} name="domingo" value="recojer"  type="radio">Recojer domingo</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.domingo == 'confirmar' %} checked {% endif %} name="domingo" value="confirmar"  type="radio">Confirmar domingo</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.domingo == 'llega' %} checked {% endif %} name="domingo" value="llega"  type="radio">Llega domingo</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.domingo == 'noViene' %} checked {% endif %} name="domingo" value="noViene"  type="radio">No viene domingo</label></div></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -160,5 +167,17 @@ $(window).on('load' ,function(){
 		}
 	});
 });
+ function sendform(){
+ 		datos = $('form').serialize();
+ 	$.ajax({
+    type:"POST",
+    url:"{{path ('childs_update')}}",
+    data:datos,
+    success:function(r){
+                   
+    }
+	
+	    });
+}
 </script>
 {% endblock %}

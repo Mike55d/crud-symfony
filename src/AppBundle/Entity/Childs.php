@@ -141,32 +141,23 @@ class Childs
     private $type;
 
     /**
-     * @var json_array
+     * @var string
      *
-     * @ORM\Column(name="recojer", type="json_array", length=255 , nullable=true )
+     * @ORM\Column(name="viernes", type="string", length=255 , nullable=true)
      */
-    private $recojer;
-
+    private $viernes;
     /**
-     * @var json_array
+     * @var string
      *
-     * @ORM\Column(name="confirmar", type="json_array", length=255 , nullable=true )
+     * @ORM\Column(name="sabado", type="string", length=255 , nullable=true)
      */
-    private $confirmar;
-
+    private $sabado;
     /**
-     * @var json_array
+     * @var string
      *
-     * @ORM\Column(name="llega", type="json_array", length=255 , nullable=true )
+     * @ORM\Column(name="domingo", type="string", length=255 , nullable=true)
      */
-    private $llega;
-
-    /**
-     * @var json_array
-     *
-     * @ORM\Column(name="noViene", type="json_array", length=255 , nullable=true )
-     */
-    private $noViene;
+    private $domingo;
 
     /**
     * @ORM\ManyToOne(targetEntity="Sede")
@@ -504,102 +495,6 @@ class Childs
     }
 
     /**
-     * Set recojer
-     *
-     * @param string $recojer
-     *
-     * @return Childs
-     */
-    public function setRecojer($recojer)
-    {
-        $this->recojer = $recojer;
-
-        return $this;
-    }
-
-    /**
-     * Get recojer
-     *
-     * @return string
-     */
-    public function getRecojer()
-    {
-        return $this->recojer;
-    }
-
-    /**
-     * Set confirmar
-     *
-     * @param string $confirmar
-     *
-     * @return Childs
-     */
-    public function setConfirmar($confirmar)
-    {
-        $this->confirmar = $confirmar;
-
-        return $this;
-    }
-
-    /**
-     * Get confirmar
-     *
-     * @return string
-     */
-    public function getConfirmar()
-    {
-        return $this->confirmar;
-    }
-
-    /**
-     * Set llega
-     *
-     * @param string $llega
-     *
-     * @return Childs
-     */
-    public function setLlega($llega)
-    {
-        $this->llega = $llega;
-
-        return $this;
-    }
-
-    /**
-     * Get llega
-     *
-     * @return string
-     */
-    public function getLlega()
-    {
-        return $this->llega;
-    }
-
-    /**
-     * Set noViene
-     *
-     * @param string $noViene
-     *
-     * @return Childs
-     */
-    public function setNoViene($noViene)
-    {
-        $this->noViene = $noViene;
-
-        return $this;
-    }
-
-    /**
-     * Get noViene
-     *
-     * @return string
-     */
-    public function getNoViene()
-    {
-        return $this->noViene;
-    }
-
-    /**
      * Set grupo
      *
      * @param \AppBundle\Entity\Grupo $grupo
@@ -861,5 +756,77 @@ class Childs
     public function getCourse()
     {
         return $this->course;
+    }
+
+    /**
+     * Set viernes
+     *
+     * @param string $viernes
+     *
+     * @return Childs
+     */
+    public function setViernes($viernes)
+    {
+        $this->viernes = $viernes;
+
+        return $this;
+    }
+
+    /**
+     * Get viernes
+     *
+     * @return string
+     */
+    public function getViernes()
+    {
+        return $this->viernes;
+    }
+
+    /**
+     * Set sabado
+     *
+     * @param string $sabado
+     *
+     * @return Childs
+     */
+    public function setSabado($sabado)
+    {
+        $this->sabado = $sabado;
+
+        return $this;
+    }
+
+    /**
+     * Get sabado
+     *
+     * @return string
+     */
+    public function getSabado()
+    {
+        return $this->sabado;
+    }
+
+    /**
+     * Set domingo
+     *
+     * @param string $domingo
+     *
+     * @return Childs
+     */
+    public function setDomingo($domingo)
+    {
+        $this->domingo = $domingo;
+
+        return $this;
+    }
+
+    /**
+     * Get domingo
+     *
+     * @return string
+     */
+    public function getDomingo()
+    {
+        return $this->domingo;
     }
 }

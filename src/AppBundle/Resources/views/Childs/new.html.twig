@@ -2,7 +2,7 @@
 
 {% block title %}Nuevo niño{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 {% endblock %}
 {% block body %}
 <div class="panel panel-default">
@@ -17,8 +17,8 @@
 					<div class="col-md-12"><label for="">Email</label><input id="email" required name="email" class="form-control" type="text"></div>
 					<div class="col-md-12"><label for="">Direccion</label><input required type="text" name="address" class="form-control" id="searchTextField"></div>
 					<div class="col-md-12">
-						<div class="col-md-6"><label for="">Lat</label><input name="lat" readonly type="text" class="MapLat form-control"></div>
-						<div class="col-md-6"><label for="">Long</label><input name="lng" readonly type="text" class="MapLon form-control"></div>
+						<div class="col-md-6"><input name="lat" type="hidden" class="MapLat form-control"></div>
+						<div class="col-md-6"><input name="lng" type="hidden" class="MapLon form-control"></div>
 					</div>
 					<div class="col-md-12">
 						<div id="map_canvas" style="height: 200px;width: 100%;margin: 0.6em; margin-right: 20px"></div>
@@ -67,18 +67,24 @@
 				<div class="col-md-12"><label for="">Comentarios</label><textarea name="comments" class="form-control" id="" cols="5" rows="2"></textarea></div>
 				<div class="panel panel-default">
 					<div class="panel-body ">
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="recojer[]" value="4"  type="checkbox">Recojer viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="recojer[]" value="5"  type="checkbox">Recojer sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="recojer[]" value="6"  type="checkbox">Recojer domingo</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="confirmar[]" value="4"  type="checkbox">Confirmar viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="confirmar[]" value="5"  type="checkbox">Confirmar sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="confirmar[]" value="6"  type="checkbox">Confirmar domingo</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="llega[]" value="4"  type="checkbox">Llega viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="llega[]" value="5"  type="checkbox">Llega sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="llega[]" value="6"  type="checkbox">Llega domingo</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="noViene[]" value="4"  type="checkbox">No viene viernes</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="noViene[]" value="5"  type="checkbox">No viene sabado</label></div></div>
-						<div class="col-md-4 mr-10"><div class="checkbox col-md-6"><label><input name="noViene[]" value="6"  type="checkbox">No viene domingo</label></div></div>
+						<div class="col-md-4 mr-10">
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="recojer"  type="radio">Recojer viernes</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="confirmar"  type="radio">Confirmar viernes</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="llega"  type="radio">Llega viernes</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="no viene"  type="radio">No viene viernes</label></div></div>
+						</div>
+						<div class="col-md-4 mr-10">
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="recojer"  type="radio">Recojer sabado</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="confirmar"  type="radio">Confirmar sabado</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="llega"  type="radio">Llega sabado</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="no viene"  type="radio">No viene sabado</label></div></div>
+						</div>
+						<div class="col-md-4 mr-10">
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="recojer"  type="radio">Recojer domingo</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="confirmar"  type="radio">Confirmar domingo</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="llega"  type="radio">Llega domingo</label></div></div>
+							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="no viene"  type="radio">No viene domingo</label></div></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -89,9 +95,9 @@
 
 {% block javascripts %}
 <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
 <script src="http://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 {# Google Api key #}
@@ -102,23 +108,23 @@
 <script>
 $( function() {
 	//autocompletar
-    var availableNames = {{childNames | json_encode | raw}};
-    var availablePhones = {{childPhones | json_encode | raw}};
-    var availableEmails = {{childEmails | json_encode | raw}};
-    var availableParents = {{childParents | json_encode | raw}};
-    $( "#name" ).autocomplete({
-      source: availableNames
-    });
-    $( "#phone" ).autocomplete({
-      source: availablePhones
-    });
-    $( "#email" ).autocomplete({
-      source: availableEmails
-    });
-    $( "#parents" ).autocomplete({
-      source: availableParents
-    });
-  } );
+	var availableNames = {{childNames | json_encode | raw}};
+	var availablePhones = {{childPhones | json_encode | raw}};
+	var availableEmails = {{childEmails | json_encode | raw}};
+	var availableParents = {{childParents | json_encode | raw}};
+	$( "#name" ).autocomplete({
+		source: availableNames
+	});
+	$( "#phone" ).autocomplete({
+		source: availablePhones
+	});
+	$( "#email" ).autocomplete({
+		source: availableEmails
+	});
+	$( "#parents" ).autocomplete({
+		source: availableParents
+	});
+} );
 // Mostrar imagenes
 $(window).on('load' ,function(){
 

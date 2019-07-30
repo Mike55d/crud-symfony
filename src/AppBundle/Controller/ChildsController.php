@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Childs;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
@@ -16,7 +17,7 @@ class ChildsController extends Controller
     /**
      * @Route("/primeraVez" , name="childs_index")
      */
-    public function indexAction()
+    public function indexAction( Request $request)
     {   
         $em =$this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')
@@ -34,7 +35,7 @@ class ChildsController extends Controller
             ->findBy($query,['id'=> 'ASC']); 
             return $this->render('AppBundle:Childs:index.html.twig', array(
                 'childs' => $childs,
-                'lista'=> 'first'
+                'lista'=> 'first',
             ));
         }
 
@@ -57,12 +58,12 @@ class ChildsController extends Controller
     /**
      * @Route("/frecuentes" , name="childs_frequent")
      */
-    public function frequentAction()
+    public function frequentAction( Request $request)
     {   
         $em =$this->getDoctrine()->getManager(); 
         $user = $this->get('security.token_storage')
         ->getToken()->getUser();
-        $sede = $user->getSede(); 
+        $sede = $user->getSede();
         $query = ['type'=>'frequent','sede'=> $sede];
         if ($user->getRola() == 'USER') 
         {
@@ -75,7 +76,7 @@ class ChildsController extends Controller
             ->findBy($query,['id'=> 'ASC']);   
             return $this->render('AppBundle:Childs:index.html.twig', array(
                 'childs' => $childs,
-                'lista'=> 'frequent'
+                'lista'=> 'frequent',
             ));
         }
 
@@ -123,10 +124,9 @@ class ChildsController extends Controller
                 ->find($request->get('telefonero')));
             $child->setObservations($request->get('observations') ?? 'ninguna');
             $child->setComments($request->get('comments') ?? 'ninguno');
-            $child->setRecojer($request->get('recojer'));
-            $child->setConfirmar($request->get('confirmar'));
-            $child->setLLega($request->get('llega'));
-            $child->setNoViene($request->get('noViene'));
+            $child->setViernes($request->get('viernes'));
+            $child->setSabado($request->get('sabado'));
+            $child->setDomingo($request->get('domingo'));
             $child->setLat($request->get('lat'));
             $child->setLng($request->get('lng'));
             //insertar imagen
@@ -165,6 +165,7 @@ class ChildsController extends Controller
         $user= $this->get('security.token_storage')
         ->getToken()->getUser();
         $sede = $user->getSede();
+        $anterior = $_SERVER['HTTP_REFERER'];
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
@@ -209,10 +210,9 @@ class ChildsController extends Controller
                 ->find($request->get('telefonero')));
             $child->setObservations($request->get('observations'));
             $child->setComments($request->get('comments'));
-            $child->setRecojer($request->get('recojer'));
-            $child->setConfirmar($request->get('confirmar'));
-            $child->setLLega($request->get('llega'));
-            $child->setNoViene($request->get('noViene'));
+            $child->setViernes($request->get('viernes'));
+            $child->setSabado($request->get('sabado'));
+            $child->setDomingo($request->get('domingo'));
             $child->setLat($request->get('lat'));
             $child->setLng($request->get('lng'));
             //insertar imagen
@@ -224,7 +224,8 @@ class ChildsController extends Controller
            }
            $em->persist($child);
            $em->flush();
-           return $this->redirectToRoute('childs_index');
+           return $this->redirectToRoute('childs_edit',
+            ['lista'=>$lista, 'id'=> $child->getId()]);
        }
        return $this->render('AppBundle:Childs:edit.html.twig', array(
         'child'=> $child,
@@ -238,7 +239,8 @@ class ChildsController extends Controller
         'childNames'=>$childNames,
         'childPhones'=>$childPhones,
         'childEmails'=>$childEmails,
-        'childParents'=>$childParents
+        'childParents'=>$childParents,
+        'anterior'=> $anterior
     ));
    }
 
@@ -267,20 +269,64 @@ class ChildsController extends Controller
         $childsFrequent = $em->getRepository('AppBundle:Childs')
         ->findBy(['sede'=> $sede , 'type'=> 'frequent']);  
         foreach ($childsFirst as $child){
-            $child->setRecojer(null);
-            $child->setConfirmar(null);
-            $child->setLlega(null);
-            $child->setNoViene(null);
+            $child->setViernes(null);
+            $child->setSabado(null);
+            $child->setDomingo(null);
         }
         foreach ($childsFrequent as $child){
-            $child->setRecojer(null);
-            $child->setConfirmar(null);
-            $child->setLlega(null);
-            $child->setNoViene(null);
+            $child->setViernes(null);
+            $child->setSabado(null);
+            $child->setDomingo(null);
         }
         $this->addFlash('notice','Se han limpiado los registros');
         $em->flush();
         return $this->redirectToRoute('homepage');
+    }
+
+    /**
+     * @Route("/update" , name="childs_update")
+     */
+    public function updateAction(Request $request){
+        $em =$this->getDoctrine()->getManager(); 
+        $child = $em->getRepository('AppBundle:Childs')
+        ->find($request->get('id')); 
+        $child->setName($request->get('name'));
+        $child->setBirthday(new \DateTime($request->get('date')));
+         //calcular edad de la fecha de nacimiento
+        $cumpleaños = new \DateTime($request->get('date'));
+        $hoy = new \DateTime();
+        $edad = $hoy->diff($cumpleaños);
+        $child->setAge($edad->y);
+        $child->setPhone($request->get('phone'));
+        $child->setEmail($request->get('email'));
+        $child->setAddress($request->get('address'));
+        $child->setBarrio($request->get('barrio'));
+        $child->setParents($request->get('parents'));
+        $child->setGrade($request->get('grade'));
+        $child->setGrupo($em->getRepository('AppBundle:Grupo')
+            ->find($request->get('grupo')));
+        $child->setInstitute($em->getRepository('AppBundle:Institute')
+            ->find($request->get('institute')));
+        $child->setRoute($request->get('route'));
+        $child->setTelefonero($em->getRepository('AppBundle:Telefonero')
+            ->find($request->get('telefonero')));
+        $child->setObservations($request->get('observations'));
+        $child->setComments($request->get('comments'));
+        $child->setViernes($request->get('viernes'));
+        $child->setSabado($request->get('sabado'));
+        $child->setDomingo($request->get('domingo'));
+        $child->setLat($request->get('lat'));
+        $child->setLng($request->get('lng'));
+        //insertar imagen
+        if ($request->files->get('image')) {
+           $file = $request->files->get('image');
+           $fileName = md5(uniqid()).'.'.$file->guessExtension();
+           $file->move($this->getParameter('childs'),$fileName);
+           $child->setImage($fileName);
+       }
+        $em->flush();
+        $name = $request->get('name');
+        return new JsonResponse($name);
     }
 
 }
