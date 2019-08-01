@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
 class UsersType extends AbstractType
@@ -22,17 +23,17 @@ class UsersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('username', EmailType::class)
-        ->add('name')
+        ->add('username', EmailType::class , ['label'=>'Email'])
+        ->add('name', TextType::class,['label'=>'Nombre'])
         ->add('plainPassword', RepeatedType::class, array(
             'type' => PasswordType::class,
-            'first_options' => array('label' => 'Password'),
-            'second_options' => array('label' => 'Repeat Password')))
-        ->add('active',CheckboxType::class,['data'=>true])
-        ->add('phone')
+            'first_options' => array('label' => 'Contraseña'),
+            'second_options' => array('label' => 'Repetir contraseña')))
+        ->add('active',CheckboxType::class,['data'=>true,'label'=>'Activo'])
+        ->add('phone',TextType::class,['label'=>'Telefono'])
         ->add('sede')
         ->add('telefonero')
-        ->add('image',FileType::class)
+        ->add('image',FileType::class,['label'=>'Imagen'])
         ->add('roles',ChoiceType::class,['choices'=>['ADMIN'=>'ROLE_ADMIN',
                                                      'USER'=>'ROLE_USER']])
         ;

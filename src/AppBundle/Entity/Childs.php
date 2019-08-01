@@ -185,7 +185,7 @@ class Childs
 
     /**
     * @ORM\ManyToOne(targetEntity="Telefonero")
-    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id" , nullable=true , onDelete="SET NULL")
     */
     private $telefonero;
 
