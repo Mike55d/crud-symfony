@@ -1,0 +1,42 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+<div class="row">
+    	<div class="col-md-4 col-md-offset-4">
+    		<div class="panel panel-default">
+    	<div class="panel-heading">
+    		Reporte de Rutas
+    	</div>
+    	<div class="panel-body">
+    		<form method="post" >
+                    <label for="">rutas</label>
+            <select class="form-control" name="ruta" id="">
+                {% for ruta in rutas %}
+                <option value="{{ruta.id}}">{{ruta.name}}</option>
+                {% endfor %}
+                <option value="todas">todas</option>
+            </select>
+    			<label for="">dias</label>
+    		<select class="form-control" name="dia" id="">
+    			<option value="viernes">Viernes</option>
+    			<option value="sabado">Sabado</option>
+    			<option value="domingo">Domingo</option>
+    		</select>
+    			<label for="">Formato</label>
+    		<select class="form-control" name="formato" id="">
+    			<option value="pdf">PDF</option>
+    			<option value="rtf">RTF</option>
+    		</select>
+    		<label for="">Data</label>
+    		<select class="form-control" name="type" id="">
+    			<option value="frequent">regular</option>
+    			<option value="first">primera vez</option>
+    			<option value="discard">descartado</option>
+    		</select><br>
+    		<button class="btn btn-success center-block" >Generar</button>
+    		</form>
+    	</div>
+    </div>
+    	</div>
+    </div>
+{% endblock %}
