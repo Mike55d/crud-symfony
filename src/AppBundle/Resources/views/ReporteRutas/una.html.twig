@@ -24,7 +24,7 @@
      <page>
  
     <page_header > 
-    	<h5 class="header">DOMINGO {{rutaName}}  RUTA 89</h5>
+    	<h5 class="header">DOMINGO {{rutaName}}  RUTA 89 {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
     	<p class="header">Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
     sábado / LD-Llega domingo</p>
     <p class="header">¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.</p>
@@ -45,7 +45,7 @@
     			<td>{{key}}</td>
     			<td>{{child.colegio}}</td>
     			<td>{{child.name}}</td>
-    			<td>{{child.address}}</td>
+    			<td>{{child.address|wordwrap(22,'<br>')|raw}}</td>
     			<td>{{child.phone}}</td>
     			<td>{{child.barrio}}</td>
     			<td>{{child.parents}}</td>

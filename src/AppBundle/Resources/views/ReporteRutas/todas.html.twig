@@ -1,58 +1,63 @@
 <style>
-	table , th  ,td{
-		border:1px solid black;
-	}
-	table{
-		margin-top: 150px;
-		border-collapse: collapse;
-	}
-	.header{
-		text-align: center;
-	}
-	th{
-		text-align: center;
-		background: #D7D5D5;
-	}
-	td{
-		text-align: center;
-	}
-	.tabla{
-		width: 10000px;
-	}
+    table , th  ,td{
+        border:1px solid black;
+    }
+    table{
+        margin-top: 150px;
+        border-collapse: collapse;
+    }
+    .header{
+        text-align: center;
+    }
+    th{
+        text-align: center;
+        background: #D7D5D5;
+    }
+    td{
+        text-align: center;
+        white-space:pre ;
+    }
+    .tabla{
+        width: 10000px;
+    }
 </style>
-{% for i in 0..2 %}
-     <page>
+     {% for dato in data %}
+         <page>
  
     <page_header > 
-    	<h5 class="header">DOMINGO {{ruta}}  RUTA 89</h5>
-    	<p class="header">Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
+        <h5 class="header">DOMINGO {{dato.ruta.name}} {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
+        <p class="header">Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
     sábado / LD-Llega domingo</p>
     <p class="header">¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.</p>
     </page_header> 
     <table >
-    		<tr >
-    			<th style="width:20px">Nº</th>
-    			<th style="width:100px">Colegio</th>
-    			<th style="width:100px">Nombre</th>
-    			<th style="width:100px">Direccion</th>
-    			<th style="width:100px">Telefono</th>
-    			<th style="width:100px">Barrio</th>
-    			<th style="width:100px">N. padres</th>
-    			<th style="width:100px">Confirmar</th>
-    		</tr>
-    		<tr>
-    			<td>1</td>
-    			<td>dwada</td>
-    			<td>mike</td>
-    			<td>new york</td>
-    			<td>421321321</td>
-    			<td>central park</td>
-    			<td>mike noris</td>
-    			<td>LCK</td>
-    		</tr>
+            <tr >
+                <th style="width:20px">Nº</th>
+                <th style="width:100px">Colegio</th>
+                <th style="width:100px">Nombre</th>
+                <th style="width:100px">Direccion</th>
+                <th style="width:100px">Telefono</th>
+                <th style="width:100px">Barrio</th>
+                <th style="width:100px">N. padres</th>
+                <th style="width:80px">Confirmar</th>
+            </tr>
+            {% for key , child in dato.childs %}
+            <tr>
+                <td>{{key}}</td>
+                <td>{{child.colegio}}</td>
+                <td>{{child.name}}</td>
+                <td>{{child.address|wordwrap(22,'<br>')|raw}}</td>
+                <td>{{child.phone}}</td>
+                <td>{{child.barrio}}</td>
+                <td>{{child.parents}}</td>
+                {% if dia == 'viernes' %}<td>{{child.viernes}}</td>{% endif %}
+                {% if dia == 'sabado' %}<td>{{child.sabado}}</td>{% endif %}
+                {% if dia == 'domingo' %}<td>{{child.domingo}}</td>{% endif %}
+                
+            </tr>
+            {% endfor %}
     </table>
     <page_footer> 
-       ...pagina{{i}}
     </page_footer> 
  </page>
- {% endfor %} 
+     {% endfor %}

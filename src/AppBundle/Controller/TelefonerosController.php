@@ -120,10 +120,23 @@ class TelefonerosController extends Controller
     public function testAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede();
+        /*
         $html2pdf = new Html2Pdf();
         $html2pdf->writeHTML($this->renderView('AppBundle:Telefoneros:test.html.twig',[
           'user'=> 'blue',
         ]));
         $html2pdf->output();
+        */
+        $data = [];
+            $rutas = $em->getRepository('AppBundle:Ruta')->findAll();
+            foreach ($rutas as $i => $route) {
+                $childs = $em->getRepository('AppBundle:Childs')
+                ->buscarRuta($route,'viernes',$sede,'first');
+                $data[]=['ruta'=>$route,'childs'=>$childs];
+            }
+        return $this->render('AppBundle:Telefoneros:test2.html.twig',['data'=>$data]);
     }
 }

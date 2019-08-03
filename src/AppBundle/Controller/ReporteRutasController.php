@@ -280,20 +280,29 @@ public function reportesRutasWordAction($dia, $ruta,$type){
         $sede = $user->getSede();
         $html2pdf = new Html2Pdf();
         if ($ruta == 'todas') {
+            $data = [];
+            $rutas = $em->getRepository('AppBundle:Ruta')->findAll();
+            foreach ($rutas as $i => $route) {
+                $childs = $em->getRepository('AppBundle:Childs')
+                ->buscarRuta($route,$dia,$sede,$type);
+                $data[]=['ruta'=>$route,'childs'=>$childs];
+            }
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteRutas:todas.html.twig',[
-              'ruta'=> $ruta,
+              'data'=> $data,
+              'type'=> $type,
+              'dia'=> $dia,
+
           ]));
         }
         if ($ruta != 'todas') {
             $rutaName = $em->getRepository('AppBundle:Ruta')->find($ruta);
             $childs = $em->getRepository('AppBundle:Childs')
             ->buscarRuta($ruta,$dia,$sede,$type);
-            $nuevo_texto = wordwrap($childs[2]->getAddress(), 25, '<br>', 1);
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteRutas:una.html.twig',[
                 'rutaName'=> $rutaName->getName(),
                 'childs'=> $childs,
                 'dia'=> $dia,
-                'texto'=> $nuevo_texto,
+                'type'=> $type
           ]));
         }
         
