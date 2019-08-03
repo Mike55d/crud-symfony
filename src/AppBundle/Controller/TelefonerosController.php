@@ -112,4 +112,13 @@ class TelefonerosController extends Controller
         return $this->redirectToRoute('telefoneros_index');
     }
 
+/**
+     * @Route("/test" , name="test")
+     */
+    public function testAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $childs = $em->getRepository('AppBundle:Childs')->buscarRuta(1,'domingo',1,'first'); 
+        return $this->render('AppBundle:telefoneros:test.html.twig',['response'=>$childs]);
+    }
 }

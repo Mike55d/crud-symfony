@@ -51,4 +51,35 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 	  $query = $qb->getQuery();
 	  return $query->getResult();
 	}
+
+	public function buscarRuta($ruta,$dia,$sede,$type){
+
+		$em = $this->getEntityManager(); 
+		$qb = $em->createQueryBuilder();
+		$qb->select('c')
+		   ->from('AppBundle:Childs', 'c')
+		   ->where('c.type = :type AND c.sede = :sede')
+		   //->andWhere('c.id > :id')
+		   ->setParameter('sede', $sede)
+		   ->setParameter('type', $type)
+		   ->orderBy('c.id', 'ASC');
+		    if ($ruta != 'todas') {
+		   	$qb->andWhere('c.route = :ruta')
+		   ->setParameter('ruta', $ruta);
+		   }
+		   if ($dia == 'viernes') {
+		   	$qb->andWhere('c.viernes IS NOT NULL AND c.viernes != :x')
+		   ->setParameter('x', 'X');
+		   }
+		   if ($dia == 'sabado') {
+		   	$qb->andWhere('c.sabado IS NOT NULL AND c.sabado != :x')
+		   ->setParameter('x', 'X');
+		   }
+		   if ($dia == 'domingo') {
+		   	$qb->andWhere('c.domingo IS NOT NULL AND c.domingo != :x')
+		   ->setParameter('x', 'X');
+		   }
+	  $query = $qb->getQuery();
+	  return $query->getResult();
+	}
 }

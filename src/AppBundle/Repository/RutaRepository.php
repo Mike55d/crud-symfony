@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class RutaRepository extends \Doctrine\ORM\EntityRepository
 {
+	
 }
