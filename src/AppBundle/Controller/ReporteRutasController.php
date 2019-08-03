@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Spipu\Html2Pdf\Html2Pdf;
+
 
 /**
      * @Route("/reporteRutas")
@@ -24,14 +26,22 @@ class ReporteRutasController extends Controller
       ->getToken()->getUser();
       $sede = $user->getSede();
       $rutas=$em->getRepository('AppBundle:Ruta')->findBySede($sede); 
-      if ($request->get('ruta') && $request->get('ruta') != 'todas') {
-        return $this->forward('AppBundle:ReporteRutas:reportesRutasWord',
-            ['dia'=>$request->get('dia'),
-            'ruta'=>$request->get('ruta'),
-            'type'=>$request->get('type')]);
+      if ($request->get('formato') == 'rtf') {
+          if ($request->get('ruta') && $request->get('ruta') != 'todas') {
+            return $this->forward('AppBundle:ReporteRutas:reportesRutasWord',
+                ['dia'=>$request->get('dia'),
+                'ruta'=>$request->get('ruta'),
+                'type'=>$request->get('type')]);
+        }
+        if ($request->get('ruta') && $request->get('ruta') == 'todas') {
+            return $this->forward('AppBundle:ReporteRutas:reportesAllRutasWord',
+                ['dia'=>$request->get('dia'),
+                'ruta'=>$request->get('ruta'),
+                'type'=>$request->get('type')]);
+        }
     }
-    if ($request->get('ruta') && $request->get('ruta') == 'todas') {
-        return $this->forward('AppBundle:ReporteRutas:reportesAllRutasWord',
+    if ($request->get('formato') == 'pdf') {
+        return $this->forward('AppBundle:ReporteRutas:reportesRutasPDF',
             ['dia'=>$request->get('dia'),
             'ruta'=>$request->get('ruta'),
             'type'=>$request->get('type')]);
@@ -45,13 +55,13 @@ public function reportesRutasWordAction($dia, $ruta,$type){
     $em =$this->getDoctrine()->getManager(); 
     $rutaName = $em->getRepository('AppBundle:Ruta')->find($ruta); 
 		//  Comenzamos a armar el documento  
- $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";    
- $date = new \DateTime();
- $output.= "{\\fs28\\qc \" Ruta ". ucfirst(utf8_decode($dia))." ".$rutaName->getName()." \" - ".$date->format('d/m/Y')."\\par}"; 
- $output.= "{\\fs24\\qc ".  utf8_decode('Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
-    sábado / LD-Llega domingo
-    ')."\\par}";    
- $output.="{\\fs24\\qc ".  utf8_decode('¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.
+    $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";    
+    $date = new \DateTime();
+    $output.= "{\\fs28\\qc \" Ruta ". ucfirst(utf8_decode($dia))." ".$rutaName->getName()." \" - ".$date->format('d/m/Y')."\\par}"; 
+    $output.= "{\\fs24\\qc ".  utf8_decode('Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
+        sábado / LD-Llega domingo
+        ')."\\par}";    
+    $output.="{\\fs24\\qc ".  utf8_decode('¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.
      ')."\\par}";
         $output.= "\\par ";  //<-- ENTER
         /* INICIO DE LA TABLA */
@@ -260,6 +270,34 @@ public function reportesRutasWordAction($dia, $ruta,$type){
         $response->setContent($output);
         return $response;
         
+    }
+
+    public function reportesRutasPDFAction($dia, $ruta,$type)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede();
+        $html2pdf = new Html2Pdf();
+        if ($ruta == 'todas') {
+            $html2pdf->writeHTML($this->renderView('AppBundle:ReporteRutas:todas.html.twig',[
+              'ruta'=> $ruta,
+          ]));
+        }
+        if ($ruta != 'todas') {
+            $rutaName = $em->getRepository('AppBundle:Ruta')->find($ruta);
+            $childs = $em->getRepository('AppBundle:Childs')
+            ->buscarRuta($ruta,$dia,$sede,$type);
+            $nuevo_texto = wordwrap($childs[2]->getAddress(), 25, '<br>', 1);
+            $html2pdf->writeHTML($this->renderView('AppBundle:ReporteRutas:una.html.twig',[
+                'rutaName'=> $rutaName->getName(),
+                'childs'=> $childs,
+                'dia'=> $dia,
+                'texto'=> $nuevo_texto,
+          ]));
+        }
+        
+        $html2pdf->output();
     }
 
 }

@@ -15,16 +15,16 @@
 	}
 	td{
 		text-align: center;
+        white-space:pre 
 	}
 	.tabla{
 		width: 10000px;
 	}
 </style>
-{% for i in 0..2 %}
      <page>
  
     <page_header > 
-    	<h5 class="header">DOMINGO  RUTA 89</h5>
+    	<h5 class="header">DOMINGO {{rutaName}}  RUTA 89</h5>
     	<p class="header">Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
     sábado / LD-Llega domingo</p>
     <p class="header">¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.</p>
@@ -38,21 +38,24 @@
     			<th style="width:100px">Telefono</th>
     			<th style="width:100px">Barrio</th>
     			<th style="width:100px">N. padres</th>
-    			<th style="width:100px">Confirmar</th>
+    			<th style="width:80px">Confirmar</th>
     		</tr>
+            {% for key , child in childs %}
     		<tr>
-    			<td>1</td>
-    			<td>dwada</td>
-    			<td>mike</td>
-    			<td>new york</td>
-    			<td>421321321</td>
-    			<td>central park</td>
-    			<td>mike noris</td>
-    			<td>LCK</td>
+    			<td>{{key}}</td>
+    			<td>{{child.colegio}}</td>
+    			<td>{{child.name}}</td>
+    			<td>{{child.address}}</td>
+    			<td>{{child.phone}}</td>
+    			<td>{{child.barrio}}</td>
+    			<td>{{child.parents}}</td>
+                {% if dia == 'viernes' %}<td>{{child.viernes}}</td>{% endif %}
+                {% if dia == 'sabado' %}<td>{{child.sabado}}</td>{% endif %}
+                {% if dia == 'domingo' %}<td>{{child.domingo}}</td>{% endif %}
+    			
     		</tr>
+            {% endfor %}
     </table>
     <page_footer> 
-       ...pagina{{i}}
     </page_footer> 
  </page>
- {% endfor %} 

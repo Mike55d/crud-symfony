@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Telefonero;
+use Spipu\Html2Pdf\Html2Pdf;
+
 
 
 /**
@@ -118,7 +120,10 @@ class TelefonerosController extends Controller
     public function testAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $childs = $em->getRepository('AppBundle:Childs')->buscarRuta(1,'domingo',1,'first'); 
-        return $this->render('AppBundle:telefoneros:test.html.twig',['response'=>$childs]);
+        $html2pdf = new Html2Pdf();
+        $html2pdf->writeHTML($this->renderView('AppBundle:Telefoneros:test.html.twig',[
+          'user'=> 'blue',
+        ]));
+        $html2pdf->output();
     }
 }
