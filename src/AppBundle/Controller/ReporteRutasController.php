@@ -306,7 +306,7 @@ public function reportesRutasWordAction($dia, $ruta,$type){
           ]));
         }
         
-        $html2pdf->output();
+        $html2pdf->output('reporteRutas.pdf', 'D');
     }
 
 }

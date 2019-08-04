@@ -1,7 +1,36 @@
-{% extends "::base.html.twig" %}
-
-{% block title %}AppBundle:ReporteTelefoneros:index{% endblock %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Welcome to the ReporteTelefoneros:index page</h1>
+    <div class="row">
+    	<div class="col-md-4 col-md-offset-4">
+    		<div class="panel panel-default">
+    	<div class="panel-heading">
+    		Registros por telefoneros
+    	</div>
+    	<div class="panel-body">
+    		<form method="post" >
+    			<label for="">Telefoneros</label>
+    		<select class="form-control" name="telefonero" id="">
+    			{% for telefonero in telefoneros %}
+    			    <option value="{{telefonero.id}}">{{telefonero.name}}</option>
+    			{% endfor %}
+    			<option value="todos">todos</option>
+    		</select>
+    			<label for="">Formato</label>
+    		<select class="form-control" name="formato" id="">
+    			<option value="pdf">PDF</option>
+    			<option value="rtf">RTF</option>
+    		</select>
+    		<label for="">Data</label>
+    		<select class="form-control" name="type" id="">
+    			<option value="frequent">regular</option>
+    			<option value="first">primera vez</option>
+    			<option value="discard">descartado</option>
+    		</select><br>
+    		<button class="btn btn-success center-block" >Generar</button>
+    		</form>
+    	</div>
+    </div>
+    	</div>
+    </div>
 {% endblock %}

@@ -3,7 +3,7 @@
 		border:1px solid black;
 	}
 	table{
-		margin-top: 150px;
+
 		border-collapse: collapse;
 	}
 	.header{
@@ -23,7 +23,7 @@
 </style>
      <page>
  
-    	<h5 class="header">{{dia}} {{rutaName}}  RUTA 89 {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
+    	<h5 class="header">{{dia}}  RUTA 89 {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
     	<p class="header">Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
     sábado / LD-Llega domingo</p>
     <p class="header">¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.</p>
@@ -43,7 +43,7 @@
     			<td>{{key}}</td>
     			<td>{{child.colegio|wordwrap(22,'<br>')|raw}}</td>
     			<td>{{child.name|wordwrap(22,'<br>')|raw}}</td>
-    			<td>{{child.address|wordwrap(22,'<br>')|raw}}</td>
+    			<td>{{child.address|wordwrap(35,'<br>')|raw}}</td>
     			<td>{{child.phone|wordwrap(22,'<br>')|raw}}</td>
     			<td>{{child.barrio|wordwrap(22,'<br>')|raw}}</td>
     			<td>{{child.parents|wordwrap(22,'<br>')|raw}}</td>
@@ -54,6 +54,5 @@
     		</tr>
             {% endfor %}
     </table>
-    <page_footer> 
-    </page_footer> 
+     
  </page>
