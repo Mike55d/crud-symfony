@@ -31,7 +31,6 @@ class UsersType extends AbstractType
             'second_options' => array('label' => 'Repetir contraseña')))
         ->add('active',CheckboxType::class,['data'=>true,'label'=>'Activo'])
         ->add('phone',TextType::class,['label'=>'Telefono'])
-        ->add('sede')
         ->add('telefonero')
         ->add('image',FileType::class,['label'=>'Imagen'])
         ->add('roles',ChoiceType::class,['choices'=>['ADMIN'=>'ROLE_ADMIN',

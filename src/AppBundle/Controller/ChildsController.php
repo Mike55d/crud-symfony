@@ -28,7 +28,6 @@ class ChildsController extends Controller
         {
             $query = [
                 'type'=>'first',
-                'sede'=> $sede,
                 'telefonero'=>$user->getTelefonero()];
             }
             $childs = $em->getRepository('AppBundle:Childs')
@@ -69,7 +68,6 @@ class ChildsController extends Controller
         {
             $query = [
                 'type'=>'frequent',
-                'sede'=> $sede,
                 'telefonero'=>$user->getTelefonero()];
             }
             $childs = $em->getRepository('AppBundle:Childs')

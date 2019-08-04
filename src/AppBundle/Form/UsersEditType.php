@@ -25,7 +25,6 @@ class UsersEditType extends AbstractType
         ->add('name')
         ->add('active',CheckboxType::class)
         ->add('phone')
-        ->add('sede')
         ->add('telefonero')
         ;
     }/**

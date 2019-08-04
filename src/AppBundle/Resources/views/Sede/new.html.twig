@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+{% form_theme form 'theme/themeForm.html.twig' %}
+
+{% block body %}
+<div class="panel panel-default">
+	<div class="panel-heading">Nueva Sede</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				{{form_start(form)}}
+				{{form_widget(form)}}
+				<button class="btn btn-success">Crear</button>
+				{{form_end(form)}}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

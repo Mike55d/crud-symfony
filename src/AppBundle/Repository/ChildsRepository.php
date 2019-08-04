@@ -16,16 +16,19 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		$qb = $em->createQueryBuilder();
 		$qb->select('c')
 		   ->from('AppBundle:Childs', 'c')
-		   ->where('c.type = :first AND c.id > :id AND c.sede = :sede ')
+		   ->where('c.type = :first AND c.id > :id ')
 		   //->andWhere('c.id > :id')
 		   ->setParameter('id', $id)
-		   ->setParameter('sede', $sede)
 		   ->setParameter('first', $lista)
 		   ->setMaxResults(1)
 		   ->orderBy('c.id', 'ASC');
 		   if ($telefonero) {
 		   	$qb->andWhere('c.telefonero = :telefonero')
 		   	->setParameter('telefonero',$telefonero);
+		   }
+		   if ($sede) {
+		   	$qb->andWhere('c.sede = :sede')
+		   	->setParameter('sede',$telefonero);
 		   }
 	  $query = $qb->getQuery();
 	  return $query->getResult();

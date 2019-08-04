@@ -5,6 +5,8 @@
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Blank</h1>
+		{{app.user.rola}}
+		{{app.user.name}}
 		{% for flash_message in app.session.flashBag.get('notice') %}
 				<div class="flash-notice">
 					<h6>{{ flash_message }}</h6>

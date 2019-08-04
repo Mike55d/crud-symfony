@@ -334,4 +334,28 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $html2pdf->output('reporteRutas.pdf', 'D');
     }
 
+    /**
+     * @Route("/{type}/printUserWord" , name="printUserWord")
+     */
+    public function printUser($type){
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $telefonero = $user->getTelefonero()->getId();
+        return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosWord',
+                ['telefonero'=>$telefonero,
+                'type'=>$type]);
+    }
+
+    /**
+     * @Route("/{type}/printUserPdf" , name="printUserPdf")
+     */
+    public function printUserPdf($type){
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $telefonero = $user->getTelefonero()->getId();
+         return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
+            ['telefonero'=>$telefonero,
+              'type'=>$type]);
+    }
+
     }

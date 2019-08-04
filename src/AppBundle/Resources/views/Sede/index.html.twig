@@ -20,12 +20,12 @@
     </tr>
   </thead>
   <tbody class="text-center">
-   {% for grupo in grupos %}
+   {% for sede in sedes %}
    <tr>
-    <td>{{grupo.name}}</td>
+    <td>{{sede.name}}</td>
     <td>
-     <a href="{{ path ('grupos_edit',{id:grupo.id})}}" class="btn btn-sm btn-warning">Editar</a>
-     <button onclick="openModal({{grupo.id}},'{{grupo.name}}')" class="btn btn-sm btn-danger">Eliminar</button>
+     <a href="{{ path ('sedes_edit',{id:sede.id})}}" class="btn btn-sm btn-warning">Editar</a>
+     <button onclick="openModal({{sede.id}},'{{sede.name}}')" class="btn btn-sm btn-danger">Eliminar</button>
    </td>
  </tr>
  {% endfor %}

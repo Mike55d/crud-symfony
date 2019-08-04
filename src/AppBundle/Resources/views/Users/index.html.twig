@@ -10,8 +10,7 @@
 	<div class="mb-10 col-md-8">
 	<a href="{{ path ('users_disable')}}" class="btn btn-danger">Desactivar usuarios</a>
 	<a href="{{ path ('users_activate')}}" class="btn btn-success">Activar usuarios</a>
-	<button class="btn btn-primary" id="export" >Export to
-        word doc</button>
+	
 </div>
 	<div class="col-md-4">
 		{% for flash_message in app.session.flashBag.get('notice') %}
@@ -34,6 +33,7 @@
 					<th>telefono</th>
 					<th>Imagen</th>
 					<th>telefonero</th>
+					<th>Tipo</th>
 					<th>Acciones</th>
 				</tr>
 			</thead>
@@ -47,6 +47,7 @@
 						<img class="" height="100" src="{{ asset ('img/profiles/'~user.image)}}" alt="">
 					</td>
 					<td>{{user.telefonero | default('ninguno')}}</td>
+					<td>{{user.rola}}</td>
 					<td>
 						<a href="{{ path ('users_edit',{id:user.id})}}" class="btn btn-sm btn-warning">Editar</a>
 						<button onclick="openModal({{user.id}},'{{user.name}}')" class="btn btn-sm btn-danger">Eliminar</button>
@@ -110,41 +111,5 @@ function openModal(id, name){
 	console.log('openModal');
 }
 </script>
-<script>
-window.export.onclick = function() {
- 
-   if (!window.Blob) {
-      alert('Your legacy browser does not support this action.');
-      return;
-   }
 
-   var html, link, blob, url, css;
-   
-   // EU A4 use: size: 841.95pt 595.35pt;
-   // US Letter use: size:11.0in 8.5in;
-   /*
-   css = (
-     '<style>' +
-     '@page WordSection1{size: 841.95pt 595.35pt;mso-page-orientation: landscape;}' +
-     'div.WordSection1 {page: WordSection1;}' +
-     'table{border-collapse:collapse;}td{border:1px gray solid;width:5em;padding:2px;}'+
-     '</style>'
-   );
-   */
-   html = window.docx.innerHTML;
-   blob = new Blob(['\ufeff', css + html], {
-     type: 'application/msword'
-   });
-   url = URL.createObjectURL(blob);
-   link = document.createElement('A');
-   link.href = url;
-   // Set default file name. 
-   // Word will append file extension - do not add an extension here.
-   link.download = 'Document';   
-   document.body.appendChild(link);
-   if (navigator.msSaveOrOpenBlob ) navigator.msSaveOrOpenBlob( blob, 'Document.doc'); // IE10-11
-   		else link.click();  // other browsers
-   document.body.removeChild(link);
- };
-</script>
 {% endblock %}
