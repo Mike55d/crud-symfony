@@ -37,7 +37,7 @@ class ReportesWordController extends Controller
       /*  Comenzamos a armar el documento  */
       $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
       $date = new \DateTime();
-      $output.= "{\\fs28\\qc \" Dia ". ucfirst(utf8_decode($dia))." \" - ".$date->format('d/m/Y')."\\par}";               
+      $output.= "{\\fs28\\qc \"". ucfirst(utf8_decode($dia))." \" - ".$date->format('d/m/Y')."\\par}";               
       $output.= "{\\fs24\\qc ".  utf8_decode('Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
        sábado / LD-Llega domingo
        ')."\\par}";        
@@ -116,26 +116,26 @@ class ReportesWordController extends Controller
         ->getToken()->getUser();
         $sede = $user->getSede();
         $childs = $em->getRepository('AppBundle:Childs')
-        ->findBy(['type'=>$type,'sede'=>$sede]);  
+        ->buscarAsist($dia,$sede,$type);  
         foreach ($childs as $v){
          $output.= " {\\qc ".$i."}\\cell ".utf8_decode($v->getColegio())."\\cell ".utf8_decode($v->getName())."\\cell ".utf8_decode($v->getAddress())."\\cell ".utf8_decode($v->getPhone())."\\cell ".utf8_decode($v->getBarrio())."\\cell ".utf8_decode($v->getParents())."\\cell ";
          if ($dia == "viernes"){
             if ($v->getViernes()) {
-                $output .= "{\\qc ".$v->getViernes().' '.$dia."}\\cell \n";
+                $output .= "{\\qc ".$v->getViernes().' '.strtoupper(substr($dia,0,1))."}\\cell \n";
             }else{
                 $output .= "{\\qc  }\\cell \n";
             }
         }  
         if ($dia == "sabado"){
             if ($v->getSabado()) {
-                $output .= "{\\qc ".$v->getSabado().' '.$dia."}\\cell \n";
+                $output .= "{\\qc ".$v->getSabado().' '.strtoupper(substr($dia,0,1))."}\\cell \n";
             }else{
                 $output .= "{\\qc  }\\cell \n";
             }
         }
         if ($dia == "domingo"){
             if ($v->getDomingo()) {
-                $output .= "{\\qc ".$v->getDomingo().' '.$dia."}\\cell \n";
+                $output .= "{\\qc ".$v->getDomingo().' '.strtoupper(substr($dia,0,1))."}\\cell \n";
             }else{
                 $output .= "{\\qc  }\\cell \n";
             }

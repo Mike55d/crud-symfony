@@ -34,7 +34,7 @@
                 <th style="width:100px">Direccion</th>
                 <th style="width:100px">Barrio</th>
                 <th style="width:100px">N. padres</th>
-                <th style="width:80px">Comentarios</th>
+                <th style="width:80px">Asistencia</th>
             </tr>
             {% for key , child in childs %}
             <tr>
@@ -47,7 +47,7 @@
                 <td>{{child.address|wordwrap(17,'<br>')|raw}}</td>
                 <td>{{child.barrio|wordwrap(17,'<br>')|raw}}</td>
                 <td>{{child.parents|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.comments|wordwrap(17,'<br>')|raw}}</td>
+                <td></td>
                 
             </tr>
             {% endfor %}

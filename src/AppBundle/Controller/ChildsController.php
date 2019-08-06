@@ -129,20 +129,20 @@ class ChildsController extends Controller
             $child->setLng($request->get('lng'));
             //insertar imagen
             if ($request->files->get('image')) {
-               $file = $request->files->get('image');
-               $fileName = md5(uniqid()).'.'.$file->guessExtension();
-               $file->move($this->getParameter('childs'),$fileName);
-               $child->setImage($fileName);
-           }
-           $child->setType('first');
-           $child->setSede($sede);
+             $file = $request->files->get('image');
+             $fileName = md5(uniqid()).'.'.$file->guessExtension();
+             $file->move($this->getParameter('childs'),$fileName);
+             $child->setImage($fileName);
+         }
+         $child->setType('first');
+         $child->setSede($sede);
 
-           $em->persist($child);
-           $em->flush();
-           return $this->redirectToRoute('childs_index');
-       }
+         $em->persist($child);
+         $em->flush();
+         return $this->redirectToRoute('childs_index');
+     }
 
-       return $this->render('AppBundle:Childs:new.html.twig', array(
+     return $this->render('AppBundle:Childs:new.html.twig', array(
         'grupos' => $grupo,
         'institutes' => $institute,
         'routes' => $route,
@@ -152,7 +152,7 @@ class ChildsController extends Controller
         'childEmails'=>$childEmails,
         'childParents'=>$childParents
     ));
-   }
+ }
 
     /**
      * @Route("/{lista}/{id}/edit" , name="childs_edit")
@@ -169,14 +169,18 @@ class ChildsController extends Controller
         $institute = $em->getRepository('AppBundle:Institute')->findAll();
         $route = $em->getRepository('AppBundle:Ruta')->findAll();
         $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
-        $telefonero = null;
+        $next = $em->getRepository('AppBundle:Childs')
+        ->nextId($child->getId(),$sede,$lista,null);
+        $back = $em->getRepository('AppBundle:Childs')
+        ->backId($child->getId(),$sede,$lista,null);
         if ($user->getRola() == 'USER') {
             $telefonero = $user->getTelefonero();
+            $next = $em->getRepository('AppBundle:Childs')
+            ->nextId($child->getId(),null,$lista,$telefonero);
+            $back = $em->getRepository('AppBundle:Childs')
+            ->backId($child->getId(),null,$lista,$telefonero);
         }
-        $next = $em->getRepository('AppBundle:Childs')
-        ->nextId($child->getId(),$sede,$lista,$telefonero);
-        $back = $em->getRepository('AppBundle:Childs')
-        ->backId($child->getId(),$sede,$lista,$telefonero);
+        
         $childs = $em->getRepository('AppBundle:Childs')
         ->findBy(['type'=>'first','sede'=> $sede]);
         // datos autocompletar 
@@ -215,17 +219,17 @@ class ChildsController extends Controller
             $child->setLng($request->get('lng'));
             //insertar imagen
             if ($request->files->get('image')) {
-               $file = $request->files->get('image');
-               $fileName = md5(uniqid()).'.'.$file->guessExtension();
-               $file->move($this->getParameter('childs'),$fileName);
-               $child->setImage($fileName);
-           }
-           $em->persist($child);
-           $em->flush();
-           return $this->redirectToRoute('childs_edit',
+             $file = $request->files->get('image');
+             $fileName = md5(uniqid()).'.'.$file->guessExtension();
+             $file->move($this->getParameter('childs'),$fileName);
+             $child->setImage($fileName);
+         }
+         $em->persist($child);
+         $em->flush();
+         return $this->redirectToRoute('childs_edit',
             ['lista'=>$lista, 'id'=> $child->getId()]);
-       }
-       return $this->render('AppBundle:Childs:edit.html.twig', array(
+     }
+     return $this->render('AppBundle:Childs:edit.html.twig', array(
         'child'=> $child,
         'grupos' => $grupo,
         'institutes' => $institute,
@@ -240,7 +244,7 @@ class ChildsController extends Controller
         'childParents'=>$childParents,
         'anterior'=> $anterior
     ));
-   }
+ }
 
     /**
      * @Route("/{id}/del" , name="childs_del")
@@ -256,30 +260,30 @@ class ChildsController extends Controller
  /**
      * @Route("/clean" , name="childs_clean")
      */
-    public function cleanAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.token_storage')
-        ->getToken()->getUser();
-        $sede = $user->getSede(); 
-        $childsFirst = $em->getRepository('AppBundle:Childs')
-        ->findBy(['sede'=> $sede , 'type'=> 'first']);
-        $childsFrequent = $em->getRepository('AppBundle:Childs')
-        ->findBy(['sede'=> $sede , 'type'=> 'frequent']);  
-        foreach ($childsFirst as $child){
-            $child->setViernes(null);
-            $child->setSabado(null);
-            $child->setDomingo(null);
-        }
-        foreach ($childsFrequent as $child){
-            $child->setViernes(null);
-            $child->setSabado(null);
-            $child->setDomingo(null);
-        }
-        $this->addFlash('notice','Se han limpiado los registros');
-        $em->flush();
-        return $this->redirectToRoute('homepage');
+ public function cleanAction()
+ {
+    $em = $this->getDoctrine()->getManager();
+    $user = $this->get('security.token_storage')
+    ->getToken()->getUser();
+    $sede = $user->getSede(); 
+    $childsFirst = $em->getRepository('AppBundle:Childs')
+    ->findBy(['sede'=> $sede , 'type'=> 'first']);
+    $childsFrequent = $em->getRepository('AppBundle:Childs')
+    ->findBy(['sede'=> $sede , 'type'=> 'frequent']);  
+    foreach ($childsFirst as $child){
+        $child->setViernes(null);
+        $child->setSabado(null);
+        $child->setDomingo(null);
     }
+    foreach ($childsFrequent as $child){
+        $child->setViernes(null);
+        $child->setSabado(null);
+        $child->setDomingo(null);
+    }
+    $this->addFlash('notice','Se han limpiado los registros');
+    $em->flush();
+    return $this->redirectToRoute('homepage');
+}
 
     /**
      * @Route("/update" , name="childs_update")
@@ -317,14 +321,14 @@ class ChildsController extends Controller
         $child->setLng($request->get('lng'));
         //insertar imagen
         if ($request->files->get('image')) {
-           $file = $request->files->get('image');
-           $fileName = md5(uniqid()).'.'.$file->guessExtension();
-           $file->move($this->getParameter('childs'),$fileName);
-           $child->setImage($fileName);
-       }
-        $em->flush();
-        $name = $request->get('name');
-        return new JsonResponse($name);
-    }
+         $file = $request->files->get('image');
+         $fileName = md5(uniqid()).'.'.$file->guessExtension();
+         $file->move($this->getParameter('childs'),$fileName);
+         $child->setImage($fileName);
+     }
+     $em->flush();
+     $name = $request->get('name');
+     return new JsonResponse($name);
+ }
 
 }

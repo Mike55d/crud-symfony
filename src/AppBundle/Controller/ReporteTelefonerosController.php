@@ -50,21 +50,12 @@ class ReporteTelefonerosController extends Controller
 public function reportesTelefonerosWordAction($telefonero,$type){
     $em =$this->getDoctrine()->getManager(); 
     $telefoneroName= $em->getRepository('AppBundle:Telefonero')->find($telefonero); 
-		/*  Comenzamos a armar el documento  */
-        $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";  
-        $output.= "\\par ";               
-        $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de Niños')." \\par}";
-        $output.= "\\par ";               
-        $output.= "{ ";  //<-- Inicio de la tabla
-
-        $output.= "\\trgaph50 "; //<-- márgenes izquierdo y derecho de las celdas=70
-        $output.= "\\trleft-10 "; // <-- Posición izquierda la primera celda = -10
 
         /*  Comenzamos a armar el documento  */
         $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
         $output.= "\\par ";               
         
-        $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de Niños  '.$telefoneroName->getName())." \\par}";
+        $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de  '.$telefoneroName->getName())." \\par}";
         $output.= "\\par ";               
         /* INICIO DE LA TABLA */
         $output.= "{ ";  //<-- Inicio de la tabla
@@ -136,7 +127,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $output.= utf8_decode('Barrio')."\\cell ";        
         $output.= utf8_decode('Ruta')."\\cell ";        
         $output.= utf8_decode('N. Padres')."\\cell ";        
-        $output.= utf8_decode('Comentarios')."\\cell ";        
+        $output.= utf8_decode('Asistencia')."\\cell ";        
         $output.="}";
         $output.= "\\row "; //<-- Fin del renglón de encabezado
         $user = $this->get('security.token_storage')
@@ -155,7 +146,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
                     "{\\fs18 ".utf8_decode($v->getBarrio())."}\\cell ".
                     "{\\fs18\\qc ".utf8_decode($v->getRoute())."}\\cell  ".
                     "{\\fs18\\qc ".utf8_decode($v->getParents())."}\\cell  ".
-                    "{\\fs18 ".utf8_decode($v->getComments())."}\\cell ";
+                    "{\\fs18 }\\cell ";
                            
                  $output.= "\\row "; //<-- Fin del renglón
                  $i++;
@@ -257,7 +248,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $output.= utf8_decode('Barrio')."\\cell ";        
         $output.= utf8_decode('Ruta')."\\cell ";        
         $output.= utf8_decode('N. Padres')."\\cell ";        
-        $output.= utf8_decode('Comentarios')."\\cell ";        
+        $output.= utf8_decode('Asistencia')."\\cell ";        
         $output.="}";
         $output.= "\\row "; //<-- Fin del renglón de encabezado
         $user = $this->get('security.token_storage')
@@ -276,7 +267,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
                     "{\\fs18 ".utf8_decode($v->getBarrio())."}\\cell ".
                     "{\\fs18\\qc ".utf8_decode($v->getRoute())."}\\cell  ".
                     "{\\fs18\\qc ".utf8_decode($v->getParents())."}\\cell  ".
-                    "{\\fs18 ".utf8_decode($v->getComments())."}\\cell ";
+                    "{\\fs18 }\\cell ";
                            
                  $output.= "\\row "; //<-- Fin del renglón
                  $i++;
