@@ -330,5 +330,16 @@ class ChildsController extends Controller
      $name = $request->get('name');
      return new JsonResponse($name);
  }
+    /**
+    * @Route("/{list}/{next}/{export}/{id}/export" , name="childs_export")
+    */
+ public function exportarAction($list,$next,$export,$id){
+    $em =$this->getDoctrine()->getManager(); 
+    $child = $em->getRepository('AppBundle:Childs')->find($id); 
+    $child->setType($export);
+    $em->flush();
+    $this->addFlash('notice','Exportado satisfactoriamente');
+    return $this->redirectToRoute('childs_edit',['lista'=>$list,'id'=>$next]);
+ }
 
 }
