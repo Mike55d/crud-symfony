@@ -115,9 +115,9 @@ class ChildsController extends Controller
             $child->setGrade($request->get('grade'));
             $child->setGrupo($em->getRepository('AppBundle:Grupo')
                 ->find($request->get('grupo')));
-            $child->setInstitute($em->getRepository('AppBundle:Institute')
-                ->find($request->get('institute')));
-            $child->setRoute($request->get('route'));
+            $child->setRoute($em->getRepository('AppBundle:Ruta')
+                ->find($request->get('ruta')));
+            $child->setColegio($request->get('colegio'));
             $child->setTelefonero($em->getRepository('AppBundle:Telefonero')
                 ->find($request->get('telefonero')));
             $child->setObservations($request->get('observations') ?? 'ninguna');
@@ -157,7 +157,7 @@ class ChildsController extends Controller
     /**
      * @Route("/{lista}/{id}/edit" , name="childs_edit")
      */
-    public function editAction(Request $request , Childs $child ,$lista )
+    public function editAction(Request $request ,$lista, Childs $child  )
     {
         $em =$this->getDoctrine()->getManager(); 
         $user= $this->get('security.token_storage')
@@ -205,9 +205,9 @@ class ChildsController extends Controller
             $child->setGrade($request->get('grade'));
             $child->setGrupo($em->getRepository('AppBundle:Grupo')
                 ->find($request->get('grupo')));
-            $child->setInstitute($em->getRepository('AppBundle:Institute')
-                ->find($request->get('institute')));
-            $child->setRoute($request->get('route'));
+            $child->setRoute($em->getRepository('AppBundle:Ruta')
+                ->find($request->get('ruta')));
+            $child->setColegio($request->get('colegio'));
             $child->setTelefonero($em->getRepository('AppBundle:Telefonero')
                 ->find($request->get('telefonero')));
             $child->setObservations($request->get('observations'));

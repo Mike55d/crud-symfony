@@ -569,11 +569,11 @@ class Childs
     /**
      * Set route
      *
-     * @param \AppBundle\Entity\Route $route
+     * @param \AppBundle\Entity\Ruta $route
      *
      * @return Childs
      */
-    public function setRoute(\AppBundle\Entity\Route $route = null)
+    public function setRoute(\AppBundle\Entity\Ruta $route = null)
     {
         $this->route = $route;
 
@@ -583,7 +583,7 @@ class Childs
     /**
      * Get route
      *
-     * @return \AppBundle\Entity\Route
+     * @return \AppBundle\Entity\Ruta
      */
     public function getRoute()
     {

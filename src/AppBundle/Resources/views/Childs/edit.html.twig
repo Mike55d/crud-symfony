@@ -37,11 +37,11 @@
 			<div class="col-md-8">
 				<div class="row">
 					<input name="id" value="{{child.id}}" type="hidden">
-					<div class="col-md-4"><label for="">Nombre</label><input {{editar}} required id="name" value="{{child.name}}" class="form-control" name="name" type="text"></div>
-					<div class="col-md-4"><label for="">Fecha de Nacimiento</label><input {{editar}} required value="{{child.birthday| date('Y-m-d')}}" name="date" class="form-control" type="date"></div>
-					<div class="col-md-4"><label for="">Telefono</label><input {{editar}} required id="phone" value="{{child.phone}}" name="phone" class="form-control" type="text"></div>
-					<div class="col-md-12"><label for="">Email</label><input {{editar}} required id="email" value="{{child.email}}" name="email" class="form-control" type="text"></div>
-					<div class="col-md-12"><label for="">Direccion</label><input {{editar}} required value="{{child.address}}" type="text" name="address" class="form-control" id="searchTextField"></div>
+					<div class="col-md-4"><label for="">Nombre</label><input {{editar}} id="name" value="{{child.name}}" class="form-control" name="name" type="text"></div>
+					<div class="col-md-4"><label for="">Fecha de Nacimiento</label><input {{editar}} value="{{child.birthday| date('Y-m-d')}}" name="date" class="form-control" type="date"></div>
+					<div class="col-md-4"><label for="">Telefono</label><input {{editar}} id="phone" value="{{child.phone}}" name="phone" class="form-control" type="text"></div>
+					<div class="col-md-12"><label for="">Email</label><input {{editar}} id="email" value="{{child.email}}" name="email" class="form-control" type="text"></div>
+					<div class="col-md-12"><label for="">Direccion</label><input {{editar}} value="{{child.address}}" type="text" name="address" class="form-control" id="searchTextField"></div>
 					<div class="col-md-12">
 						<div class="col-md-6"><input {{editar}} value="{{child.lat}}" name="lat"  type="hidden" class="MapLat form-control"></div>
 						<div class="col-md-6"><input {{editar}} value="{{child.lng}}" name="lng"  type="hidden" class="MapLon form-control"></div>
@@ -49,37 +49,40 @@
 					<div class="col-md-12">
 						<div id="map_canvas" style="height: 200px;width: 100%;margin: 0.6em; margin-right: 20px"></div>
 					</div>
-					<div class="col-md-6"><label for="">Barrio</label><input {{editar}} required value="{{child.barrio}}" name="barrio" class="form-control" type="text"></div>
-					<div class="col-md-6"><label for="">Nombre padres</label><input {{editar}} required id="parents" value="{{child.parents}}" name="parents" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Barrio</label><input {{editar}} value="{{child.barrio}}" name="barrio" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Nombre padres</label><input {{editar}} id="parents" value="{{child.parents}}" name="parents" class="form-control" type="text"></div>
 					<div class="col-md-6"><label for="">Grado</label>
 						<select {{editSelect}} name="grade" class="form-control" id="">
-							<option {% if child.grade %}selected{% endif %} value="A">A</option>
-							<option {% if child.grade %}selected{% endif %} value="B">B</option>
-							<option {% if child.grade %}selected{% endif %} value="C">C</option>
+							<option {% if child.grade == 'A' %}selected{% endif %} value="A">A</option>
+							<option {% if child.grade == 'B' %}selected{% endif %} value="B">B</option>
+							<option {% if child.grade == 'C' %}selected{% endif %} value="C">C</option>
 						</select>
 					</div>
 					<div class="col-md-6"><label for="">Grupo</label>
 						<select {{editSelect}} name="grupo" class="form-control" id="">
 							{% for grupo in grupos %}
-							<option {% if child.grupo %}selected{% endif %} value="{{grupo.id}}">{{grupo.name}}</option>
+							<option {% if child.grupo.id == grupo.id %}selected{% endif %} value="{{grupo.id}}">{{grupo.name}}</option>
 							{% endfor %}
+							<option {% if child.grupo == null %}selected{% endif %} value="">Ninguno</option>
 						</select>
 					</div>
 					<div class="col-md-6"><label for="">Colegio</label>
 						<input {{editSelect}} class="form-control" name="colegio" value="{{child.colegio}}" type="text">
 					</div>
 					<div class="col-md-6"><label for="">Ruta</label>
-						<select {{editSelect}} name="institute" class="form-control" id="">
+						<select {{editSelect}} name="ruta" class="form-control" id="">
 							{% for route in routes %}
-							<option {% if child.route %}selected{% endif %} value="{{route.id}}">{{route.name}}</option>
+							<option {% if child.route.id == route.id %}selected{% endif %} value="{{route.id}}">{{route.name}}</option>
 							{% endfor %}
+							<option {% if child.route == null %}selected{% endif %} value="">Ninguna</option>
 						</select>
 					</div>
 					<div class="col-md-6"><label for="">Telefonero</label>
 						<select {{editSelect}} name="telefonero" class="form-control" id="">
 							{% for telefonero in telefoneros %}
-							<option {% if child.telefonero %}selected{% endif %} value="{{telefonero.id}}">{{telefonero.name}}</option>
+							<option {% if child.telefonero.id == telefonero.id %}selected{% endif %} value="{{telefonero.id}}">{{telefonero.name}}</option>
 							{% endfor %}
+							<option {% if child.telefonero == null %}selected{% endif %} value="">Ninguno</option>
 						</select>
 					</div>
 					<div class="checkbox col-md-6"><label class="activo"><input class="form-control" name="active" {{editSelect}}  type="checkbox">Activo</label></div>
