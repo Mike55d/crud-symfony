@@ -42,12 +42,12 @@
             {% for key , child in dato.childs %}
             <tr>
                 <td>{{key}}</td>
-                <td>{{child.colegio|wordwrap(22,'<br>')|raw}}</td>
-                <td>{{child.name|wordwrap(22,'<br>')|raw}}</td>
-                <td>{{child.address|wordwrap(22,'<br>')|raw}}</td>
-                <td>{{child.phone|wordwrap(22,'<br>')|raw}}</td>
-                <td>{{child.barrio|wordwrap(22,'<br>')|raw}}</td>
-                <td>{{child.parents|wordwrap(22,'<br>')|raw}}</td>
+                <td>{{child.colegio|wordwrap(15,'<br>')|raw}}</td>
+                <td>{{child.name|wordwrap(15,'<br>')|raw}}</td>
+                <td>{{child.address|wordwrap(15,'<br>')|raw}}</td>
+                <td>{{child.phone|wordwrap(15,'<br>')|raw}}</td>
+                <td>{{child.barrio|wordwrap(15,'<br>')|raw}}</td>
+                <td>{{child.parents|wordwrap(15,'<br>')|raw}}</td>
                 {% if dia == 'viernes' %}<td>{{child.viernes}}</td>{% endif %}
                 {% if dia == 'sabado' %}<td>{{child.sabado}}</td>{% endif %}
                 {% if dia == 'domingo' %}<td>{{child.domingo}}</td>{% endif %}

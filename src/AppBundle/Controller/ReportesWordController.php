@@ -27,7 +27,8 @@ class ReportesWordController extends Controller
         }
         if ($request->get('formato') == 'pdf') {
             return $this->forward('AppBundle:ReportesWord:reporteNinosPdf',
-                ['dia'=>$request->get('dia'),'type'=>$request->get('type')]);
+                ['dia'=>$request->get('dia'),'type'=>$request->get('type'),
+                'foto'=>$request->get('foto')]);
         }
         return $this->render('AppBundle:reportesWord:index.html.twig');
     }
@@ -121,21 +122,21 @@ class ReportesWordController extends Controller
          $output.= " {\\qc ".$i."}\\cell ".utf8_decode($v->getColegio())."\\cell ".utf8_decode($v->getName())."\\cell ".utf8_decode($v->getAddress())."\\cell ".utf8_decode($v->getPhone())."\\cell ".utf8_decode($v->getBarrio())."\\cell ".utf8_decode($v->getParents())."\\cell ";
          if ($dia == "viernes"){
             if ($v->getViernes()) {
-                $output .= "{\\qc ".$v->getViernes().' '.strtoupper(substr($dia,0,1))."}\\cell \n";
+                $output .= "{\\qc ".$v->getViernes().strtoupper(substr($dia,0,1))."}\\cell \n";
             }else{
                 $output .= "{\\qc  }\\cell \n";
             }
         }  
         if ($dia == "sabado"){
             if ($v->getSabado()) {
-                $output .= "{\\qc ".$v->getSabado().' '.strtoupper(substr($dia,0,1))."}\\cell \n";
+                $output .= "{\\qc ".$v->getSabado().strtoupper(substr($dia,0,1))."}\\cell \n";
             }else{
                 $output .= "{\\qc  }\\cell \n";
             }
         }
         if ($dia == "domingo"){
             if ($v->getDomingo()) {
-                $output .= "{\\qc ".$v->getDomingo().' '.strtoupper(substr($dia,0,1))."}\\cell \n";
+                $output .= "{\\qc ".$v->getDomingo().strtoupper(substr($dia,0,1))."}\\cell \n";
             }else{
                 $output .= "{\\qc  }\\cell \n";
             }
@@ -162,7 +163,7 @@ class ReportesWordController extends Controller
         return $response; 
     }
 
-    public function reporteNinosPdfAction($dia,$type){
+    public function reporteNinosPdfAction($dia,$type,$foto){
 
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')
@@ -174,7 +175,8 @@ class ReportesWordController extends Controller
         $html2pdf->writeHTML($this->renderView('AppBundle:reportesWord:pdf.html.twig',[
             'childs'=> $childs,
             'dia'=> $dia,
-            'type'=> $type
+            'type'=> $type,
+            'foto'=>$foto
         ]));
         $html2pdf->output('reporteAsistencia.pdf', 'D');
 

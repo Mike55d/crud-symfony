@@ -122,4 +122,23 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 	  $query = $qb->getQuery();
 	  return $query->getResult();
 	}
+
+	public function listaHome($telefonero,$sede){
+		$em = $this->getEntityManager(); 
+		$qb = $em->createQueryBuilder();
+		$qb->select('c')
+		   ->from('AppBundle:Childs', 'c')
+		   ->where('c.type = :first OR c.type = :frequent AND c.sede = :sede')
+		   //->andWhere('c.id > :id')
+		   ->setParameter('sede', $sede)
+		   ->setParameter('first', 'first')
+		   ->setParameter('frequent', 'frequent')
+		   ->orderBy('c.id', 'ASC');
+		   if ($telefonero) {
+		   	$qb->andWhere('c.telefonero = :telefonero')
+		   ->setParameter('telefonero', '$telefonero');
+		   }
+	  $query = $qb->getQuery();
+	  return $query->getResult();
+	}
 }

@@ -9,6 +9,7 @@
 {% if app.user.rola == 'USER' %}
 <a href="{{ path ('printUserWord',{'type':lista})}}" class="btn btn-primary mb-10">Imprimir Word</a>
 <a href="{{ path ('printUserPdf',{'type':lista})}}" class="btn btn-danger mb-10">Imprimir Pdf</a>
+<a href="{{ path ('printUserPdfFoto',{'type':lista})}}" class="btn btn-info mb-10">Imprimir Pdf con Foto</a>
 {% endif %}
 <div class="panel panel-default">
 	<div class="panel-heading">

@@ -163,6 +163,7 @@ class ChildsController extends Controller
         $user= $this->get('security.token_storage')
         ->getToken()->getUser();
         $sede = $user->getSede();
+        $sedes = $em->getRepository('AppBundle:Sede')->findAll(); 
         $anterior = $_SERVER['HTTP_REFERER'];
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
@@ -173,6 +174,8 @@ class ChildsController extends Controller
         ->nextId($child->getId(),$sede,$lista,null);
         $back = $em->getRepository('AppBundle:Childs')
         ->backId($child->getId(),$sede,$lista,null);
+        $stars = $em->getRepository('AppBundle:StarsChilds')
+        ->findByChild($child->getId()); 
         if ($user->getRola() == 'USER') {
             $telefonero = $user->getTelefonero();
             $next = $em->getRepository('AppBundle:Childs')
@@ -242,7 +245,9 @@ class ChildsController extends Controller
         'childPhones'=>$childPhones,
         'childEmails'=>$childEmails,
         'childParents'=>$childParents,
-        'anterior'=> $anterior
+        'anterior'=> $anterior,
+        'sedes'=>$sedes,
+        'stars'=>$stars
     ));
  }
 
@@ -341,5 +346,22 @@ class ChildsController extends Controller
     $this->addFlash('notice','Exportado satisfactoriamente');
     return $this->redirectToRoute('childs_edit',['lista'=>$list,'id'=>$next]);
  }
+
+ /**
+    * @Route("/exportSede" , name="childs_exportSede")
+    */
+ public function exportarSedeAction(Request $request){
+    $em =$this->getDoctrine()->getManager(); 
+    $sede = $em->getRepository('AppBundle:Sede')->find($request->get('sede')); 
+    $lista = $request->get('lista');
+    $next = $request->get('next');
+    $child = $em->getRepository('AppBundle:Childs')
+    ->find($request->get('id')); 
+    $child->setSede($sede);
+    $em->flush();
+    $this->addFlash('notice','Exportado satisfactoriamente');
+    return $this->redirectToRoute('childs_edit',['lista'=>$lista,'id'=>$next]);
+ }
+
 
 }

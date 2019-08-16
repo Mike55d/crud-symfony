@@ -22,8 +22,8 @@
 	}
 </style>
      <page>
- 
-    	<h5 class="header">{{dia}}  RUTA 89 {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
+        
+    	<h5 class="header">{{dia}} fot {{foto}} {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
     	<p class="header">Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
     sábado / LD-Llega domingo</p>
     <p class="header">¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.</p>
@@ -36,20 +36,26 @@
     			<th style="width:100px">Telefono</th>
     			<th style="width:100px">Barrio</th>
     			<th style="width:100px">N. padres</th>
-    			<th style="width:80px">Confirmar</th>
+                <th style="width:80px">Confirmar</th>
+    			<th style="width:80px">foto</th>
     		</tr>
             {% for key , child in childs %}
     		<tr>
     			<td>{{key}}</td>
-    			<td>{{child.colegio|wordwrap(22,'<br>')|raw}}</td>
-    			<td>{{child.name|wordwrap(22,'<br>')|raw}}</td>
-    			<td>{{child.address|wordwrap(35,'<br>')|raw}}</td>
-    			<td>{{child.phone|wordwrap(22,'<br>')|raw}}</td>
-    			<td>{{child.barrio|wordwrap(22,'<br>')|raw}}</td>
-    			<td>{{child.parents|wordwrap(22,'<br>')|raw}}</td>
+    			<td>{{child.colegio|wordwrap(15,'<br>')|raw}}</td>
+    			<td>{{child.name|wordwrap(15,'<br>')|raw}}</td>
+    			<td>{{child.address|wordwrap(25,'<br>')|raw}}</td>
+    			<td>{{child.phone|wordwrap(15,'<br>')|raw}}</td>
+    			<td>{{child.barrio|wordwrap(15,'<br>')|raw}}</td>
+    			<td>{{child.parents|wordwrap(15,'<br>')|raw}}</td>
                 {% if dia == 'viernes' %}<td>{{child.viernes}}</td>{% endif %}
                 {% if dia == 'sabado' %}<td>{{child.sabado}}</td>{% endif %}
                 {% if dia == 'domingo' %}<td>{{child.domingo}}</td>{% endif %}
+                {% if foto %}
+                {% if child.image %}
+                    <td><img height="80" src="img/childs/{{child.image}}" alt=""></td>
+                {% endif %}
+                {% endif %}
     			
     		</tr>
             {% endfor %}

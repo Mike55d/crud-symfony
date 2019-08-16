@@ -40,7 +40,8 @@ class ReporteTelefonerosController extends Controller
     if ($request->get('formato') == 'pdf') {
         return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
             ['telefonero'=>$request->get('telefonero'),
-              'type'=>$request->get('type')]);
+              'type'=>$request->get('type'),
+                'foto'=>$request->get('foto')]);
     }
     return $this->render('AppBundle:ReporteTelefoneros:index.html.twig', array(
         'telefoneros'=> $telefoneros
@@ -290,7 +291,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         
     }
 
-    public function reportesTelefonerosPDFAction($telefonero,$type)
+    public function reportesTelefonerosPDFAction($telefonero,$type,$foto)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')
@@ -308,6 +309,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteTelefoneros:todas.html.twig',[
               'data'=> $data,
               'type'=> $type,
+              'foto'=>$foto
 
           ]));
         }
@@ -318,7 +320,8 @@ public function reportesTelefonerosWordAction($telefonero,$type){
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteTelefoneros:una.html.twig',[
                 'telefonero'=> $telefoneroName->getName(),
                 'childs'=> $childs,
-                'type'=> $type
+                'type'=> $type,
+                'foto'=>$foto
           ]));
         }
         
@@ -346,7 +349,23 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $telefonero = $user->getTelefonero()->getId();
          return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
             ['telefonero'=>$telefonero,
-              'type'=>$type]);
+              'type'=>$type,
+              'foto'=>0
+          ]);
+    }
+
+    /**
+     * @Route("/{type}/printUserPdf" , name="printUserPdfFoto")
+     */
+    public function printUserPdfFoto($type){
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $telefonero = $user->getTelefonero()->getId();
+         return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
+            ['telefonero'=>$telefonero,
+              'type'=>$type,
+              'foto'=> 1
+          ]);
     }
 
     }

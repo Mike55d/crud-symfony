@@ -1,7 +1,7 @@
 {% extends "::base.html.twig" %}
 {% block title %}Editar niño{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 {% endblock %}
 {% block body %}
 {% set editar = '' %}
@@ -11,23 +11,23 @@
 {% set editSelect = 'disabled' %}
 {% endif %}
 {% for flash_message in app.session.flashBag.get('notice') %}
-				<div class="alert alert-success" role="alert">
-					<h6>{{ flash_message }}</h6>
-				</div>
-	{% endfor %}
+<div class="alert alert-success" role="alert">
+	<h6>{{ flash_message }}</h6>
+</div>
+{% endfor %}
 <div class="row mb-10">
 	<div class="col-md-4">
-	{% if back %}
+		{% if back %}
 		<a onclick="sendform()" href="{{path ('childs_edit',{'id':back[0].id ,lista : lista})}}" class="btn btn-warning center-block next-back-btn">Anterior</a>
-	{% endif %}
+		{% endif %}
 	</div>
 	<div class="col-md-4">
-	{% if next %}
+		{% if next %}
 		<a onclick="sendform()" href="{{path ('childs_edit',{'id':next[0].id ,lista : lista})}}"  class="btn btn-success center-block next-back-btn">Siguiente</a>
-	{% endif %}
+		{% endif %}
 	</div>
 	<div class="col-md-4">
-	<a onclick="sendform()" href="{{anterior}}" class="btn btn-primary center-block next-back-btn">Volver</a>
+		<a onclick="sendform()" href="{{anterior}}" class="btn btn-primary center-block next-back-btn">Volver</a>
 	</div>
 </div>
 <div class="panel panel-default">
@@ -87,7 +87,7 @@
 					</div>
 					<div class="checkbox col-md-6"><label class="activo"><input class="form-control" name="active" {{editSelect}}  type="checkbox">Activo</label></div>
 					<div class="col-md-12"><label for="">Observaciones</label><textarea name="observations" class="form-control" id="" cols="5" rows="2">{{child.observations}}</textarea></div>
-					<div class="col-md-12 mt-10"><button class="btn btn-success m-r-10">Editar</button></div>
+					<div class="col-md-12 mt-10"><button class="btn btn-success m-r-10">Editar</button><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#puntos">Control de puntos</button></div>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -114,25 +114,41 @@
 							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.domingo == 'L' %} checked {% endif %} name="domingo" value="L"  type="radio">Llega domingo</label></div></div>
 							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input {% if child.domingo == 'X' %} checked {% endif %} name="domingo" value="X"  type="radio">No viene domingo</label></div></div>
 						</div>
-						<div class="col-md-12 mt-10 ">
-							{% if lista != 'frequent' %}
-							<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'frequent',{{child.id}})" class="btn btn-primary center-block">Exportar a registros</button></div>
-							{% endif %}
-							{% if lista != 'first' %}
-							<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'first',{{child.id}})"  class="btn btn-info center-block">Exportar a primera vez</button></div>
-							{% endif %}
-							{% if lista != 'discard' %}
-							<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'discard',{{child.id}})"  class="btn btn-danger center-block">Exportar a descartados</button></div>
-							{% endif %}
-						</div>
+					</form>
+					<div class="col-md-12 mt-10">
+						<button type="button" id="sedeToggle" class="btn btn-primary center-block">Exportar sede</button>
+					</div>
+					<div id="sedeList" style="display:none;" class="col-md-12 mt-10">
+						<form class="center-block" action="{{ path ('childs_exportSede')}}">
+							<input type="hidden" name="id" value="{{child.id}}">
+							<input type="hidden" name="next" value="{{next[0].id}}">
+							<input type="hidden" name="lista" value="{{lista}}">
+							<select class="form-control" name="sede" id="">
+								{% for sede in sedes %}
+								<option {% if sede.id == child.sede.id %}checked{% endif %} value="{{sede.id}}">{{sede.name}}</option>
+								{% endfor %}
+							</select><br>
+							<button class="btn btn-success center-block">Exportar</button>
+						</form>
+					</div>
+					<div class="col-md-12 mt-10 ">
+						{% if lista != 'frequent' %}
+						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'frequent',{{child.id}})" class="btn btn-primary center-block">Exportar a registros</button></div>
+						{% endif %}
+						{% if lista != 'first' %}
+						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'first',{{child.id}})"  class="btn btn-info center-block">Exportar a primera vez</button></div>
+						{% endif %}
+						{% if lista != 'discard' %}
+						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'discard',{{child.id}})"  class="btn btn-danger center-block">Exportar a descartados</button></div>
+						{% endif %}
 					</div>
 				</div>
 			</div>
-		</form>
+		</div>
 	</div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="puntos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -142,11 +158,51 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				Seguro que desea exportar este registro ?
+				<div class="row">
+					<div class="col-md-4">
+						<button onclick="addStar(1,{{child.id}},1,'blanca')" class="btn btn-default bronce mt-10 mb-10">★ 1</button>
+						<button onclick="addStar(2,{{child.id}},3,'blanca')" class="btn btn-default plata mt-10 mb-10">★ 3</button><br>
+						<button onclick="addStar(3,{{child.id}},6,'blanca')" class="btn btn-default oro mt-10 mb-10">★ 6</button>
+						<button onclick="addStar(4,{{child.id}},1,'negra')" class="btn btn-default black mt-10 mb-10">★ -1</button>
+					</div>
+					<div class="col-md-8">
+						<div class="row mb-10">
+							<div class="col-md-6"><label for="">total positivos</label><input id="totalBlancas" class="form-control" readonly type="text"></div>
+							<div class="col-md-6"><label for="">total negativos</label><input id="totalNegras" class="form-control" readonly type="text"></div>
+						</div>
+						<div class="row">
+							<div id="tableContainer" class="col-md-12 mt-10">
+								<table id="tableStar" class="table table-bordered text-center">
+									<thead >
+										<tr class="text-center">
+											<th>fecha</th>
+											<th>punto</th>
+											<th>tipo</th>
+											<th>accion</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for star in stars %}
+										<tr id="stars">
+											{% set type = 'blanca' %}
+											{% if star.star.color == 'negra' %}
+											{% set type = 'negra' %}
+											{% endif %}
+											<td>{{star.date|date('d-m-Y')}}</td>
+											<td class="{{type}}" data-color="{{star.star.color}}" >{{star.star.valor}}</td>
+											<td>{{star.star.color}}</td>
+											<td><button onclick="delStar({{star.id}},{{star.star.valor}},'{{type}}')" class="btn btn-sm btn-danger">x</button></td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-				<a href="" id="href-modal" class="btn btn-primary">Exportar</a>
 			</div>
 		</div>
 	</div>
@@ -163,23 +219,24 @@
 <script>
 $( function() {
 	//autocompletar
-    var availableNames = {{childNames | json_encode | raw}};
-    var availablePhones = {{childPhones | json_encode | raw}};
-    var availableEmails = {{childEmails | json_encode | raw}};
-    var availableParents = {{childParents | json_encode | raw}};
-    $( "#name" ).autocomplete({
-      source: availableNames
-    });
-    $( "#phone" ).autocomplete({
-      source: availablePhones
-    });
-    $( "#email" ).autocomplete({
-      source: availableEmails
-    });
-    $( "#parents" ).autocomplete({
-      source: availableParents
-    });
-  } );
+	var availableNames = {{childNames | json_encode | raw}};
+	var availablePhones = {{childPhones | json_encode | raw}};
+	var availableEmails = {{childEmails | json_encode | raw}};
+	var availableParents = {{childParents | json_encode | raw}};
+	$( "#name" ).autocomplete({
+		source: availableNames
+	});
+	$( "#phone" ).autocomplete({
+		source: availablePhones
+	});
+	$( "#email" ).autocomplete({
+		source: availableEmails
+	});
+	$( "#parents" ).autocomplete({
+		source: availableParents
+	});
+	
+} );
 // Mostrar imagenes
 $(window).on('load' ,function(){
 
@@ -206,17 +263,80 @@ $(window).on('load' ,function(){
 		}
 	});
 });
- function sendform(){
- 		datos = $('form').serialize();
- 	$.ajax({
+
+// FUNCION PARA SUMAR ESTRELLAS
+		var totalBlancas = 0
+		var totalNegras = 0
+function sumarEstrellas(){
+	$('.blanca').each(function(){
+		totalBlancas+= parseInt($(this).text());
+		$('#totalBlancas').val(totalBlancas);
+		console.log($(this).text());
+	})
+	$('.negra').each(function(){
+		totalNegras+= parseInt($(this).text());
+		$('#totalNegras').val(totalNegras);
+		console.log($(this).text());
+	})
+	}
+	sumarEstrellas();
+
+	function addStar(star,child,value,type){
+	datos = 'star='+star+
+					'&child='+child;
+	$.ajax({
     type:"POST",
-    url:"{{path ('childs_update')}}",
+    url:"{{path ('addStar')}}",
     data:datos,
     success:function(r){
-                   
+        if (r==1){
+        	$('#tableContainer').load(' #tableStar');
+        	if (type == 'blanca') {
+        		totalBlancas+= parseInt(value);
+        		$('#totalBlancas').val(totalBlancas);
+        	}else{
+        		totalNegras+= parseInt(value);
+        		$('#totalNegras').val(totalNegras);
+        	}
+        }else{
+        }                           
     }
-	
-	    });
+});
+}
+
+function delStar(id,value,type){
+	datos = 'id='+id;
+	$.ajax({
+    type:"POST",
+    url:"{{path ('delStar')}}",
+    data:datos,
+    success:function(r){
+        if (r==1){
+        	$('#tableContainer').load(' #tableStar');
+        	if (type == 'blanca') {
+        		totalBlancas-= parseInt(value);
+        		$('#totalBlancas').val(totalBlancas);
+        	}else{
+        		totalNegras-= parseInt(value);
+        		$('#totalNegras').val(totalNegras);
+        	}
+        }else{
+        }                           
+    }
+});
+}
+
+function sendform(){
+	datos = $('form').serialize();
+	$.ajax({
+		type:"POST",
+		url:"{{path ('childs_update')}}",
+		data:datos,
+		success:function(r){
+
+		}
+
+	});
 }
 function openModal(lista,next,exportar,id){
 	$('.modal-title').text(name);
@@ -224,5 +344,9 @@ function openModal(lista,next,exportar,id){
 	$('#confirm').modal('show');
 	console.log('openModal');
 }
+$('#sedeToggle').on('click', function(){
+	$('#sedeList').toggle();
+});
+
 </script>
 {% endblock %}

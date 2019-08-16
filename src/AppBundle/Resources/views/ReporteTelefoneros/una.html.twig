@@ -34,19 +34,28 @@
                 <th style="width:100px">Direccion</th>
                 <th style="width:100px">Barrio</th>
                 <th style="width:100px">N. padres</th>
+                <th style="width:80px">Foto</th>
                 <th style="width:80px">Asistencia</th>
             </tr>
             {% for key , child in childs %}
             <tr>
                 <td>{{key}}</td>
-                <td>{{child.observations|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.colegio|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.grupo|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.name|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.phone|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.address|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.barrio|wordwrap(17,'<br>')|raw}}</td>
-                <td>{{child.parents|wordwrap(17,'<br>')|raw}}</td>
+                <td>{{child.observations|wordwrap(12,'<br>')|raw}}</td>
+                <td>{{child.colegio|wordwrap(12,'<br>')|raw}}</td>
+                <td>{{child.grupo|wordwrap(12,'<br>')|raw}}</td>
+                <td>{{child.name|wordwrap(12,'<br>')|raw}}</td>
+                <td>{{child.phone|wordwrap(12,'<br>')|raw}}</td>
+                <td>{{child.address|wordwrap(12,'<br>')|raw}}</td>
+                <td>{{child.barrio|wordwrap(12,'<br>')|raw}}</td>
+                <td>{{child.parents|wordwrap(12,'<br>')|raw}}</td>
+                {% if foto %}
+                {% if child.image %}
+                    <td><img height="80" src="img/childs/{{child.image}}" alt=""></td>
+                {% endif %}
+                {% if child.image is null %}
+                    <td></td>
+                {% endif %}
+                {% endif %}
                 <td></td>
                 
             </tr>
