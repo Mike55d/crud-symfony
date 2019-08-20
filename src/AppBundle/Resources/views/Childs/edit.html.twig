@@ -72,7 +72,7 @@
 					<div class="col-md-6"><label for="">Ruta</label>
 						<select {{editSelect}} name="ruta" class="form-control" id="">
 							{% for route in routes %}
-							<option {% if child.route.id == route.id %}selected{% endif %} value="{{route.id}}">{{route.name}}</option>
+							<option {% if child.route.id|default('none') == route.id %}selected{% endif %} value="{{route.id}}">{{route.name}}</option>
 							{% endfor %}
 							<option {% if child.route == null %}selected{% endif %} value="">Ninguna</option>
 						</select>
@@ -207,15 +207,30 @@
 		</div>
 	</div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="export" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title-export" id="exampleModalLabel"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				Seguro que desea exportar este registro ?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+				<a href="" id="href-modal-export" class="btn btn-primary">Exportar</a>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-{# Google Api key #}
-{# Script Mapa #}
-<script src="{{ asset ('js/googleMapsEdit.js')}}"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script>
 $( function() {
 	//autocompletar
@@ -339,9 +354,9 @@ function sendform(){
 	});
 }
 function openModal(lista,next,exportar,id){
-	$('.modal-title').text(name);
-	$('#href-modal').attr('href',`${window.location.origin}/childs/${lista}/${next}/${exportar}/${id}/export`);
-	$('#confirm').modal('show');
+	$('.modal-title-export').text(name);
+	$('#href-modal-export').attr('href',`${window.location.origin}/childs/${lista}/${next}/${exportar}/${id}/export`);
+	$('#export').modal('show');
 	console.log('openModal');
 }
 $('#sedeToggle').on('click', function(){
@@ -349,4 +364,10 @@ $('#sedeToggle').on('click', function(){
 });
 
 </script>
+{# Google Api key #}
+<script src="http://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+{# Script Mapa #}
+<script src="{{ asset ('js/googleMapsEdit.js')}}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 {% endblock %}

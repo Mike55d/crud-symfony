@@ -67,3 +67,21 @@
 .black{
 	color: #161414;
 }
+
+.form-top{
+	width: 140px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	display: inline;
+}
+
+.inline{
+	display: inline;
+}
+
+.dontShow{
+	display: none;
+	padding-right: 0px;
+	padding-left: 0px;
+}

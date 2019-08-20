@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Childs;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ChildsController extends Controller
 {
     /**
-     * @Route("/primeraVez" , name="childs_index")
+     * @Route("/primeraVez" , name="childs_first")
      */
     public function indexAction( Request $request)
     {   
@@ -23,6 +24,11 @@ class ChildsController extends Controller
         $user = $this->get('security.token_storage')
         ->getToken()->getUser();
         $sede = $user->getSede(); 
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')
+        ->findBySede($sede); 
+        $grupos = $em->getRepository('AppBundle:Grupo')
+        ->findBySede($sede);  
+        $sedes = $em->getRepository('AppBundle:Sede')->findAll();
         $query = ['type'=>'first','sede'=> $sede];
         if ($user->getRola() == 'USER') 
         {
@@ -35,6 +41,9 @@ class ChildsController extends Controller
             return $this->render('AppBundle:Childs:index.html.twig', array(
                 'childs' => $childs,
                 'lista'=> 'first',
+                'telefoneros'=>$telefoneros,
+                'grupos'=>$grupos,
+                'sedes'=>$sedes,
             ));
         }
 
@@ -46,11 +55,19 @@ class ChildsController extends Controller
         $em =$this->getDoctrine()->getManager(); 
         $sede = $this->get('security.token_storage')
         ->getToken()->getUser()->getSede(); 
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')
+        ->findBySede($sede); 
+        $grupos = $em->getRepository('AppBundle:Grupo')
+        ->findBySede($sede);  
+        $sedes = $em->getRepository('AppBundle:Sede')->findAll();
         $childs = $em->getRepository('AppBundle:Childs')
         ->findBy(['type'=>'discard','sede'=> $sede],['id'=> 'ASC']);  
         return $this->render('AppBundle:Childs:index.html.twig', array(
             'childs' => $childs,
-            'lista'=> 'discard'
+            'lista'=> 'discard',
+            'telefoneros'=>$telefoneros,
+            'grupos'=>$grupos,
+            'sedes'=>$sedes,
         ));
     }
 
@@ -63,6 +80,11 @@ class ChildsController extends Controller
         $user = $this->get('security.token_storage')
         ->getToken()->getUser();
         $sede = $user->getSede();
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')
+        ->findBySede($sede); 
+        $grupos = $em->getRepository('AppBundle:Grupo')
+        ->findBySede($sede);  
+        $sedes = $em->getRepository('AppBundle:Sede')->findAll();
         $query = ['type'=>'frequent','sede'=> $sede];
         if ($user->getRola() == 'USER') 
         {
@@ -75,6 +97,9 @@ class ChildsController extends Controller
             return $this->render('AppBundle:Childs:index.html.twig', array(
                 'childs' => $childs,
                 'lista'=> 'frequent',
+                'telefoneros'=>$telefoneros,
+                'grupos'=>$grupos,
+                'sedes'=>$sedes,
             ));
         }
 
@@ -88,7 +113,6 @@ class ChildsController extends Controller
         ->getToken()->getUser()->getSede();
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
-        $institute = $em->getRepository('AppBundle:Institute')->findAll();
         $route = $em->getRepository('AppBundle:Ruta')->findAll();
         $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
         // datos autocompletar 
@@ -128,8 +152,14 @@ class ChildsController extends Controller
             $child->setLat($request->get('lat'));
             $child->setLng($request->get('lng'));
             //insertar imagen
-            if ($request->files->get('image')) {
-             $file = $request->files->get('image');
+            if ($request->get('image')) {
+             $img = $request->get('image');
+             $img = str_replace('data:image/jpeg;base64,', '', $img);
+             $img = str_replace(' ', '+', $img);
+             $data = base64_decode($img);
+             $file = 'image.jpeg';
+             $success = file_put_contents($file, $data);
+             $file = new File($file);
              $fileName = md5(uniqid()).'.'.$file->guessExtension();
              $file->move($this->getParameter('childs'),$fileName);
              $child->setImage($fileName);
@@ -139,12 +169,11 @@ class ChildsController extends Controller
 
          $em->persist($child);
          $em->flush();
-         return $this->redirectToRoute('childs_index');
+         return $this->redirectToRoute('childs_first');
      }
 
      return $this->render('AppBundle:Childs:new.html.twig', array(
         'grupos' => $grupo,
-        'institutes' => $institute,
         'routes' => $route,
         'telefoneros' => $telefoneros,
         'childNames'=>$childNames,
@@ -164,10 +193,9 @@ class ChildsController extends Controller
         ->getToken()->getUser();
         $sede = $user->getSede();
         $sedes = $em->getRepository('AppBundle:Sede')->findAll(); 
-        $anterior = $_SERVER['HTTP_REFERER'];
+        $anterior = $_SERVER['HTTP_REFERER'] ?? '' ;
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
-        $institute = $em->getRepository('AppBundle:Institute')->findAll();
         $route = $em->getRepository('AppBundle:Ruta')->findAll();
         $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
         $next = $em->getRepository('AppBundle:Childs')
@@ -235,7 +263,6 @@ class ChildsController extends Controller
      return $this->render('AppBundle:Childs:edit.html.twig', array(
         'child'=> $child,
         'grupos' => $grupo,
-        'institutes' => $institute,
         'routes' => $route,
         'telefoneros' => $telefoneros,
         'next'=>$next,
@@ -252,14 +279,15 @@ class ChildsController extends Controller
  }
 
     /**
-     * @Route("/{id}/del" , name="childs_del")
+     * @Route("/{id}/{type}/del" , name="childs_del")
      */
-    public function delAction(Childs $child)
+    public function delAction(Childs $child,$type)
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($child);
         $em->flush();
-        return $this->redirectToRoute('childs_index');
+        $this->addFlash('notice','Registro removido satisfactoriamente');
+        return $this->redirectToRoute('childs_'.$type);
     }
 
  /**
@@ -312,9 +340,8 @@ class ChildsController extends Controller
         $child->setGrade($request->get('grade'));
         $child->setGrupo($em->getRepository('AppBundle:Grupo')
             ->find($request->get('grupo')));
-        $child->setInstitute($em->getRepository('AppBundle:Institute')
-            ->find($request->get('institute')));
-        $child->setRoute($request->get('route'));
+        $child->setRoute($em->getRepository('AppBundle:Ruta')
+            ->find($request->get('ruta')));
         $child->setTelefonero($em->getRepository('AppBundle:Telefonero')
             ->find($request->get('telefonero')));
         $child->setObservations($request->get('observations'));

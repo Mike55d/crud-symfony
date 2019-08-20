@@ -3,6 +3,7 @@
 {% block title %}Nuevo niño{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="{{ asset ('plugins/cropper/cropper.min.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
 <div class="panel panel-default">
@@ -58,55 +59,57 @@
 					</div>
 					<div class="checkbox col-md-6"><label class="activo"><input name="active"  type="checkbox">Activo</label></div>
 					<div class="col-md-12"><label for="">Observaciones</label><textarea name="observations" class="form-control" id="" cols="5" rows="2"></textarea></div>
-					<div class="col-md-12 mt-10"><button class="btn btn-success m-r-10">Crear</button><input type="reset" class="btn btn-warning"></div>
+					<input id="imageUrl" name="image" type="hidden">
+					<div class="col-md-12 mt-10"><button id="crear" class="btn btn-success m-r-10">Crear</button>
+					<input type="reset" class="btn btn-warning"></div>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="col-md-12 image"><img id="imgSalida" width="280" src="" /></div>
-				<div class="col-md-12 mb-10"><input class="form-control" name="image" id="file-input" type="file" /></div>
-				<div class="col-md-12"><label for="">Comentarios</label><textarea name="comments" class="form-control" id="" cols="5" rows="2"></textarea></div>
-				<div class="panel panel-default">
-					<div class="panel-body ">
-						<div class="col-md-4 mr-10">
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="R"  type="radio">Recoger viernes</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="C"  type="radio">Confirmar viernes</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="llega"  type="radio">Llega viernes</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="X"  type="radio">No viene viernes</label></div></div>
-						</div>
-						<div class="col-md-4 mr-10">
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="R"  type="radio">Recoger sabado</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="C"  type="radio">Confirmar sabado</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="llega"  type="radio">Llega sabado</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="X"  type="radio">No viene sabado</label></div></div>
-						</div>
-						<div class="col-md-4 mr-10">
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="R"  type="radio">Recoger domingo</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="C"  type="radio">Confirmar domingo</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="llega"  type="radio">Llega domingo</label></div></div>
-							<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="X"  type="radio">No viene domingo</label></div></div>
+				<div class="col-md-4">
+					<div class="col-md-12 image"><img id="IMAGE" width="280" src="" /></div>
+					<div class="col-md-12 mb-10"><input class="form-control" name="image" id="file-input" type="file" /></div>
+					<div class="col-md-12"><label for="">Comentarios</label><textarea name="comments" class="form-control" id="" cols="5" rows="2"></textarea></div>
+					<div class="panel panel-default">
+						<div class="panel-body ">
+							<div class="col-md-4 mr-10">
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="R"  type="radio">Recoger viernes</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="C"  type="radio">Confirmar viernes</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="llega"  type="radio">Llega viernes</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="X"  type="radio">No viene viernes</label></div></div>
+							</div>
+							<div class="col-md-4 mr-10">
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="R"  type="radio">Recoger sabado</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="C"  type="radio">Confirmar sabado</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="llega"  type="radio">Llega sabado</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="X"  type="radio">No viene sabado</label></div></div>
+							</div>
+							<div class="col-md-4 mr-10">
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="R"  type="radio">Recoger domingo</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="C"  type="radio">Confirmar domingo</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="llega"  type="radio">Llega domingo</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="X"  type="radio">No viene domingo</label></div></div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
-</div>
-{% endblock %}
+	{% endblock %}
 
-{% block javascripts %}
-<script
-src="https://code.jquery.com/jquery-3.3.1.min.js"
-integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-crossorigin="anonymous"></script>
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-{# Google Api key #}
-{# Script Mapa #}
-<script src="{{ asset ('js/googleMaps.js')}}"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<script>
-$( function() {
+	{% block javascripts %}
+	<script
+	src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
+	<script src="http://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	{# Google Api key #}
+	{# Script Mapa #}
+	<script src="{{ asset ('js/googleMaps.js')}}"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="{{ asset ('plugins/cropper/cropper.min.js')}}"></script>
+	<script>
+	$( function() {
 	//autocompletar
 	var availableNames = {{childNames | json_encode | raw}};
 	var availablePhones = {{childPhones | json_encode | raw}};
@@ -124,32 +127,73 @@ $( function() {
 	$( "#parents" ).autocomplete({
 		source: availableParents
 	});
-} );
-// Mostrar imagenes
-$(window).on('load' ,function(){
 
-	$(function() {
-		$('#file-input').change(function(e) {
-			addImage(e); 
-		});
 
-		function addImage(e){
-			var file = e.target.files[0],
-			imageType = /image.*/;
+// CROPPER
 
-			if (!file.type.match(imageType))
-				return;
+var $image = $('#IMAGE');
 
-			var reader = new FileReader();
-			reader.onload = fileOnload;
-			reader.readAsDataURL(file);
-		}
-
-		function fileOnload(e) {
-			var result=e.target.result;
-			$('#imgSalida').attr("src",result);
-		}
-	});
+$image.cropper({
+	movable: true,
+	aspectRatio: 9 / 12,
+	crop: function(event) {
+		console.log(event.detail.x);
+		console.log(event.detail.y);
+		console.log(event.detail.width);
+		console.log(event.detail.height);
+		console.log(event.detail.rotate);
+		console.log(event.detail.scaleX);
+		console.log(event.detail.scaleY);
+	}
 });
-</script>
-{% endblock %}
+
+// Get the Cropper.js instance after initialized
+var cropper = $image.data('cropper');
+
+  // Import image
+  var $inputImage = $('#file-input');
+  var URL = window.URL || window.webkitURL;
+  var blobURL;
+  var imagenSubida = false;
+  if (URL) {
+  	$inputImage.change(function () {
+  		imagenSubida = true
+  		var files = this.files;
+  		var file;
+
+  		if (!$image.data('cropper')) {
+  			return;
+  		}
+
+  		if (files && files.length) {
+  			file = files[0];
+
+  			if (/^image\/\w+$/.test(file.type)) {
+  				blobURL = URL.createObjectURL(file);
+  				$image.one('built.cropper', function () {
+
+            // Revoke when load complete
+            URL.revokeObjectURL(blobURL);
+          }).cropper('reset').cropper('replace', blobURL);
+  				$inputImage.val('');
+  			} else {
+  				window.alert('Please choose an image file.');
+  			}
+  		}
+  	});
+  } else {
+  	$inputImage.prop('disabled', true).parent().addClass('disabled');
+  }
+
+  $('#crear').click(function(){
+  	var green = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+  	console.log(green);
+  	if (imagenSubida) {
+  		$('#imageUrl').val(green);
+  	}
+  });
+// !!! FINISH CROPPER
+
+} );
+	</script>
+	{% endblock %}
