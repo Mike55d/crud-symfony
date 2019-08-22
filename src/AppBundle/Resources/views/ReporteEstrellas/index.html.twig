@@ -1,0 +1,30 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Reporte de Puntos
+			</div>
+			<div class="panel-body">
+				<form method="post" >
+					<label for="">Grupos</label>
+					<select class="form-control" name="grupo" id="">
+						{% for grupo in grupos %}
+						<option value="{{grupo.id}}">{{grupo.name}}</option>
+						{% endfor %}
+					</select>
+					<label for="">Data</label>
+					<select class="form-control" name="type" id="">
+						<option value="frequent">regular</option>
+						<option value="first">primera vez</option>
+						<option value="discard">descartado</option>
+					</select><br>
+					<button class="btn btn-success center-block" >Generar</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+<style>
+table , th  ,td{
+	border:1px solid black;
+}
+table{
+	margin-top: 150px;
+	border-collapse: collapse;
+}
+.header{
+	text-align: center;
+}
+th{
+	text-align: center;
+	background: #D7D5D5;
+}
+td{
+	text-align: center;
+	white-space:pre ;
+}
+.tabla{
+	width: 10000px;
+}
+.bronce{
+	color:#BF4A10;
+}
+
+.plata{
+	color :#C9C4C4;
+}
+
+.oro{
+	color: #EAA208;
+}
+
+.black{
+	color: #161414;
+}
+</style>
+<page>
+
+	<p class="header">Listado de puntos</p>
+	<table >
+		<tr >
+			<th style="width:100px">nombre</th>
+			<th style="width:60px">positivos</th>
+			<th style="width:60px">negativos</th>
+			<th style="width:80px;color:#BF4A10;">bronce</th>
+			<th style="width:80px;color :#716E6E;">plata</th>
+			<th style="width:80px;color: #EAA208;">oro</th>
+			<th style="width:80px;color: #161414;">negro</th>
+			<th style="width:100px">foto</th>
+		</tr>
+		{% for child in childs %}
+		<tr>
+			<td>{{child.child.name}}</td>
+			<td>{{child.positivos}}</td>
+			<td>{{child.negativos}}</td>
+			<td>{{child.bronce}}</td>
+			<td>{{child.plata}}</td>
+			<td>{{child.oro}}</td>
+			<td>{{child.negra}}</td>
+			{% if child.child.image %}
+			<td><img height="80" src="img/childs/{{child.child.image}}" alt=""></td>
+			{% endif %}
+			{% if child.child.image is null %}
+			<td></td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</table>
+	<page_footer> 
+	</page_footer> 
+</page>
+

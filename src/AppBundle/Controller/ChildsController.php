@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Childs;
+use AppBundle\Entity\datesChilds;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -189,6 +190,35 @@ class ChildsController extends Controller
     public function editAction(Request $request ,$lista, Childs $child  )
     {
         $em =$this->getDoctrine()->getManager(); 
+        $recojerDates = [];
+        $recojer = $em->getRepository('AppBundle:datesChilds')
+        ->findBy(['child'=>$child->getId(),'event'=>'R']); 
+        foreach ($recojer as $recojerData) $recojerDates[] = $recojerData->getDate();
+
+        $confirmarDates = [];
+        $confirmar = $em->getRepository('AppBundle:datesChilds')
+        ->findBy(['child'=>$child->getId(),'event'=>'C']); 
+        foreach ($confirmar as $confirmarData) $confirmarDates[] = $confirmarData->getDate();
+
+        $llegaDates = [];
+        $llega = $em->getRepository('AppBundle:datesChilds')
+        ->findBy(['child'=>$child->getId(),'event'=>'L']); 
+        foreach ($llega as $llegaData) $llegaDates[] = $llegaData->getDate();
+
+        $noVieneDates = [];
+        $noviene = $em->getRepository('AppBundle:datesChilds')
+        ->findBy(['child'=>$child->getId(),'event'=>'X']); 
+        foreach ($noviene as $noVieneData) $noVieneDates[] = $noVieneData->getDate();
+
+        $viernes = new \DateTime('friday this week');
+        $formatViernes = $viernes->format('Y-m-d');
+        
+        $sabado = new \DateTime('saturday this week');
+        $formatSabado = $sabado->format('Y-m-d');
+
+        $domingo = new \DateTime('sunday this week');
+        $formatDomingo = $domingo->format('Y-m-d');
+
         $user= $this->get('security.token_storage')
         ->getToken()->getUser();
         $sede = $user->getSede();
@@ -243,9 +273,54 @@ class ChildsController extends Controller
                 ->find($request->get('telefonero')));
             $child->setObservations($request->get('observations'));
             $child->setComments($request->get('comments'));
+
             $child->setViernes($request->get('viernes'));
             $child->setSabado($request->get('sabado'));
             $child->setDomingo($request->get('domingo'));
+            //Guardar fechas para el calendario
+
+            // buscar viernes
+            $idViernes = $em->getRepository('AppBundle:datesChilds')
+            ->findOneBy(['date'=>$formatViernes,'child'=>$child->getId()]);
+            if ($idViernes)
+            {
+                $idViernes->setEvent($request->get('viernes'));   
+            }else{
+                $viernesDate = new datesChilds;
+                $viernesDate->setDate($formatViernes);
+                $viernesDate->setEvent($request->get('viernes'));
+                $viernesDate->setChild($child);
+                $em->persist($viernesDate);
+            }
+
+            // buscar sabado
+            $idSabado = $em->getRepository('AppBundle:datesChilds')
+            ->findOneBy(['date'=>$formatSabado,'child'=>$child->getId()]);
+            if ($idSabado)
+            {
+                $idSabado->setEvent($request->get('sabado'));   
+            }else{
+                $sabadoDate = new datesChilds;
+                $sabadoDate->setDate($formatSabado);
+                $sabadoDate->setEvent($request->get('sabado'));
+                $sabadoDate->setChild($child);
+                $em->persist($sabadoDate);
+            }
+
+            // buscar domingo
+            $idDomingo = $em->getRepository('AppBundle:datesChilds')
+            ->findOneBy(['date'=>$formatDomingo,'child'=>$child->getId()]);
+            if ($idDomingo)
+            {
+                $idDomingo->setEvent($request->get('domingo'));   
+            }else{
+                $domingoDate = new datesChilds;
+                $domingoDate->setDate($formatDomingo);
+                $domingoDate->setEvent($request->get('domingo'));
+                $domingoDate->setChild($child);
+                $em->persist($domingoDate);
+            }
+
             $child->setLat($request->get('lat'));
             $child->setLng($request->get('lng'));
             //insertar imagen
@@ -274,7 +349,11 @@ class ChildsController extends Controller
         'childParents'=>$childParents,
         'anterior'=> $anterior,
         'sedes'=>$sedes,
-        'stars'=>$stars
+        'stars'=>$stars,
+        'recojer'=>$recojerDates,
+        'confirmar'=>$confirmarDates,
+        'llega'=> $llegaDates,
+        'noViene'=>$noVieneDates,
     ));
  }
 
@@ -323,6 +402,16 @@ class ChildsController extends Controller
      */
     public function updateAction(Request $request){
         $em =$this->getDoctrine()->getManager(); 
+
+        $viernes = new \DateTime('friday this week');
+        $formatViernes = $viernes->format('Y-m-d');
+        
+        $sabado = new \DateTime('saturday this week');
+        $formatSabado = $sabado->format('Y-m-d');
+
+        $domingo = new \DateTime('sunday this week');
+        $formatDomingo = $domingo->format('Y-m-d');
+        
         $child = $em->getRepository('AppBundle:Childs')
         ->find($request->get('id')); 
         $child->setName($request->get('name'));
@@ -351,6 +440,51 @@ class ChildsController extends Controller
         $child->setDomingo($request->get('domingo'));
         $child->setLat($request->get('lat'));
         $child->setLng($request->get('lng'));
+
+        //Guardar fechas para el calendario
+
+            // buscar viernes
+        $idViernes = $em->getRepository('AppBundle:datesChilds')
+        ->findOneBy(['date'=>$formatViernes,'child'=>$child->getId()]);
+        
+        if ($idViernes)
+        {
+            $idViernes->setEvent($request->get('viernes'));   
+        }else{
+            $viernesDate = new datesChilds;
+            $viernesDate->setDate($formatViernes);
+            $viernesDate->setEvent($request->get('viernes'));
+            $viernesDate->setChild($child);
+            $em->persist($viernesDate);
+        }
+
+            // buscar sabado
+        $idSabado = $em->getRepository('AppBundle:datesChilds')
+        ->findOneBy(['date'=>$formatSabado,'child'=>$child->getId()]);
+        if ($idSabado)
+        {
+            $idSabado->setEvent($request->get('sabado'));   
+        }else{
+            $sabadoDate = new datesChilds;
+            $sabadoDate->setDate($formatSabado);
+            $sabadoDate->setEvent($request->get('sabado'));
+            $sabadoDate->setChild($child);
+            $em->persist($sabadoDate);
+        }
+
+            // buscar domingo
+        $idDomingo = $em->getRepository('AppBundle:datesChilds')
+        ->findOneBy(['date'=>$formatDomingo,'child'=>$child->getId()]);
+        if ($idDomingo)
+        {
+            $idDomingo->setEvent($request->get('domingo'));   
+        }else{
+            $domingoDate = new datesChilds;
+            $domingoDate->setDate($formatDomingo);
+            $domingoDate->setEvent($request->get('domingo'));
+            $domingoDate->setChild($child);
+            $em->persist($domingoDate);
+        }
         //insertar imagen
         if ($request->files->get('image')) {
          $file = $request->files->get('image');
@@ -365,14 +499,14 @@ class ChildsController extends Controller
     /**
     * @Route("/{list}/{next}/{export}/{id}/export" , name="childs_export")
     */
- public function exportarAction($list,$next,$export,$id){
-    $em =$this->getDoctrine()->getManager(); 
-    $child = $em->getRepository('AppBundle:Childs')->find($id); 
-    $child->setType($export);
-    $em->flush();
-    $this->addFlash('notice','Exportado satisfactoriamente');
-    return $this->redirectToRoute('childs_edit',['lista'=>$list,'id'=>$next]);
- }
+    public function exportarAction($list,$next,$export,$id){
+        $em =$this->getDoctrine()->getManager(); 
+        $child = $em->getRepository('AppBundle:Childs')->find($id); 
+        $child->setType($export);
+        $em->flush();
+        $this->addFlash('notice','Exportado satisfactoriamente');
+        return $this->redirectToRoute('childs_edit',['lista'=>$list,'id'=>$next]);
+    }
 
  /**
     * @Route("/exportSede" , name="childs_exportSede")
@@ -388,7 +522,7 @@ class ChildsController extends Controller
     $em->flush();
     $this->addFlash('notice','Exportado satisfactoriamente');
     return $this->redirectToRoute('childs_edit',['lista'=>$lista,'id'=>$next]);
- }
+}
 
 
 }

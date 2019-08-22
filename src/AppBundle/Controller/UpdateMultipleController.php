@@ -40,7 +40,7 @@ class UpdateMultipleController extends Controller
     		foreach ($childs as $child) {
     			$obChild = $em->getRepository('AppBundle:Childs')
     			->find($child); 
-    			$sede = $em->getRepository('AppBundle:Grupo')
+    			$grupo = $em->getRepository('AppBundle:Grupo')
     			->find($idEditar); 
     			$obChild->setGrupo($grupo);
     		}

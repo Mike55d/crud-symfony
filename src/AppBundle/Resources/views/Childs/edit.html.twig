@@ -2,6 +2,22 @@
 {% block title %}Editar niño{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="{{ asset ('fullCalendar/packages/core/main.css')}}" rel='stylesheet' />
+<link href="{{ asset ('fullCalendar/packages/daygrid/main.css')}}" rel='stylesheet' />
+<link href="{{ asset ('fullCalendar/packages/timegrid/main.css')}}" rel='stylesheet' />
+<link href="{{ asset ('fullCalendar/packages/list/main.css')}}" rel='stylesheet' />
+<style>
+#calendar {
+	max-width: 400px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.fc-bgevent{
+	opacity: 0.6 !important;
+}
+</style>
 {% endblock %}
 {% block body %}
 {% set editar = '' %}
@@ -16,24 +32,27 @@
 </div>
 {% endfor %}
 <div class="row mb-10">
-	<div class="col-md-4">
+	<div class="col-md-3">
 		{% if back %}
 		<a onclick="sendform()" href="{{path ('childs_edit',{'id':back[0].id ,lista : lista})}}" class="btn btn-warning center-block next-back-btn">Anterior</a>
 		{% endif %}
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-3">
 		{% if next %}
 		<a onclick="sendform()" href="{{path ('childs_edit',{'id':next[0].id ,lista : lista})}}"  class="btn btn-success center-block next-back-btn">Siguiente</a>
 		{% endif %}
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-3">
+		<button id="editar" class="btn btn-info next-back-btn" >Editar</button>
+	</div>
+	<div class="col-md-3">
 		<a onclick="sendform()" href="{{anterior}}" class="btn btn-primary center-block next-back-btn">Volver</a>
 	</div>
 </div>
 <div class="panel panel-default">
 	<div class="panel-heading">Editar Niño</div>
 	<div class="panel-body">
-		<form method="post" enctype="multipart/form-data" >
+		<form id="formEditar" method="post" enctype="multipart/form-data" >
 			<div class="col-md-8">
 				<div class="row">
 					<input name="id" value="{{child.id}}" type="hidden">
@@ -87,6 +106,9 @@
 					</div>
 					<div class="checkbox col-md-6"><label class="activo"><input class="form-control" name="active" {{editSelect}}  type="checkbox">Activo</label></div>
 					<div class="col-md-12"><label for="">Observaciones</label><textarea name="observations" class="form-control" id="" cols="5" rows="2">{{child.observations}}</textarea></div>
+					<div class="col-md-12">
+						<div id='calendar'></div>
+					</div>
 					<div class="col-md-12 mt-10"><button class="btn btn-success m-r-10">Editar</button><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#puntos">Control de puntos</button></div>
 				</div>
 			</div>
@@ -230,9 +252,82 @@
 {% endblock %}
 
 {% block javascripts %}
+<script src="{{ asset ('fullCalendar/packages/core/main.js')}}"></script>
+<script src="{{ asset ('fullCalendar/packages/interaction/main.js')}}"></script>
+<script src="{{ asset ('fullCalendar/packages/daygrid/main.js')}}"></script>
+<script src="{{ asset ('fullCalendar/packages/timegrid/main.js')}}"></script>
+<script src="{{ asset ('fullCalendar/packages/list/main.js')}}"></script>
 
 <script>
 $( function() {
+
+	$('#editar').click(function() {
+		$('#formEditar').submit()
+	});
+
+	let eventos = [];
+	for (var i = 0; i < {{recojer| json_encode | raw}}.length; i++) {
+		 eventos.push({
+			start: {{recojer| json_encode | raw}}[i],
+			end: {{recojer| json_encode | raw}}[i],
+			overlap: false,
+			rendering: 'background',
+			color: '#2664E1'
+		});
+	}
+
+	for (var i = 0; i < {{confirmar| json_encode | raw}}.length; i++) {
+		 eventos.push({
+			start: {{confirmar| json_encode | raw}}[i],
+			end: {{confirmar| json_encode | raw}}[i],
+			overlap: false,
+			rendering: 'background',
+			color: '#FAE81E'
+		});
+	}
+
+for (var i = 0; i < {{llega| json_encode | raw}}.length; i++) {
+		 eventos.push({
+			start: {{llega| json_encode | raw}}[i],
+			end: {{llega| json_encode | raw}}[i],
+			overlap: false,
+			rendering: 'background',
+			color: '#1EFA47'
+		})
+	}
+
+	for (var i = 0; i < {{noViene| json_encode | raw}}.length; i++) {
+		 eventos.push({
+			start: {{noViene| json_encode | raw}}[i],
+			end: {{noViene| json_encode | raw}}[i],
+			overlap: false,
+			rendering: 'background',
+			color: '#FA4D1E'
+		});
+	}
+
+	var calendarEl = document.getElementById('calendar');
+
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+		header: {
+        //left: 'prev,next today',
+        //center: 'title',
+        //right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      },
+      defaultDate: '2019-08-12',
+      locale: 'es',
+      navLinks: false, // can click day/week names to navigate views
+      businessHours: false, // display business hours
+      editable: false,
+      events: eventos
+      });
+
+	console.log(eventos);
+	calendar.render();
+
+	$('.fc-today-button').text('Hoy');
+
 	//autocompletar
 	var availableNames = {{childNames | json_encode | raw}};
 	var availablePhones = {{childPhones | json_encode | raw}};
@@ -280,8 +375,8 @@ $(window).on('load' ,function(){
 });
 
 // FUNCION PARA SUMAR ESTRELLAS
-		var totalBlancas = 0
-		var totalNegras = 0
+var totalBlancas = 0
+var totalNegras = 0
 function sumarEstrellas(){
 	$('.blanca').each(function(){
 		totalBlancas+= parseInt($(this).text());
@@ -293,52 +388,52 @@ function sumarEstrellas(){
 		$('#totalNegras').val(totalNegras);
 		console.log($(this).text());
 	})
-	}
-	sumarEstrellas();
+}
+sumarEstrellas();
 
-	function addStar(star,child,value,type){
+function addStar(star,child,value,type){
 	datos = 'star='+star+
-					'&child='+child;
+	'&child='+child;
 	$.ajax({
-    type:"POST",
-    url:"{{path ('addStar')}}",
-    data:datos,
-    success:function(r){
-        if (r==1){
-        	$('#tableContainer').load(' #tableStar');
-        	if (type == 'blanca') {
-        		totalBlancas+= parseInt(value);
-        		$('#totalBlancas').val(totalBlancas);
-        	}else{
-        		totalNegras+= parseInt(value);
-        		$('#totalNegras').val(totalNegras);
-        	}
-        }else{
-        }                           
-    }
-});
+		type:"POST",
+		url:"{{path ('addStar')}}",
+		data:datos,
+		success:function(r){
+			if (r==1){
+				$('#tableContainer').load(' #tableStar');
+				if (type == 'blanca') {
+					totalBlancas+= parseInt(value);
+					$('#totalBlancas').val(totalBlancas);
+				}else{
+					totalNegras+= parseInt(value);
+					$('#totalNegras').val(totalNegras);
+				}
+			}else{
+			}                           
+		}
+	});
 }
 
 function delStar(id,value,type){
 	datos = 'id='+id;
 	$.ajax({
-    type:"POST",
-    url:"{{path ('delStar')}}",
-    data:datos,
-    success:function(r){
-        if (r==1){
-        	$('#tableContainer').load(' #tableStar');
-        	if (type == 'blanca') {
-        		totalBlancas-= parseInt(value);
-        		$('#totalBlancas').val(totalBlancas);
-        	}else{
-        		totalNegras-= parseInt(value);
-        		$('#totalNegras').val(totalNegras);
-        	}
-        }else{
-        }                           
-    }
-});
+		type:"POST",
+		url:"{{path ('delStar')}}",
+		data:datos,
+		success:function(r){
+			if (r==1){
+				$('#tableContainer').load(' #tableStar');
+				if (type == 'blanca') {
+					totalBlancas-= parseInt(value);
+					$('#totalBlancas').val(totalBlancas);
+				}else{
+					totalNegras-= parseInt(value);
+					$('#totalNegras').val(totalNegras);
+				}
+			}else{
+			}                           
+		}
+	});
 }
 
 function sendform(){

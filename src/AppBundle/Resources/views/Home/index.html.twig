@@ -20,7 +20,8 @@
 			<thead>
 				<tr>
 					<th>Nombre</th>
-					<th>Edad</th>
+					<th>Barrio</th>
+					<th>Colegio</th>
 					<th>Telefonero</th>
 					<th>Datos faltantes</th>
 					<th>Foto</th>
@@ -31,7 +32,8 @@
 				{% for child in childs %}
 				<tr>
 					<td>{{child.name}}</td>
-					<td>{{child.age}}</td>
+					<td>{{child.barrio |default('Ninguno')}}</td>
+					<td>{{child.colegio |default('Ninguno')}}</td>
 					<td>{{child.telefonero.name |default('Ninguno')}}</td>
 					<td>
 						{% if child.route == null %}
