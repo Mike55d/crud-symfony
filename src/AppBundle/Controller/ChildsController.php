@@ -223,7 +223,7 @@ class ChildsController extends Controller
         ->getToken()->getUser();
         $sede = $user->getSede();
         $sedes = $em->getRepository('AppBundle:Sede')->findAll(); 
-        $anterior = $_SERVER['HTTP_REFERER'] ?? '' ;
+        $anterior = 'childs_'.$lista ;
         //obtener selects
         $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
         $route = $em->getRepository('AppBundle:Ruta')->findAll();

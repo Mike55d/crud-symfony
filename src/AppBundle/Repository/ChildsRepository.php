@@ -43,7 +43,6 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		   ->where('c.type = :first AND c.id < :id ')
 		   //->andWhere('c.id > :id')
 		   ->setParameter('id', $id)
-		   ->setParameter('sede', $sede)
 		   ->setParameter('first', $lista)
 		   ->setMaxResults(1)
 		   ->orderBy('c.id', 'DESC');

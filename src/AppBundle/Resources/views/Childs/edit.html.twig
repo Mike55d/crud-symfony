@@ -31,6 +31,10 @@
 	<h6>{{ flash_message }}</h6>
 </div>
 {% endfor %}
+{% set siguiente = back[0].id %}
+{% if next %}
+{% set siguiente = next[0].id %}
+{% endif %}
 <div class="row mb-10">
 	<div class="col-md-3">
 		{% if back %}
@@ -46,7 +50,7 @@
 		<button id="editar" class="btn btn-info next-back-btn" >Editar</button>
 	</div>
 	<div class="col-md-3">
-		<a onclick="sendform()" href="{{anterior}}" class="btn btn-primary center-block next-back-btn">Volver</a>
+		<a onclick="sendform()" href="{{ path (anterior)}}" class="btn btn-primary center-block next-back-btn">Volver</a>
 	</div>
 </div>
 <div class="panel panel-default">
@@ -106,8 +110,16 @@
 					</div>
 					<div class="checkbox col-md-6"><label class="activo"><input class="form-control" name="active" {{editSelect}}  type="checkbox">Activo</label></div>
 					<div class="col-md-12"><label for="">Observaciones</label><textarea name="observations" class="form-control" id="" cols="5" rows="2">{{child.observations}}</textarea></div>
-					<div class="col-md-12">
-						<div id='calendar'></div>
+					<div class="row">
+						<div class="col-md-8">
+							<div id='calendar'></div>
+						</div>
+						<div class="col-md-4 p-t-50">
+							<h4 class="inline">Recojer</h4><div class="circleR"></div><br><br>
+							<h4 class="inline">Confirmar</h4><div class="circleC"></div><br><br>
+							<h4 class="inline">Llega</h4><div class="circleL"></div><br><br>
+							<h4 class="inline">no viene</h4><div class="circleX"></div>
+						</div>
 					</div>
 					<div class="col-md-12 mt-10"><button class="btn btn-success m-r-10">Editar</button><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#puntos">Control de puntos</button></div>
 				</div>
@@ -143,7 +155,7 @@
 					<div id="sedeList" style="display:none;" class="col-md-12 mt-10">
 						<form class="center-block" action="{{ path ('childs_exportSede')}}">
 							<input type="hidden" name="id" value="{{child.id}}">
-							<input type="hidden" name="next" value="{{next[0].id}}">
+							<input type="hidden" name="next" value="{{siguiente}}">
 							<input type="hidden" name="lista" value="{{lista}}">
 							<select class="form-control" name="sede" id="">
 								{% for sede in sedes %}
@@ -154,14 +166,15 @@
 						</form>
 					</div>
 					<div class="col-md-12 mt-10 ">
+						
 						{% if lista != 'frequent' %}
-						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'frequent',{{child.id}})" class="btn btn-primary center-block">Exportar a registros</button></div>
+						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{siguiente}},'frequent',{{child.id}})" class="btn btn-primary center-block">Exportar a registros</button></div>
 						{% endif %}
 						{% if lista != 'first' %}
-						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'first',{{child.id}})"  class="btn btn-info center-block">Exportar a primera vez</button></div>
+						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{siguiente}},'first',{{child.id}})"  class="btn btn-info center-block">Exportar a primera vez</button></div>
 						{% endif %}
 						{% if lista != 'discard' %}
-						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{next[0].id}},'discard',{{child.id}})"  class="btn btn-danger center-block">Exportar a descartados</button></div>
+						<div class="col-md-12 mt-10"><button type="button" onclick="openModal('{{lista}}',{{siguiente}},'discard',{{child.id}})"  class="btn btn-danger center-block">Exportar a descartados</button></div>
 						{% endif %}
 					</div>
 				</div>
@@ -267,7 +280,7 @@ $( function() {
 
 	let eventos = [];
 	for (var i = 0; i < {{recojer| json_encode | raw}}.length; i++) {
-		 eventos.push({
+		eventos.push({
 			start: {{recojer| json_encode | raw}}[i],
 			end: {{recojer| json_encode | raw}}[i],
 			overlap: false,
@@ -277,7 +290,7 @@ $( function() {
 	}
 
 	for (var i = 0; i < {{confirmar| json_encode | raw}}.length; i++) {
-		 eventos.push({
+		eventos.push({
 			start: {{confirmar| json_encode | raw}}[i],
 			end: {{confirmar| json_encode | raw}}[i],
 			overlap: false,
@@ -286,8 +299,8 @@ $( function() {
 		});
 	}
 
-for (var i = 0; i < {{llega| json_encode | raw}}.length; i++) {
-		 eventos.push({
+	for (var i = 0; i < {{llega| json_encode | raw}}.length; i++) {
+		eventos.push({
 			start: {{llega| json_encode | raw}}[i],
 			end: {{llega| json_encode | raw}}[i],
 			overlap: false,
@@ -297,7 +310,7 @@ for (var i = 0; i < {{llega| json_encode | raw}}.length; i++) {
 	}
 
 	for (var i = 0; i < {{noViene| json_encode | raw}}.length; i++) {
-		 eventos.push({
+		eventos.push({
 			start: {{noViene| json_encode | raw}}[i],
 			end: {{noViene| json_encode | raw}}[i],
 			overlap: false,
@@ -321,7 +334,7 @@ for (var i = 0; i < {{llega| json_encode | raw}}.length; i++) {
       businessHours: false, // display business hours
       editable: false,
       events: eventos
-      });
+    });
 
 	console.log(eventos);
 	calendar.render();
