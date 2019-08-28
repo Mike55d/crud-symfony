@@ -6,6 +6,7 @@
 <link href="{{ asset ('sb-admin/vendor/datatables-responsive/dataTables.responsive.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
+{% if app.user.rola == 'ADMIN' %}
 {% for flash_message in app.session.flashBag.get('notice') %}
 				<div class="flash-notice">
 					<h6>{{ flash_message }}</h6>
@@ -97,6 +98,7 @@
 		</div>
 	</div>
 </div>
+{% endif %}
 {% endblock %}
 {% block javascripts %}
 <!-- DataTables JavaScript -->

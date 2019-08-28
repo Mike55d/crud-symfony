@@ -26,6 +26,9 @@
     <td>
      <a href="{{ path ('sedes_edit',{id:sede.id})}}" class="btn btn-sm btn-warning">Editar</a>
      <button onclick="openModal({{sede.id}},'{{sede.name}}')" class="btn btn-sm btn-danger">Eliminar</button>
+     {% if app.user.rola == 'WEBMASTER' %}
+     <a href="{{ path ('sedes_permisos',{id:sede.id})}}" class="btn btn-sm btn-info">Permisos</a>
+     {% endif %}
    </td>
  </tr>
  {% endfor %}

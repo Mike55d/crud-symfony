@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class UsersType extends AbstractType
+class UsersWebmasterType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -31,10 +31,8 @@ class UsersType extends AbstractType
             'second_options' => array('label' => 'Repetir contraseña')))
         ->add('active',CheckboxType::class,['data'=>true,'label'=>'Activo'])
         ->add('phone',TextType::class,['label'=>'Telefono'])
-        ->add('telefonero')
         ->add('image',FileType::class,['label'=>'Imagen'])
-        ->add('roles',ChoiceType::class,['choices'=>['ADMIN'=>'ROLE_ADMIN',
-                                                     'USER'=>'ROLE_USER']])
+        ->add('sede')
         ;
     }/**
      * {@inheritdoc}

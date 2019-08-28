@@ -12,10 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
-class UsersType extends AbstractType
+class UsersEditProfileType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -24,17 +23,12 @@ class UsersType extends AbstractType
     {
         $builder
         ->add('username', EmailType::class , ['label'=>'Email'])
-        ->add('name', TextType::class,['label'=>'Nombre'])
+        ->add('name')
+        ->add('phone')
         ->add('plainPassword', RepeatedType::class, array(
             'type' => PasswordType::class,
             'first_options' => array('label' => 'Contraseña'),
             'second_options' => array('label' => 'Repetir contraseña')))
-        ->add('active',CheckboxType::class,['data'=>true,'label'=>'Activo'])
-        ->add('phone',TextType::class,['label'=>'Telefono'])
-        ->add('telefonero')
-        ->add('image',FileType::class,['label'=>'Imagen'])
-        ->add('roles',ChoiceType::class,['choices'=>['ADMIN'=>'ROLE_ADMIN',
-                                                     'USER'=>'ROLE_USER']])
         ;
     }/**
      * {@inheritdoc}
@@ -44,6 +38,7 @@ class UsersType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Users',
             'allow_extra_fields' => true
+            
         ));
     }
 

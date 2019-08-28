@@ -31,7 +31,9 @@
 	<h6>{{ flash_message }}</h6>
 </div>
 {% endfor %}
+{% if back %}
 {% set siguiente = back[0].id %}
+{% endif %}
 {% if next %}
 {% set siguiente = next[0].id %}
 {% endif %}

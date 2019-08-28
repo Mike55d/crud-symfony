@@ -104,12 +104,11 @@ class TelefonerosController extends Controller
     public function setPwAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $childs = $em->getRepository('AppBundle:Childs')->findAll(); 
-        foreach ($childs as $child) {
-          if (!$child->getType()) {
-           $child->setType('frequent');
-          }
-        }
+        $permiso = $em->getRepository('AppBundle:Permisos')->findOneBy(['sede'=>7,'type'=>'USER']);
+        $users = $em->getRepository('AppBundle:Users')->findBySede(7);
+        foreach ($users as $user) {
+           $user->setPermisos($permiso);
+         } 
         $em->flush();
         return $this->redirectToRoute('telefoneros_index');
     }

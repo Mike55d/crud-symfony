@@ -113,9 +113,9 @@ class ChildsController extends Controller
         $sede = $this->get('security.token_storage')
         ->getToken()->getUser()->getSede();
         //obtener selects
-        $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
-        $route = $em->getRepository('AppBundle:Ruta')->findAll();
-        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
+        $grupo = $em->getRepository('AppBundle:Grupo')->findBy(['sede'=>$sede]);
+        $route = $em->getRepository('AppBundle:Ruta')->findBy(['sede'=>$sede]);
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findBy(['sede'=>$sede]);
         // datos autocompletar 
         $childs = $em->getRepository('AppBundle:Childs')
         ->findBy(['type'=>'first','sede'=> $sede]);
@@ -225,9 +225,9 @@ class ChildsController extends Controller
         $sedes = $em->getRepository('AppBundle:Sede')->findAll(); 
         $anterior = 'childs_'.$lista ;
         //obtener selects
-        $grupo = $em->getRepository('AppBundle:Grupo')->findAll();
-        $route = $em->getRepository('AppBundle:Ruta')->findAll();
-        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
+        $grupo = $em->getRepository('AppBundle:Grupo')->findBy(['sede'=>$sede]);
+        $route = $em->getRepository('AppBundle:Ruta')->findBy(['sede'=>$sede]);
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findBy(['sede'=>$sede]);
         $next = $em->getRepository('AppBundle:Childs')
         ->nextId($child->getId(),$sede,$lista,null);
         $back = $em->getRepository('AppBundle:Childs')

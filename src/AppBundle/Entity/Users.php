@@ -92,11 +92,18 @@ class Users implements AdvancedUserInterface
     private $sede;
 
         /**
-    * @ORM\ManyToOne(targetEntity="Telefonero")
+    * @ORM\ManyToOne(targetEntity="Telefonero" , cascade={"persist"})
     * @ORM\JoinColumn(name="telefonero", referencedColumnName="id" , nullable=true , onDelete="SET NULL")
     */
 
     private $telefonero;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="Permisos")
+    * @ORM\JoinColumn(name="permisos", referencedColumnName="id")
+    */
+
+    private $permisos;
 
 
     /**
@@ -274,7 +281,6 @@ class Users implements AdvancedUserInterface
     public function setRoles($roles)
     {
         $this->roles = [$roles];
-
         return $this;
     }
 
@@ -385,5 +391,29 @@ public function isAccountNonExpired()
     public function getTelefonero()
     {
         return $this->telefonero;
+    }
+
+    /**
+     * Set permisos.
+     *
+     * @param \AppBundle\Entity\Permisos|null $permisos
+     *
+     * @return Users
+     */
+    public function setPermisos(\AppBundle\Entity\Permisos $permisos = null)
+    {
+        $this->permisos = $permisos;
+
+        return $this;
+    }
+
+    /**
+     * Get permisos.
+     *
+     * @return \AppBundle\Entity\Permisos|null
+     */
+    public function getPermisos()
+    {
+        return $this->permisos;
     }
 }

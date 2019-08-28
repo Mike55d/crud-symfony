@@ -47,7 +47,7 @@
 						<img class="" height="100" src="{{ asset ('img/profiles/'~user.image)}}" alt="">
 					</td>
 					<td>{{user.telefonero | default('ninguno')}}</td>
-					<td>{{user.rola}}</td>
+					<td>{{user.permisos.type}}</td>
 					<td>
 						<a href="{{ path ('users_edit',{id:user.id})}}" class="btn btn-sm btn-warning">Editar</a>
 						<button onclick="openModal({{user.id}},'{{user.name}}')" class="btn btn-sm btn-danger">Eliminar</button>

@@ -165,7 +165,7 @@ public function reportesRutasWordAction($dia, $ruta,$type){
         //  Comenzamos a armar el documento  
         $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
         $em =$this->getDoctrine()->getManager(); 
-        $rutas = $em->getRepository('AppBundle:Ruta')->findAll(); 
+        $rutas = $em->getRepository('AppBundle:Ruta')->findBy(['sede'=>$sede]); 
         foreach ($rutas as $route) {
             $date = new \DateTime();
             $output.= "{\\fs28\\qc \" Ruta ". ucfirst(utf8_decode($dia))." ".$route->getName()." \" - ".$date->format('d/m/Y')."\\par}"; 
@@ -281,7 +281,7 @@ public function reportesRutasWordAction($dia, $ruta,$type){
         $html2pdf = new Html2Pdf();
         if ($ruta == 'todas') {
             $data = [];
-            $rutas = $em->getRepository('AppBundle:Ruta')->findAll();
+            $rutas = $em->getRepository('AppBundle:Ruta')->findBy(['sede'=>$sede]);
             foreach ($rutas as $i => $route) {
                 $childs = $em->getRepository('AppBundle:Childs')
                 ->buscarRuta($route,$dia,$sede,$type);

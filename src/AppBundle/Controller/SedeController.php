@@ -74,4 +74,26 @@ class SedeController extends Controller
         return $this->redirectToRoute('sedes_index');
     }
 
+    /**
+     * @Route("/{id}/permisos" , name="sedes_permisos")
+     */
+    public function permisosAction(Request $request, Sede $sede)
+    {
+        $em =$this->getDoctrine()->getManager();
+        $permisosUser = $em->getRepository('AppBundle:Permisos')
+        ->findOneBy(['sede'=>$sede->getId(),'type'=>'USER']); 
+        $permisosAdmin = $em->getRepository('AppBundle:Permisos')
+        ->findOneBy(['sede'=>$sede->getId(),'type'=>'ADMIN']); 
+        if ($request->get('permisosUser')) {
+            $permisosUser->setPermisos($request->get('permisosUser'));
+            $permisosAdmin->setPermisos($request->get('permisosAdmin'));
+        $em->flush();
+        }
+        return $this->render('AppBundle:Sede:permisos.html.twig', array(
+            'sede'=>$sede,
+            'permisosUser'=>$permisosUser,
+            'permisosAdmin'=>$permisosAdmin,
+        ));
+    }
+
 }

@@ -1,0 +1,84 @@
+{% extends "::base.html.twig" %}
+{% block css %}
+<!-- DataTables CSS -->
+<link href="{{ asset ('sb-admin/vendor/datatables-plugins/dataTables.bootstrap.css')}}" rel="stylesheet">
+<!-- DataTables Responsive CSS -->
+<link href="{{ asset ('sb-admin/vendor/datatables-responsive/dataTables.responsive.css')}}" rel="stylesheet">
+{% endblock %}
+{% block body %}
+
+<a href="{{path ('sedes_index')}}" class="btn btn-primary mb-10">Volver</a>
+<div class="panel panel-default">
+	<div class="panel-heading">
+    Permisos de usuarios {{sede.name}}
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Usuario</h3>
+        <form method="post">
+          <label class="m-r-10" for="">Registros</label><input {% if 'registros' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="registros" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Nuevo registro</label><input {% if 'nuevoRegistro' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="nuevoRegistro" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Primera vez</label><input {% if 'primeraVez' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="primeraVez" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Descartados</label><input {% if 'descartados' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="descartados" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Cumpleaños</label><input {% if 'cumpleaños' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="cumpleaños" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">telefoneros</label><input {% if 'telefoneros' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="telefoneros" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">rutas</label><input {% if 'rutas' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="rutas" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">grupos</label><input {% if 'grupos' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="grupos" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">usuarios</label><input {% if 'usuarios' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="usuarios" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Reporte de asistencia</label><input {% if 'reporteAsistencia' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="reporteAsistencia" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Reporte de Rutas</label><input {% if 'reporteRutas' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="reporteRutas" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Reporte de Telefoneros</label><input {% if 'reporteTelefoneros' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="reporteTelefoneros" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Control de Puntos</label><input {% if 'controlPuntos' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="controlPuntos" name="permisosUser[]"><br>
+
+        </div>
+        <div class="col-md-6">
+          <h3>Administrador</h3>
+          <label class="m-r-10" for="">Registros</label><input {% if 'registros' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="registros" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Nuevo registro</label><input {% if 'nuevoRegistro' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="nuevoRegistro" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Primera vez</label><input {% if 'primeraVez' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="primeraVez" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Descartados</label><input {% if 'descartados' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="descartados" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Cumpleaños</label><input {% if 'cumpleaños' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="cumpleaños" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">telefoneros</label><input {% if 'telefoneros' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="telefoneros" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">rutas</label><input {% if 'rutas' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="rutas" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">grupos</label><input {% if 'grupos' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="grupos" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">usuarios</label><input {% if 'usuarios' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="usuarios" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Reporte de asistencia</label><input {% if 'reporteAsistencia' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="reporteAsistencia" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Reporte de Rutas</label><input {% if 'reporteRutas' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="reporteRutas" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Reporte de Telefoneros</label><input {% if 'reporteTelefoneros' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="reporteTelefoneros" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Control de Puntos</label><input {% if 'controlPuntos' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="controlPuntos" name="permisosAdmin[]"><br>
+
+        </div>
+      </div>
+      <button class="btn btn-success mt-10">Guardar</button>
+    </form>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Seguro que quieres eliminar este registro ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a href="" id="href-modal" class="btn btn-primary">Eliminar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+<!-- DataTables JavaScript -->
+<script src="{{ asset ('sb-admin/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{ asset ('sb-admin/vendor/datatables-plugins/dataTables.bootstrap.min.js')}}"></script>
+
+{% endblock %}

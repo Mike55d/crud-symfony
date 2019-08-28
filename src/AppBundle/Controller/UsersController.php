@@ -7,7 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Users;
 use AppBundle\Form\UsersType;
+use AppBundle\Form\UsersWebmasterType;
 use AppBundle\Form\UsersEditType;
+use AppBundle\Form\UsersEditProfileType;
+use AppBundle\Entity\Telefonero;
 
  /**
      * @Route("users")
@@ -48,8 +51,28 @@ use AppBundle\Form\UsersEditType;
             ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
             $user->setSede($sede);
-            if ($user->getRoles()[0] == 'ROLE_USER') $user->setRola('USER');
-            if ($user->getRoles()[0] == 'ROLE_ADMIN') $user->setRola('ADMIN');
+            if ($user->getRoles()[0] == 'ROLE_USER') 
+            {
+                $permisos = $em->getRepository('AppBundle:Permisos')
+                ->findOneBy(['sede'=>$sede,'type'=>'USER']); 
+                $user->setPermisos($permisos);
+                $user->setRola('USER');
+            }
+            if ($user->getRoles()[0] == 'ROLE_ADMIN') 
+            {
+                $permisos = $em->getRepository('AppBundle:Permisos')
+                ->findOneBy(['sede'=>$sede,'type'=>'ADMIN']); 
+                $user->setPermisos($permisos);
+                $user->setRola('ADMIN');
+            }
+            if ($request->get('crearTelefonero')) {
+                $telefonero = new Telefonero;
+                $telefonero->setSede($sede);
+                $telefonero->setName($user->getName()); 
+                $telefonero->setPhone($user->getPhone()); 
+                $telefonero->setImage($fileName); 
+                $user->setTelefonero($telefonero);
+            }
             $em->persist($user);
             $em->flush();
             return $this->redirectToRoute('users_index');
@@ -69,8 +92,20 @@ use AppBundle\Form\UsersEditType;
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles($request->get('roles'));
-            if ($request->get('roles') == 'ROLE_USER') $user->setRola('USER');
-            if ($request->get('roles') == 'ROLE_ADMIN') $user->setRola('ADMIN');
+             if ($user->getRoles()[0] == 'ROLE_USER') 
+            {
+                $permisos = $em->getRepository('AppBundle:Permisos')
+                ->findOneBy(['sede'=>$sede,'type'=>'USER']); 
+                $user->setPermisos($permisos);
+                $user->setRola('USER');
+            }
+            if ($user->getRoles()[0] == 'ROLE_ADMIN') 
+            {
+                $permisos = $em->getRepository('AppBundle:Permisos')
+                ->findOneBy(['sede'=>$sede,'type'=>'ADMIN']); 
+                $user->setPermisos($permisos);
+                $user->setRola('ADMIN');
+            }
             $em->flush();
             return $this->redirectToRoute('users_index');
         }
@@ -98,7 +133,10 @@ use AppBundle\Form\UsersEditType;
     public function activateAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:Users')->findAll(); 
+        $sede = $this->get('security.token_storage')
+        ->getToken()->getUser()->getSede(); 
+        $users = $em->getRepository('AppBundle:Users')
+        ->findBy(['sede'=>$sede,'rola'=>'USER']); 
         foreach ($users as $user) $user->setActive(1);
         $em->flush();
         $this->addFlash('notice','Usuarios Activados');
@@ -111,11 +149,74 @@ use AppBundle\Form\UsersEditType;
     public function disableAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:Users')->findByRola('USER'); 
+        $sede = $this->get('security.token_storage')
+        ->getToken()->getUser()->getSede(); 
+        $users = $em->getRepository('AppBundle:Users')
+        ->findBy(['sede'=>$sede,'rola'=>'USER']); 
         foreach ($users as $user) $user->setActive(0);
         $em->flush();
         $this->addFlash('notice','Usuarios Desactivados');
         return $this->redirectToRoute('users_index');
+    }
+
+    /**
+     * @Route("/editProfile" , name="users_editProfile")
+     */
+    public function editProfileAction(Request $request)
+    {
+        $em =$this->getDoctrine()->getManager(); 
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $form = $this->createForm(UsersEditProfileType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $this->get('security.password_encoder')
+            ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+             //insertar imagen
+            if ($request->files->get('image')) {
+             $file = $request->files->get('image');
+             $fileName = md5(uniqid()).'.'.$file->guessExtension();
+             $file->move($this->getParameter('profiles'),$fileName);
+             $user->setImage($fileName);
+            }
+            $em->flush();
+            return $this->redirectToRoute('homepage');
+        }
+        return $this->render('AppBundle:Users:editProfile.html.twig', array(
+            'form'=> $form->createView(),
+        ));
+    }
+
+     /**
+     * @Route("/newWebmaster" , name="users_newWebmaster")
+     */
+    public function newWebmasterAction(Request $request)
+    {
+        $user = new Users();
+        $form = $this->createForm(UsersWebmasterType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $permisos = $em->getRepository('AppBundle:Permisos')
+            ->findOneBy(['type'=>'WEBMASTER']); 
+            $file = $user->getImage();
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+            $file->move($this->getParameter('profiles'),$fileName);
+            $user->setImage($fileName);
+            $password = $this->get('security.password_encoder')
+            ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+            $user->setRoles("ROLE_SUPER_ADMIN"); 
+            $user->setRola('WEBMASTER');
+            $user->setPermisos($permisos);         
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('users_index');
+        }
+        return $this->render('AppBundle:Users:newWebmaster.html.twig', array(
+            'form'=> $form->createView()
+        ));
     }
 
 }

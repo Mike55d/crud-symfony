@@ -174,7 +174,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         //  Comenzamos a armar el documento  
         $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
         $em =$this->getDoctrine()->getManager(); 
-        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll(); 
+        $telefoneros = $em->getRepository('AppBundle:Telefonero')->findBy(['sede'=>$sede]); 
         foreach ($telefoneros as $telefonero) {
            
         $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de Niños  '.$telefonero->getName())." \\par}";
@@ -300,7 +300,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $html2pdf = new Html2Pdf();
         if ($telefonero == 'todos') {
             $data = [];
-            $telefoneros = $em->getRepository('AppBundle:Telefonero')->findAll();
+            $telefoneros = $em->getRepository('AppBundle:Telefonero')->findBy(['sede'=>$sede]);
             foreach ($telefoneros as $i => $telefon) {
                 $childs = $em->getRepository('AppBundle:Childs')
         				->findBy(['type'=>$type,'sede'=> $sede,'telefonero'=>$telefon]);
