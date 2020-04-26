@@ -1,0 +1,11 @@
+body{
+	background-image: url('/img/stars/fondo.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 100%;
+}
+
+html{
+	height: 100%;
+}

@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Childs;
 
 
 class HomeController extends Controller
@@ -29,5 +30,17 @@ class HomeController extends Controller
     			'childs' => $childs,
     		));
     	}
+
+    /**
+     * @Route("/{id}/del" , name="del_child")
+     */
+    public function delAction(Childs $child)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($child);
+        $em->flush();
+        $this->addFlash('notice','Registro removido satisfactoriamente');
+        return $this->redirectToRoute('homepage');
+    }
 
     }

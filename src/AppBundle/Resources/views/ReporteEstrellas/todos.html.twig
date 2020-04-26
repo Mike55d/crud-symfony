@@ -37,24 +37,24 @@ td{
 }
 </style>
 {% for grupo in childs %}
-    <page>
-	<table>
+<page>
+	<p class="header">Listado de puntos {{grupo.grupo.name}}</p>
+	<table style="margin-left:275px;">
 		<tr>
-			<td style="width:200px">
+			<td style="width:65px">
 				<img height="40" src="img/stars/starbronce.png" alt="">
 			</td>
-			<td style="width:200px">
+			<td style="width:80px">
 				<img height="40" src="img/stars/starplata.png" alt="">
 			</td>
-			<td style="width:200px">
+			<td style="width:80px">
 				<img height="40" src="img/stars/staroro.png" alt="">
 			</td>
-			<td style="width:200px">
+			<td style="width:80px">
 				<img height="40" src="img/stars/starnegro.png" alt="">
 			</td>
 		</tr>
 	</table>
-	<p class="header">Listado de puntos {{grupo.grupo.name}}</p>
 	<table class="border tabla" >
 		<tr >
 			<th class="border" style="width:100px">nombre</th>

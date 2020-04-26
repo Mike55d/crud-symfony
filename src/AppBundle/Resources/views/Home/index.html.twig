@@ -69,8 +69,10 @@
 						<img class=" max" src="{{ asset ('img/childs/'~child.image)}}" alt="">
 					</td>
 					<td>
-						<a href="{{ path ('childs_edit',{id:child.id,lista:child.type})}}" class="btn btn-sm btn-warning">Editar</a>
+						<a href="{{ path ('childs_edit',{id:child.id,lista:child.type ,'telf': 0 ,'miGrupo':0})}}" class="btn btn-sm btn-warning">Editar</a>
+						{#
 						<button onclick="openModal({{child.id}},'{{child.name}}')" class="btn btn-sm btn-danger">Eliminar</button>
+							#}
 					</td>
 				</tr>
 				{% endfor %}
@@ -114,7 +116,7 @@ $(document).ready(function() {
 			console.log( 'DataTables has finished its initialisation.' );
 		},
 		language: {
-			"lengthMenu": "Mosrar _MENU_ ",
+			"lengthMenu": "Mostrar _MENU_ ",
 			"zeroRecords": "No hay registros disponibles",
 			"info": "Mostrando pagina _PAGE_ de _PAGES_",
 			"infoEmpty": "No records available",

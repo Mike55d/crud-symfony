@@ -167,13 +167,13 @@ class Childs
 
     /**
     * @ORM\ManyToOne(targetEntity="Grupo")
-    * @ORM\JoinColumn(name="grupo", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="grupo", referencedColumnName="id" , nullable=true , onDelete="SET NULL")
     */
     private $grupo;
 
         /**
     * @ORM\ManyToOne(targetEntity="Courses")
-    * @ORM\JoinColumn(name="course", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="course", referencedColumnName="id" , nullable=true ,onDelete="SET NULL")
     */
     private $course;
 
@@ -185,15 +185,22 @@ class Childs
 
     /**
     * @ORM\ManyToOne(targetEntity="Telefonero")
-    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="telefonero", referencedColumnName="id" , nullable=true , onDelete="SET NULL")
     */
     private $telefonero;
 
 /**
     * @ORM\ManyToOne(targetEntity="Ruta")
-    * @ORM\JoinColumn(name="route", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="route", referencedColumnName="id" , nullable=true ,onDelete="SET NULL")
     */
     private $route;
+
+       /**
+     * @var boolean
+     *
+     * @ORM\Column(name="extra", type="boolean" , nullable=true )
+     */
+    private $extra;
 
 
     /**
@@ -569,11 +576,11 @@ class Childs
     /**
      * Set route
      *
-     * @param \AppBundle\Entity\Route $route
+     * @param \AppBundle\Entity\Ruta $route
      *
      * @return Childs
      */
-    public function setRoute(\AppBundle\Entity\Route $route = null)
+    public function setRoute(\AppBundle\Entity\Ruta $route = null)
     {
         $this->route = $route;
 
@@ -583,7 +590,7 @@ class Childs
     /**
      * Get route
      *
-     * @return \AppBundle\Entity\Route
+     * @return \AppBundle\Entity\Ruta
      */
     public function getRoute()
     {
@@ -756,5 +763,77 @@ class Childs
     public function getCourse()
     {
         return $this->course;
+    }
+
+    /**
+     * Set viernes
+     *
+     * @param string $viernes
+     *
+     * @return Childs
+     */
+    public function setViernes($viernes)
+    {
+        $this->viernes = $viernes;
+
+        return $this;
+    }
+
+    /**
+     * Get viernes
+     *
+     * @return string
+     */
+    public function getViernes()
+    {
+        return $this->viernes;
+    }
+
+    /**
+     * Set sabado
+     *
+     * @param string $sabado
+     *
+     * @return Childs
+     */
+    public function setSabado($sabado)
+    {
+        $this->sabado = $sabado;
+
+        return $this;
+    }
+
+    /**
+     * Get sabado
+     *
+     * @return string
+     */
+    public function getSabado()
+    {
+        return $this->sabado;
+    }
+
+    /**
+     * Set domingo
+     *
+     * @param string $domingo
+     *
+     * @return Childs
+     */
+    public function setDomingo($domingo)
+    {
+        $this->domingo = $domingo;
+
+        return $this;
+    }
+
+    /**
+     * Get domingo
+     *
+     * @return string
+     */
+    public function getDomingo()
+    {
+        return $this->domingo;
     }
 }

@@ -27,17 +27,25 @@ class ReporteRutasController extends Controller
       $sede = $user->getSede();
       $rutas=$em->getRepository('AppBundle:Ruta')->findBySede($sede); 
       if ($request->get('formato') == 'rtf') {
-          if ($request->get('ruta') && $request->get('ruta') != 'todas') {
+          if (($request->get('ruta') && $request->get('ruta') != 'todas') && $request->get('ruta') != 'extra' ) {
             return $this->forward('AppBundle:ReporteRutas:reportesRutasWord',
                 ['dia'=>$request->get('dia'),
                 'ruta'=>$request->get('ruta'),
                 'type'=>$request->get('type')]);
         }
+        if ($request->get('ruta') && $request->get('ruta') != 'todas' && $request->get('ruta') == 'extra' ) {
+            return $this->forward('AppBundle:ReporteRutas:reportesAllRutasWord',
+                ['dia'=>$request->get('dia'),
+                'ruta'=>$request->get('ruta'),
+                'type'=>$request->get('type'),
+                'extra'=> 1]);
+        }
         if ($request->get('ruta') && $request->get('ruta') == 'todas') {
             return $this->forward('AppBundle:ReporteRutas:reportesAllRutasWord',
                 ['dia'=>$request->get('dia'),
                 'ruta'=>$request->get('ruta'),
-                'type'=>$request->get('type')]);
+                'type'=>$request->get('type'),
+                'extra'=> 0]);
         }
     }
     if ($request->get('formato') == 'pdf') {
@@ -127,7 +135,7 @@ public function reportesRutasWordAction($dia, $ruta,$type){
         ->getToken()->getUser();
         $sede = $user->getSede();
         $childs = $em->getRepository('AppBundle:Childs')
-        ->buscarRuta($ruta,$dia,$sede,$type);
+        ->buscarRuta($ruta,$dia,$sede,$type,0);
         $i = 1;
         foreach ($childs as $v){
          $output.= " {\\qc ".$i."}\\cell ".utf8_decode($v->getColegio())."\\cell ".utf8_decode($v->getName())."\\cell ".utf8_decode($v->getAddress())."\\cell ".utf8_decode($v->getPhone())."\\cell ".utf8_decode($v->getBarrio())."\\cell ".utf8_decode($v->getParents())."\\cell ";
@@ -160,12 +168,17 @@ public function reportesRutasWordAction($dia, $ruta,$type){
         return $response;
     }
 
-    public function reportesAllRutasWordAction($dia, $ruta,$type){
+    public function reportesAllRutasWordAction($dia, $ruta,$type,$extra){
 
         //  Comenzamos a armar el documento  
         $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
         $em =$this->getDoctrine()->getManager(); 
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede();
         $rutas = $em->getRepository('AppBundle:Ruta')->findBy(['sede'=>$sede]); 
+        $sinRutaDefinida = $em->getRepository('AppBundle:Ruta')->find(28); 
+        array_push($rutas, $sinRutaDefinida);
         foreach ($rutas as $route) {
             $date = new \DateTime();
             $output.= "{\\fs28\\qc \" Ruta ". ucfirst(utf8_decode($dia))." ".$route->getName()." \" - ".$date->format('d/m/Y')."\\par}"; 
@@ -238,7 +251,7 @@ public function reportesRutasWordAction($dia, $ruta,$type){
         ->getToken()->getUser();
         $sede = $user->getSede();
         $childs = $em->getRepository('AppBundle:Childs')
-        ->buscarRuta($route,$dia,$sede,$type);
+        ->buscarRuta($route,$dia,$sede,$type,$extra);
         $i = 1;
         foreach ($childs as $v){
          $output.= " {\\qc ".$i."}\\cell ".utf8_decode($v->getColegio())."\\cell ".utf8_decode($v->getName())."\\cell ".utf8_decode($v->getAddress())."\\cell ".utf8_decode($v->getPhone())."\\cell ".utf8_decode($v->getBarrio())."\\cell ".utf8_decode($v->getParents())."\\cell ";
@@ -284,7 +297,7 @@ public function reportesRutasWordAction($dia, $ruta,$type){
             $rutas = $em->getRepository('AppBundle:Ruta')->findBy(['sede'=>$sede]);
             foreach ($rutas as $i => $route) {
                 $childs = $em->getRepository('AppBundle:Childs')
-                ->buscarRuta($route,$dia,$sede,$type);
+                ->buscarRuta($route,$dia,$sede,$type,0);
                 $data[]=['ruta'=>$route,'childs'=>$childs];
             }
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteRutas:todas.html.twig',[
@@ -294,10 +307,25 @@ public function reportesRutasWordAction($dia, $ruta,$type){
 
           ]));
         }
-        if ($ruta != 'todas') {
+        if ($ruta == 'extra' && $ruta != 'todas') {
+            $data = [];
+            $rutas = $em->getRepository('AppBundle:Ruta')->findBy(['sede'=>$sede]);
+            foreach ($rutas as $i => $route) {
+                $childs = $em->getRepository('AppBundle:Childs')
+                ->buscarRuta($route,$dia,$sede,$type,1);
+                $data[]=['ruta'=>$route,'childs'=>$childs];
+            }
+            $html2pdf->writeHTML($this->renderView('AppBundle:ReporteRutas:todas.html.twig',[
+              'data'=> $data,
+              'type'=> $type,
+              'dia'=> $dia,
+
+          ]));
+        }
+        if ($ruta != 'todas' && $ruta != 'extra') {
             $rutaName = $em->getRepository('AppBundle:Ruta')->find($ruta);
             $childs = $em->getRepository('AppBundle:Childs')
-            ->buscarRuta($ruta,$dia,$sede,$type);
+            ->buscarRuta($ruta,$dia,$sede,$type,0);
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteRutas:una.html.twig',[
                 'rutaName'=> $rutaName->getName(),
                 'childs'=> $childs,

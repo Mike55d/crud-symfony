@@ -24,7 +24,7 @@
 					<div class="col-md-12">
 						<div id="map_canvas" style="height: 200px;width: 100%;margin: 0.6em; margin-right: 20px"></div>
 					</div>
-					<div class="col-md-6"><label for="">Barrio</label><input  name="barrio" class="form-control" type="text"></div>
+					<div class="col-md-6"><label for="">Barrio</label><input id="barrio"  name="barrio" class="form-control" type="text"></div>
 					<div class="col-md-6"><label for="">Nombre padres</label><input id="parents"  name="parents" class="form-control" type="text"></div>
 					<div class="col-md-6"><label for="">Grado</label>
 						<select name="grade" class="form-control" id="">
@@ -35,29 +35,33 @@
 					</div>
 					<div class="col-md-6"><label for="">Grupo</label>
 						<select name="grupo" class="form-control" id="">
+							<option selected value="">Seleccione un grupo</option>
 							{% for grupo in grupos %}
 							<option value="{{grupo.id}}">{{grupo.name}}</option>
 							{% endfor %}
 						</select>
 					</div>
 					<div class="col-md-6"><label for="">Colegio</label>
-						<input class="form-control" name="colegio" type="text">
+						<input id="colegio" class="form-control" name="colegio" type="text">
 					</div>
 					<div class="col-md-6"><label for="">Ruta</label>
 						<select name="ruta" class="form-control" id="">
+							<option selected value="28">Sin ruta definida</option>
 							{% for route in routes %}
 							<option value="{{route.id}}">{{route.name}}</option>
 							{% endfor %}
 						</select>
 					</div>
+					{% if app.user.rola != 'USER' %}
 					<div class="col-md-6"><label for="">Telefonero</label>
 						<select name="telefonero" class="form-control" id="">
+							<option selected value="">Seleccione un Telefonero</option>
 							{% for telefonero in telefoneros %}
 							<option value="{{telefonero.id}}">{{telefonero.name}}</option>
 							{% endfor %}
 						</select>
 					</div>
-					<div class="checkbox col-md-6"><label class="activo"><input name="active"  type="checkbox">Activo</label></div>
+					{% endif %}
 					<div class="col-md-12"><label for="">Observaciones</label><textarea name="observations" class="form-control" id="" cols="5" rows="2"></textarea></div>
 					<input id="imageUrl" name="image" type="hidden">
 					<div class="col-md-12 mt-10"><button id="crear" class="btn btn-success m-r-10">Crear</button>
@@ -66,26 +70,26 @@
 				</div>
 				<div class="col-md-4">
 					<div class="col-md-12 image"><img id="IMAGE" width="280" src="" /></div>
-					<div class="col-md-12 mb-10"><input class="form-control" name="image" id="file-input" type="file" /></div>
+					<div class="col-md-12 mb-10"><input class="form-control" id="file-input" type="file" /></div>
 					<div class="col-md-12"><label for="">Comentarios</label><textarea name="comments" class="form-control" id="" cols="5" rows="2"></textarea></div>
 					<div class="panel panel-default">
 						<div class="panel-body ">
 							<div class="col-md-4 mr-10">
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="R"  type="radio">Recoger viernes</label></div></div>
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="C"  type="radio">Confirmar viernes</label></div></div>
-								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="llega"  type="radio">Llega viernes</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="L"  type="radio">Llega viernes</label></div></div>
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="viernes" value="X"  type="radio">No viene viernes</label></div></div>
 							</div>
 							<div class="col-md-4 mr-10">
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="R"  type="radio">Recoger sabado</label></div></div>
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="C"  type="radio">Confirmar sabado</label></div></div>
-								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="llega"  type="radio">Llega sabado</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="L"  type="radio">Llega sabado</label></div></div>
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="sabado" value="X"  type="radio">No viene sabado</label></div></div>
 							</div>
 							<div class="col-md-4 mr-10">
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="R"  type="radio">Recoger domingo</label></div></div>
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="C"  type="radio">Confirmar domingo</label></div></div>
-								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="llega"  type="radio">Llega domingo</label></div></div>
+								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="L"  type="radio">Llega domingo</label></div></div>
 								<div class="col-md-12 mr-10"><div class="radio col-md-6"><label><input name="domingo" value="X"  type="radio">No viene domingo</label></div></div>
 							</div>
 						</div>
@@ -101,7 +105,7 @@
 	src="https://code.jquery.com/jquery-3.3.1.min.js"
 	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	crossorigin="anonymous"></script>
-	<script src="http://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
+	<script src="https://maps.google.com/maps/api/js?key=AIzaSyCx5syL0jRIx6U17sIZlBb7QnC2ly1UMtc&libraries=places&region=uk&language=en&sensor=true"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 	{# Google Api key #}
 	{# Script Mapa #}
@@ -115,6 +119,10 @@
 	var availablePhones = {{childPhones | json_encode | raw}};
 	var availableEmails = {{childEmails | json_encode | raw}};
 	var availableParents = {{childParents | json_encode | raw}};
+	var availableBarrios = {{childBarrio | json_encode | raw}};
+	var availableColegios = {{childColegio | json_encode | raw}};
+	console.log(availableEmails);
+	console.log(availablePhones);
 	$( "#name" ).autocomplete({
 		source: availableNames
 	});
@@ -126,6 +134,12 @@
 	});
 	$( "#parents" ).autocomplete({
 		source: availableParents
+	});
+	$( "#barrio" ).autocomplete({
+		source: availableBarrios
+	});
+	$( "#colegio" ).autocomplete({
+		source: availableColegios
 	});
 
 

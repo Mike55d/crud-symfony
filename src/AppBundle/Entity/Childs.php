@@ -167,13 +167,13 @@ class Childs
 
     /**
     * @ORM\ManyToOne(targetEntity="Grupo")
-    * @ORM\JoinColumn(name="grupo", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="grupo", referencedColumnName="id" , nullable=true , onDelete="SET NULL")
     */
     private $grupo;
 
         /**
     * @ORM\ManyToOne(targetEntity="Courses")
-    * @ORM\JoinColumn(name="course", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="course", referencedColumnName="id" , nullable=true ,onDelete="SET NULL")
     */
     private $course;
 
@@ -191,9 +191,16 @@ class Childs
 
 /**
     * @ORM\ManyToOne(targetEntity="Ruta")
-    * @ORM\JoinColumn(name="route", referencedColumnName="id" , nullable=true)
+    * @ORM\JoinColumn(name="route", referencedColumnName="id" , nullable=true ,onDelete="SET NULL")
     */
     private $route;
+
+       /**
+     * @var boolean
+     *
+     * @ORM\Column(name="extra", type="boolean" , nullable=true )
+     */
+    private $extra;
 
 
     /**
@@ -828,5 +835,29 @@ class Childs
     public function getDomingo()
     {
         return $this->domingo;
+    }
+
+    /**
+     * Set extra.
+     *
+     * @param bool|null $extra
+     *
+     * @return Childs
+     */
+    public function setExtra($extra = null)
+    {
+        $this->extra = $extra;
+
+        return $this;
+    }
+
+    /**
+     * Get extra.
+     *
+     * @return bool|null
+     */
+    public function getExtra()
+    {
+        return $this->extra;
     }
 }

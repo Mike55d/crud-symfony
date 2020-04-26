@@ -28,7 +28,9 @@ class UsersEditProfileType extends AbstractType
         ->add('plainPassword', RepeatedType::class, array(
             'type' => PasswordType::class,
             'first_options' => array('label' => 'Contraseña'),
-            'second_options' => array('label' => 'Repetir contraseña')))
+            'second_options' => array('label' => 'Repetir contraseña'),
+            'required' => false,
+        ))
         ;
     }/**
      * {@inheritdoc}

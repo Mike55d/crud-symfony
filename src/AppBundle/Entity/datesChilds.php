@@ -37,7 +37,7 @@ class datesChilds
 
     /**
     * @ORM\ManyToOne(targetEntity="Childs")
-    * @ORM\JoinColumn(name="child", referencedColumnName="id")
+    * @ORM\JoinColumn(name="child", referencedColumnName="id" , onDelete="CASCADE")
     */
     private $child;
 

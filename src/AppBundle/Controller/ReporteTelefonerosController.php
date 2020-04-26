@@ -40,8 +40,8 @@ class ReporteTelefonerosController extends Controller
     if ($request->get('formato') == 'pdf') {
         return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
             ['telefonero'=>$request->get('telefonero'),
-              'type'=>$request->get('type'),
-                'foto'=>$request->get('foto')]);
+            'type'=>$request->get('type'),
+            'foto'=>$request->get('foto')]);
     }
     return $this->render('AppBundle:ReporteTelefoneros:index.html.twig', array(
         'telefoneros'=> $telefoneros
@@ -52,70 +52,70 @@ public function reportesTelefonerosWordAction($telefonero,$type){
     $em =$this->getDoctrine()->getManager(); 
     $telefoneroName= $em->getRepository('AppBundle:Telefonero')->find($telefonero); 
 
-        /*  Comenzamos a armar el documento  */
-        $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
-        $output.= "\\par ";               
-        
-        $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de  '.$telefoneroName->getName())." \\par}";
-        $output.= "\\par ";               
-        /* INICIO DE LA TABLA */
+    /*  Comenzamos a armar el documento  */
+    $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
+    $output.= "\\par ";               
+    
+    $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de  '.$telefoneroName->getName())." \\par}";
+    $output.= "\\par ";               
+    /* INICIO DE LA TABLA */
         $output.= "{ ";  //<-- Inicio de la tabla
 
         $output.= "\\trgaph50 "; //<-- márgenes izquierdo y derecho de las celdas=70
-        $output.= "\\trleft-10 "; // <-- Posición izquierda la primera celda = -10
+        $output.= "\\trleft1300 "; // <-- Posición izquierda la primera celda = -10
 
-       /*  Definición de las celdas de datos. Se definen 4 columnas */
+        /*  Definición de las celdas de datos. Se definen 4 columnas */
         $output.= "
         \\clbrdrl\\brdrw10\\brdrs 
         \\clbrdrt\\brdrw10\\brdrs 
         \\clbrdrr\\brdrw10\\brdrs 
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx1550
+        \\cellx2650
         \\clbrdrl\\brdrw10\\brdrs 
         \\clbrdrt\\brdrw10\\brdrs 
         \\clbrdrr\\brdrw10\\brdrs 
         \\clbrdrb\\brdrw10\\brdrs
-        \\cellx2500
+        \\cellx3650
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx3500
+        \\cellx4600
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx4500
+        \\cellx5600
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx5500    
+        \\cellx6650  
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx6500    
+        \\cellx7650    
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx7500    
+        \\cellx8650    
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx8500
+        \\cellx9650
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx9500
+        \\cellx10650
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx11500
+        \\cellx13000
         ";
         /*Introducción de los títulos en el primer renglón*/
         $output.="{\\fs18\\b\\qc ";              
@@ -138,17 +138,17 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         ->findBy(['type'=>$type,'sede'=> $sede,'telefonero'=>$telefonero]);
         $i = 1;
         foreach ($childs as $v){
-        $output.= " {\\fs18 ".utf8_decode($v->getObservations())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getColegio())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getGrupo())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getName())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getPhone())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getAddress())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getBarrio())."}\\cell ".
-                    "{\\fs18\\qc ".utf8_decode($v->getRoute())."}\\cell  ".
-                    "{\\fs18\\qc ".utf8_decode($v->getParents())."}\\cell  ".
-                    "{\\fs18 }\\cell ";
-                           
+            $output.= " {\\fs18 ".utf8_decode($v->getObservations())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getColegio())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getGrupo())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getName())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getPhone())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getAddress())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getBarrio())."}\\cell ".
+            "{\\fs18\\qc ".utf8_decode($v->getRoute())."}\\cell  ".
+            "{\\fs18\\qc ".utf8_decode($v->getParents())."}\\cell  ".
+            "{\\fs18 }\\cell ";
+            
                  $output.= "\\row "; //<-- Fin del renglón
                  $i++;
              }
@@ -161,7 +161,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $d = $response->headers->makeDisposition(
         	ResponseHeaderBag::DISPOSITION_INLINE,
             //ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-        	'registroTelefonero'.date('d-m-Y').'.rtf',
+        	'reporteTelefonero'.date('d-m-Y').'.rtf',
         	iconv('UTF-8', 'ASCII//TRANSLIT', 'registroTelefonero'.date('d-m-Y').'.rtf')
         );
         $response->headers->set('Content-Disposition', $d);
@@ -174,69 +174,72 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         //  Comenzamos a armar el documento  
         $output="{\\rtf1\\anci\\deff0\\paperw15842\\paperh12242\\margl250\\margr250";
         $em =$this->getDoctrine()->getManager(); 
+        $user = $this->get('security.token_storage')
+        ->getToken()->getUser();
+        $sede = $user->getSede();
         $telefoneros = $em->getRepository('AppBundle:Telefonero')->findBy(['sede'=>$sede]); 
         foreach ($telefoneros as $telefonero) {
-           
-        $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de Niños  '.$telefonero->getName())." \\par}";
-        $output.= "\\par ";               
-        /* INICIO DE LA TABLA */
+         
+            $output.= "{\\fs28\\qc\\b ".  utf8_decode('Listado de Niños  '.$telefonero->getName())." \\par}";
+            $output.= "\\par ";               
+            /* INICIO DE LA TABLA */
         $output.= "{ ";  //<-- Inicio de la tabla
 
         $output.= "\\trgaph50 "; //<-- márgenes izquierdo y derecho de las celdas=70
-        $output.= "\\trleft-10 "; // <-- Posición izquierda la primera celda = -10
+        $output.= "\\trleft1300 "; // <-- Posición izquierda la primera celda = -10
 
-       /*  Definición de las celdas de datos. Se definen 4 columnas */
+        /*  Definición de las celdas de datos. Se definen 4 columnas */
         $output.= "
         \\clbrdrl\\brdrw10\\brdrs 
         \\clbrdrt\\brdrw10\\brdrs 
         \\clbrdrr\\brdrw10\\brdrs 
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx1550
+        \\cellx2650
         \\clbrdrl\\brdrw10\\brdrs 
         \\clbrdrt\\brdrw10\\brdrs 
         \\clbrdrr\\brdrw10\\brdrs 
         \\clbrdrb\\brdrw10\\brdrs
-        \\cellx2500
+        \\cellx3650
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx3500
+        \\cellx4600
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx4500
+        \\cellx5600
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx5500    
+        \\cellx6650  
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx6500    
+        \\cellx7650    
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx7500    
+        \\cellx8650    
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx8500
+        \\cellx9650
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx9500
+        \\cellx10650
         \\clbrdrl\\brdrw10\\brdrs
         \\clbrdrt\\brdrw10\\brdrs
         \\clbrdrr\\brdrw10\\brdrs
         \\clbrdrb\\brdrw10\\brdrs 
-        \\cellx11500
+        \\cellx13000
         ";
         /*Introducción de los títulos en el primer renglón*/
         $output.="{\\fs18\\b\\qc ";              
@@ -259,17 +262,17 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         ->findBy(['type'=>$type,'sede'=> $sede,'telefonero'=>$telefonero]);
         $i = 1;
         foreach ($childs as $v){
-        $output.= " {\\fs18 ".utf8_decode($v->getObservations())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getColegio())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getGrupo())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getName())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getPhone())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getAddress())."}\\cell ".
-                    "{\\fs18 ".utf8_decode($v->getBarrio())."}\\cell ".
-                    "{\\fs18\\qc ".utf8_decode($v->getRoute())."}\\cell  ".
-                    "{\\fs18\\qc ".utf8_decode($v->getParents())."}\\cell  ".
-                    "{\\fs18 }\\cell ";
-                           
+            $output.= " {\\fs18 ".utf8_decode($v->getObservations())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getColegio())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getGrupo())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getName())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getPhone())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getAddress())."}\\cell ".
+            "{\\fs18 ".utf8_decode($v->getBarrio())."}\\cell ".
+            "{\\fs18\\qc ".utf8_decode($v->getRoute())."}\\cell  ".
+            "{\\fs18\\qc ".utf8_decode($v->getParents())."}\\cell  ".
+            "{\\fs18 }\\cell ";
+            
                  $output.= "\\row "; //<-- Fin del renglón
                  $i++;
              }
@@ -282,7 +285,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $d = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_INLINE,
             //ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'registroTelefonero'.date('d-m-Y').'.rtf',
+            'reporteTelefonero'.date('d-m-Y').'.rtf',
             iconv('UTF-8', 'ASCII//TRANSLIT', 'registroTelefonero'.date('d-m-Y').'.rtf')
         );
         $response->headers->set('Content-Disposition', $d);
@@ -303,7 +306,7 @@ public function reportesTelefonerosWordAction($telefonero,$type){
             $telefoneros = $em->getRepository('AppBundle:Telefonero')->findBy(['sede'=>$sede]);
             foreach ($telefoneros as $i => $telefon) {
                 $childs = $em->getRepository('AppBundle:Childs')
-        				->findBy(['type'=>$type,'sede'=> $sede,'telefonero'=>$telefon]);
+                ->findBy(['type'=>$type,'sede'=> $sede,'telefonero'=>$telefon]);
                 $data[]=['telefonero'=>$telefon,'childs'=>$childs];
             }
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteTelefoneros:todas.html.twig',[
@@ -316,16 +319,16 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         if ($telefonero != 'todos') {
             $telefoneroName = $em->getRepository('AppBundle:Telefonero')->find($telefonero);
             $childs = $em->getRepository('AppBundle:Childs')
-        				->findBy(['type'=>$type,'sede'=> $sede,'telefonero'=>$telefonero]);
+            ->findBy(['type'=>$type,'sede'=> $sede,'telefonero'=>$telefonero]);
             $html2pdf->writeHTML($this->renderView('AppBundle:ReporteTelefoneros:una.html.twig',[
                 'telefonero'=> $telefoneroName->getName(),
                 'childs'=> $childs,
                 'type'=> $type,
                 'foto'=>$foto
-          ]));
+            ]));
         }
         
-        $html2pdf->output('reporteRutas.pdf', 'D');
+        $html2pdf->output('reporteTelefonero.pdf', 'D');
     }
 
     /**
@@ -336,8 +339,8 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         ->getToken()->getUser();
         $telefonero = $user->getTelefonero()->getId();
         return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosWord',
-                ['telefonero'=>$telefonero,
-                'type'=>$type]);
+            ['telefonero'=>$telefonero,
+            'type'=>$type]);
     }
 
     /**
@@ -347,25 +350,25 @@ public function reportesTelefonerosWordAction($telefonero,$type){
         $user = $this->get('security.token_storage')
         ->getToken()->getUser();
         $telefonero = $user->getTelefonero()->getId();
-         return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
+        return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
             ['telefonero'=>$telefonero,
-              'type'=>$type,
-              'foto'=>0
-          ]);
+            'type'=>$type,
+            'foto'=>0
+        ]);
     }
 
     /**
-     * @Route("/{type}/printUserPdf" , name="printUserPdfFoto")
+     * @Route("/{type}/printUserPdfFoto" , name="printUserPdfFoto")
      */
     public function printUserPdfFoto($type){
         $user = $this->get('security.token_storage')
         ->getToken()->getUser();
         $telefonero = $user->getTelefonero()->getId();
-         return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
+        return $this->forward('AppBundle:ReporteTelefoneros:reportesTelefonerosPDF',
             ['telefonero'=>$telefonero,
-              'type'=>$type,
-              'foto'=> 1
-          ]);
+            'type'=>$type,
+            'foto'=> 1
+        ]);
     }
 
-    }
+}

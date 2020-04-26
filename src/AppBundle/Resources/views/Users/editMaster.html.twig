@@ -1,0 +1,54 @@
+{% extends "::base.html.twig" %}
+{% form_theme form 'theme/themeForm.html.twig' %}
+
+{% block body %}
+<div class="panel panel-default">
+	<div class="panel-heading">Editar Usuario</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<img id="imgSalida" width="280" src="{{ asset ('img/profiles/'~user.image)}}" />
+				{{form_start(form, { 'attr': {'enctype': 'multipart/form-data'} })}}
+				{{form_widget(form)}}
+				<input class="form-control" name="image" id="file-input" type="file" />
+				<select class="form-control" name="roles" id="">
+					<option {% if 'ROLE_ADMIN' in user.roles %}selected{% endif %} value="ROLE_ADMIN">ADMIN</option>
+					<option {% if 'ROLE_USER' in user.roles %}selected{% endif %} value="ROLE_USER">USER</option>
+				</select><br>
+				<button class="btn btn-warning">Editar</button>
+				{{form_end(form)}}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    // Mostrar imagenes
+    $(window).on('load' ,function(){
+
+    	$(function() {
+    		$('#file-input').change(function(e) {
+    			addImage(e); 
+    		});
+
+    		function addImage(e){
+    			var file = e.target.files[0],
+    			imageType = /image.*/;
+
+    			if (!file.type.match(imageType))
+    				return;
+
+    			var reader = new FileReader();
+    			reader.onload = fileOnload;
+    			reader.readAsDataURL(file);
+    		}
+
+    		function fileOnload(e) {
+    			var result=e.target.result;
+    			$('#imgSalida').attr("src",result);
+    		}
+    	});
+    });
+    </script>
+    {% endblock %}

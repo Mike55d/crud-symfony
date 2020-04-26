@@ -12,6 +12,7 @@
 
     <title>Apostolado Chez Nous</title>
     <!-- Bootstrap Core CSS -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset ('favicon.ico')}}">
     <link href="{{ asset ('sb-admin/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
@@ -46,7 +47,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path ('homepage')}}">Apostolado</a>
+            <a class="navbar-brand" href="{{ path ('homepage')}}">Apostolado <small>sede {{app.user.sede.name}}</small></a>
         </div>
         <!-- /.navbar-header -->
 
@@ -86,17 +87,43 @@
                             {% endif %}
                             {% if 'registros' in app.user.permisos.permisos %}
                             <li>
-                                <a href="{{ path ('childs_frequent')}}">Registros</a>
+                                <a href="{{ path ('childs_frequent',{'telf': 0 ,'miGrupo':0})}}">Registros</a>
                             </li>
                             {% endif %}
                             {% if 'primeraVez' in app.user.permisos.permisos %}
                             <li>
-                                <a href="{{ path ('childs_first')}}">Primera Vez</a>
+                                <a href="{{ path ('childs_first',{'telf': 0 ,'miGrupo':0})}}">Primera Vez</a>
                             </li>
                             {% endif %}
                             {% if 'descartados' in app.user.permisos.permisos %}
                             <li>
-                                <a href="{{ path ('childs_discard')}}">Descartados</a>
+                                <a href="{{ path ('childs_discard',{'telf': 0 ,'miGrupo':0})}}">Descartados</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-print"></i> Reportes<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            {% if 'reporteAsistencia' in app.user.permisos.permisos %}
+                            <li>
+                                <a href="{{ path ('reportes_asistencia')}}">Reporte de asistencia</a>
+                            </li>
+                            {% endif %}
+                            {% if 'reporteTelefoneros' in app.user.permisos.permisos %}
+                            <li>
+                                <a href="{{ path ('registros_telefoneros')}}">Reporte por telefoneros</a>
+                            </li>
+                            {% endif %}
+                            {% if 'reporteRutas' in app.user.permisos.permisos %}
+                            <li>
+                                <a href="{{ path ('resportes_rutas')}}">Reporte de Rutas</a>
+                            </li>
+                            {% endif %}
+                            {% if 'controlPuntos' in app.user.permisos.permisos %}
+                            <li>
+                                <a href="{{ path ('resportes_puntos')}}">Reporte de Puntos</a>
                             </li>
                             {% endif %}
                         </ul>
@@ -111,6 +138,20 @@
                             </li>
                             <li>
                                 <a href="{{ path ('telefoneros_index')}}">Lista</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    {% endif %}
+                     {% if 'listadoFotos' in app.user.permisos.permisos %}
+                    <li>
+                        <a href="#"><i class="fa fa-child"></i> Listado de Fotos<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{path ('listadoFotos_first')}}">Primera vez</a>
+                            </li>
+                            <li>
+                                <a href="{{ path ('listadoFotos_frequent')}}">Registros</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
@@ -145,38 +186,7 @@
                         <!-- /.nav-second-level -->
                     </li>
                     {% endif %}
-                    {% if 'limpiarRegistro' in app.user.permisos.permisos %}
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#confirm"><i class="fa fa-eraser fa-fw"></i> Limpiar registros</a>
-                    </li>
-                    {% endif %}
                     
-                    <li>
-                        <a href="#"><i class="fa fa-print"></i> Reportes<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            {% if 'reporteAsistencia' in app.user.permisos.permisos %}
-                            <li>
-                                <a href="{{ path ('reportes_asistencia')}}">Reporte de asistencia</a>
-                            </li>
-                            {% endif %}
-                            {% if 'reporteTelefoneros' in app.user.permisos.permisos %}
-                            <li>
-                                <a href="{{ path ('registros_telefoneros')}}">Reporte por telefoneros</a>
-                            </li>
-                            {% endif %}
-                            {% if 'reporteRutas' in app.user.permisos.permisos %}
-                            <li>
-                                <a href="{{ path ('resportes_rutas')}}">Reporte de Rutas</a>
-                            </li>
-                            {% endif %}
-                            {% if 'controlPuntos' in app.user.permisos.permisos %}
-                            <li>
-                                <a href="{{ path ('resportes_puntos')}}">Reporte de Puntos</a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
                     {% if 'usuarios' in app.user.permisos.permisos %}
                     <li>
                         <a href="#"><i class="fa fa-users"></i> Usuarios<span class="fa arrow"></span></a>
@@ -189,6 +199,17 @@
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
+                    </li>
+                    {% endif %}
+                    {% if 'limpiarRegistro' in app.user.permisos.permisos %}
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#delRegistro"><i class="fa fa-eraser fa-fw"></i> Limpiar registros</a>
+                    </li>
+                    {% endif %}
+
+                     {% if 'limpiarCalendario' in app.user.permisos.permisos %}
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#confirmCalendario"><i class="fa fa-eraser fa-fw"></i> Limpiar Calendario</a>
                     </li>
                     {% endif %}
                     {% if app.user.rola == 'WEBMASTER' %}
@@ -208,13 +229,13 @@
                         <a href="#"><i class="fa fa-users"></i> Usuarios<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="{{ path ('users_new')}}">Nuevo</a>
+                                <a href="{{ path ('users_new_master')}}">Nuevo</a>
                             </li>
                             <li>
                                 <a href="{{ path ('users_newWebmaster')}}">Nuevo Webmaster</a>
                             </li>
                             <li>
-                                <a href="{{ path ('users_index')}}">Lista</a>
+                                <a href="{{ path ('users_index_master')}}">Lista</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
@@ -234,7 +255,7 @@
         <div class="content">
             {% block body %}{% endblock %}
             <!-- Modal -->
-            <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="delRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -249,6 +270,26 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             <a href="{{ path ('childs_clean')}}" id="href-modal" class="btn btn-primary">Limpiar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- Modal -->
+            <div class="modal fade" id="confirmCalendario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Seguro que quieres limpiar los Calendarios  ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <a href="{{ path ('childs_cleanCalendar')}}" id="href-modal" class="btn btn-primary">Limpiar</a>
                         </div>
                     </div>
                 </div>

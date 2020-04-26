@@ -1,17 +1,22 @@
 {% extends "::base.html.twig" %}
 {% form_theme form 'theme/themeForm.html.twig' %}
 
+{% block css %}
+    <link href="{{ asset ('plugins/cropper/cropper.min.css')}}" rel="stylesheet">
+{% endblock %}
 {% block body %}
 <div class="panel panel-default">
 	<div class="panel-heading">Editar Usuario</div>
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
-				<img id="imgSalida" width="280" src="{{ asset ('img/profiles/'~app.user.image)}}" />
+				<div id="contImage1" class="col-md-12 image"><img id="imgSalida" width="250" src="{{ asset ('img/profiles/'~app.user.image)}}" /></div>
+                <div style="display:none" id="contImage2" class="col-md-12 image"><img id="IMAGE" width="280" src="" /></div>
 				{{form_start(form, { 'attr': {'enctype': 'multipart/form-data'} })}}
-				<input class="form-control" name="image" id="file-input" type="file" />
+				<input class="form-control" id="file-input" type="file" />
+                <input id="imageUrl" name="image" type="hidden">
 				{{form_widget(form)}}
-				<button class="btn btn-warning">Editar</button>
+				<button class="btn btn-warning editarRegistro">Editar</button>
 				{{form_end(form)}}
 			</div>
 		</div>
@@ -20,6 +25,8 @@
 {% endblock %}
 
 {% block javascripts %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{{ asset ('plugins/cropper/cropper.min.js')}}"></script>
 <script>
     // Mostrar imagenes
     $(window).on('load' ,function(){
@@ -47,5 +54,89 @@
     		}
     	});
     });
+    $(function(){
+
+    $('#file-input').change(function(){
+        $('#contImage1').hide();
+        $('#contImage2').show();
+    });
+
+// CROPPER
+
+
+var $image = $('#IMAGE');
+$image.cropper({
+    movable: true,
+    aspectRatio: 9 / 12,
+    crop: function(event) {
+        console.log(event.detail.x);
+        console.log(event.detail.y);
+        console.log(event.detail.width);
+        console.log(event.detail.height);
+        console.log(event.detail.rotate);
+        console.log(event.detail.scaleX);
+        console.log(event.detail.scaleY);
+    }
+});
+
+// Get the Cropper.js instance after initialized
+var cropper = $image.data('cropper');
+
+  // Import image
+  var $inputImage = $('#file-input');
+  var URL = window.URL || window.webkitURL;
+  var blobURL;
+  var imagenSubida = false;
+  if (URL) {
+    $inputImage.change(function () {
+        imagenSubida = true
+        var files = this.files;
+        var file;
+
+        if (!$image.data('cropper')) {
+            return;
+        }
+
+        if (files && files.length) {
+            file = files[0];
+
+            if (/^image\/\w+$/.test(file.type)) {
+                blobURL = URL.createObjectURL(file);
+                $image.one('built.cropper', function () {
+
+            // Revoke when load complete
+            URL.revokeObjectURL(blobURL);
+          }).cropper('reset').cropper('replace', blobURL);
+                $inputImage.val('');
+            } else {
+                window.alert('Please choose an image file.');
+            }
+        }
+    });
+  } else {
+    $inputImage.prop('disabled', true).parent().addClass('disabled');
+  }
+
+  $('#editTop').click(function(){
+    console.log('clcikeado');
+    if (cropper.getCroppedCanvas()) {
+        var green = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+        console.log(green);
+        if (imagenSubida) {
+            $('#imageUrl').val(green);
+        }
+    }
+    $('#formEditar').submit();
+  });
+
+  $('.editarRegistro').click(function(){
+    var green = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+    console.log(green);
+    if (imagenSubida) {
+        $('#imageUrl').val(green);
+    }
+  });
+// !!! FINISH CROPPER
+});
     </script>
     {% endblock %}

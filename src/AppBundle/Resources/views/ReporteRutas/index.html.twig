@@ -9,12 +9,14 @@
     	</div>
     	<div class="panel-body">
     		<form method="post" >
-                    <label for="">rutas</label>
+                <label for="">rutas</label>
             <select class="form-control" name="ruta" id="">
+                <option value="28">Sin ruta definida</option>
                 {% for ruta in rutas %}
                 <option value="{{ruta.id}}">{{ruta.name}}</option>
                 {% endfor %}
                 <option value="todas">todas</option>
+                <option value="extra">Ruta extra</option>
             </select>
     			<label for="">dias</label>
     		<select class="form-control" name="dia" id="">

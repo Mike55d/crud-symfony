@@ -1,0 +1,67 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+<div class="panel panel-default">
+	<div class="panel-heading">Listado de fotos Primera vez</div>
+	<div class="panel-body">
+		<div class="row">
+			{% for child in childs %}
+			<div  class="col-md-2 padding-5 " onclick="openModal('{{asset ('img/childs/'~child.image)}}','{{child.name}}','{{child.barrio}}','{{child.colegio}}','{{child.grupo}}','{{child.telefonero}}')">
+				<div class="col-md-12 imageList "
+				style="background-image: url('{{ asset ('img/childs/'~child.image)}}');">
+				<h5 class="text-center text-image">{{child.name}}</h5>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="showKid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="panel">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6 padding-20">
+								<img height="200" src="" id="imageKid" alt="">
+							</div>
+							<div class="col-md-6 padding-20">
+								<h6 id="nombre">Nombre</h6>
+								<h6 id="barrio">Barrio</h6>
+								<h6 id="colegio">Colegio</h6>
+								<h6 id="grupo">Grupo</h6>
+								<h6 id="telefonero">Telefonero</h6>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+function openModal(img,nombre,barrio,colegio,grupo,telefonero){
+	$('#imageKid').attr('src',img);
+	$('#nombre').text('Nombre : '+ nombre);
+	$('#barrio').text('Barrio : '+ barrio);
+	$('#colegio').text('Colegio : '+ colegio);
+	$('#grupo').text('Grupo : '+ grupo);
+	$('#telefonero').text('Telefonero : '+ telefonero);
+	$('#showKid').modal('toggle');
+}
+;
+</script>
+{% endblock %}

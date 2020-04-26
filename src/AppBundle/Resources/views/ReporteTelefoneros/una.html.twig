@@ -1,66 +1,67 @@
 <style>
-    table , th  ,td{
-        border:1px solid black;
-    }
-    table{
-        margin-top: 150px;
-        border-collapse: collapse;
-    }
-    .header{
-        text-align: center;
-    }
-    th{
-        text-align: center;
-        background: #D7D5D5;
-    }
-    td{
-        text-align: center;
-        white-space:pre ;
-    }
-    .tabla{
-        width: 10000px;
-    }
+table , th  ,td{
+    border:1px solid black;
+}
+table{
+    margin-top: 150px;
+    border-collapse: collapse;
+}
+.header{
+    text-align: center;
+}
+th{
+    text-align: center;
+    background: #D7D5D5;
+}
+td{
+    text-align: center;
+    white-space:pre ;
+}
+.tabla{
+    width: 10000px;
+}
 </style>
-         <page orientation="L">
-        <h5 class="header">Listado de niños {{telefonero}}</h5>
+<page orientation="L">
+    <h5 class="header">Listado de niños {{telefonero}}</h5>
     <table >
-            <tr >
-                <th style="width:20px">Nº</th>
-                <th style="width:100px">Observaciones</th>
-                <th style="width:100px">Colegio</th>
-                <th style="width:100px">Grupo</th>
-                <th style="width:100px">Nombre</th>
-                <th style="width:100px">Telefono</th>
-                <th style="width:100px">Direccion</th>
-                <th style="width:100px">Barrio</th>
-                <th style="width:100px">N. padres</th>
-                <th style="width:80px">Foto</th>
-                <th style="width:80px">Asistencia</th>
-            </tr>
-            {% for key , child in childs %}
-            <tr>
-                <td>{{key}}</td>
-                <td>{{child.observations|wordwrap(12,'<br>')|raw}}</td>
-                <td>{{child.colegio|wordwrap(12,'<br>')|raw}}</td>
-                <td>{{child.grupo|wordwrap(12,'<br>')|raw}}</td>
-                <td>{{child.name|wordwrap(12,'<br>')|raw}}</td>
-                <td>{{child.phone|wordwrap(12,'<br>')|raw}}</td>
-                <td>{{child.address|wordwrap(12,'<br>')|raw}}</td>
-                <td>{{child.barrio|wordwrap(12,'<br>')|raw}}</td>
-                <td>{{child.parents|wordwrap(12,'<br>')|raw}}</td>
-                {% if foto %}
-                {% if child.image %}
-                    <td><img height="80" src="img/childs/{{child.image}}" alt=""></td>
-                {% endif %}
-                {% if child.image is null %}
-                    <td></td>
-                {% endif %}
-                {% endif %}
-                <td></td>
-                
-            </tr>
-            {% endfor %}
+        <tr >
+            <th style="width:20px">Nº</th>
+            <th style="width:100px">Observaciones</th>
+            <th style="width:100px">Colegio</th>
+            <th style="width:100px">Grupo</th>
+            <th style="width:100px">Nombre</th>
+            <th style="width:100px">Telefono</th>
+            <th style="width:100px">Direccion</th>
+            <th style="width:100px">Barrio</th>
+            <th style="width:100px">N. padres</th>
+            {% if foto %}
+            <th style="width:80px">Foto</th>
+            {% endif %}
+            <th style="width:80px">Asistencia</th>
+        </tr>
+        {% for key , child in childs %}
+        <tr>
+            <td>{{key}}</td>
+            <td>{{child.observations|wordwrap(12,'<br>')|raw}}</td>
+            <td>{{child.colegio|wordwrap(12,'<br>')|raw}}</td>
+            <td>{{child.grupo|wordwrap(12,'<br>')|raw}}</td>
+            <td>{{child.name|wordwrap(12,'<br>')|raw}}</td>
+            <td>{{child.phone|wordwrap(12,'<br>')|raw}}</td>
+            <td>{{child.address|wordwrap(12,'<br>')|raw}}</td>
+            <td>{{child.barrio|wordwrap(12,'<br>')|raw}}</td>
+            <td>{{child.parents|wordwrap(12,'<br>')|raw}}</td>
+            {% if foto %}
+            {% if child.image %}
+            <td><img height="80" src="img/childs/{{child.image}}" alt=""></td>
+            {% endif %}
+            {% if child.image is null %}
+            <td></td>
+            {% endif %}
+            {% endif %}
+            <td></td>                
+        </tr>
+        {% endfor %}
     </table>
     <page_footer> 
     </page_footer> 
- </page>
+</page>

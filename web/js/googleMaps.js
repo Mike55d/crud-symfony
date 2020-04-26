@@ -1,6 +1,6 @@
 $(function  () {
-         var lat = 10.4805937,
-             lng = -66.90360629999998,
+         var lat = 4.710988599999999,
+             lng = -74.072092,
              latlng = new google.maps.LatLng(lat, lng),
              image = 'http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png';
          //zoomControl: true,

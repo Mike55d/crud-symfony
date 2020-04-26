@@ -7,10 +7,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Users;
 use AppBundle\Form\UsersType;
+use AppBundle\Form\UsersMasterType;
 use AppBundle\Form\UsersWebmasterType;
 use AppBundle\Form\UsersEditType;
 use AppBundle\Form\UsersEditProfileType;
+use AppBundle\Form\UsersEditProfileMasterType;
 use AppBundle\Entity\Telefonero;
+use Symfony\Component\HttpFoundation\File\File;
 
  /**
      * @Route("users")
@@ -26,6 +29,20 @@ use AppBundle\Entity\Telefonero;
         $sede = $this->get('security.token_storage')
         ->getToken()->getUser()->getSede(); 
         $users = $em->getRepository('AppBundle:Users')->findBySede($sede); 
+        return $this->render('AppBundle:Users:index.html.twig', array(
+            'users'=> $users
+        ));
+    }
+
+    /**
+     * @Route("/users_webmaster" , name="users_index_master")
+     */
+    public function indexMasterAction()
+    {
+        $em =$this->getDoctrine()->getManager(); 
+        $sede = $this->get('security.token_storage')
+        ->getToken()->getUser()->getSede(); 
+        $users = $em->getRepository('AppBundle:Users')->findAll(); 
         return $this->render('AppBundle:Users:index.html.twig', array(
             'users'=> $users
         ));
@@ -83,16 +100,67 @@ use AppBundle\Entity\Telefonero;
     }
 
     /**
+     * @Route("/new_master" , name="users_new_master")
+     */
+    public function newMasterAction(Request $request)
+    {   
+        $user = new Users();
+        $form = $this->createForm(UsersMasterType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $sede = $user->getSede();
+            $file = $user->getImage();
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+            $file->move($this->getParameter('profiles'),$fileName);
+            $user->setImage($fileName);
+            $password = $this->get('security.password_encoder')
+            ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+            if ($user->getRoles()[0] == 'ROLE_USER') 
+            {
+                $permisos = $em->getRepository('AppBundle:Permisos')
+                ->findOneBy(['sede'=>$sede,'type'=>'USER']); 
+                $user->setPermisos($permisos);
+                $user->setRola('USER');
+            }
+            if ($user->getRoles()[0] == 'ROLE_ADMIN') 
+            {
+                $permisos = $em->getRepository('AppBundle:Permisos')
+                ->findOneBy(['sede'=>$sede,'type'=>'ADMIN']); 
+                $user->setPermisos($permisos);
+                $user->setRola('ADMIN');
+            }
+            if ($request->get('crearTelefonero')) {
+                $telefonero = new Telefonero;
+                $telefonero->setSede($sede);
+                $telefonero->setName($user->getName()); 
+                $telefonero->setPhone($user->getPhone()); 
+                $telefonero->setImage($fileName); 
+                $user->setTelefonero($telefonero);
+            }
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('users_index_master');
+        }
+        return $this->render('AppBundle:Users:new.html.twig', array(
+            'form'=> $form->createView()
+        ));
+    }
+
+    /**
      * @Route("/{id}/edit" , name="users_edit")
      */
     public function editAction(Request $request, Users $user)
     {
         $em =$this->getDoctrine()->getManager(); 
+        $sede = $this->get('security.token_storage')
+        ->getToken()->getUser()->getSede();
         $form = $this->createForm(UsersEditType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles($request->get('roles'));
-             if ($user->getRoles()[0] == 'ROLE_USER') 
+            if ($user->getRoles()[0] == 'ROLE_USER') 
             {
                 $permisos = $em->getRepository('AppBundle:Permisos')
                 ->findOneBy(['sede'=>$sede,'type'=>'USER']); 
@@ -170,29 +238,37 @@ use AppBundle\Entity\Telefonero;
         $form = $this->createForm(UsersEditProfileType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->get('security.password_encoder')
-            ->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
+            if ($user->getPlainPassword()) {
+                $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
              //insertar imagen
-            if ($request->files->get('image')) {
-             $file = $request->files->get('image');
+            if ($request->get('image')) {
+             $img = $request->get('image');
+             $img = str_replace('data:image/jpeg;base64,', '', $img);
+             $img = str_replace(' ', '+', $img);
+             $data = base64_decode($img);
+             $file = 'image.jpeg';
+             $success = file_put_contents($file, $data);
+             $file = new File($file);
              $fileName = md5(uniqid()).'.'.$file->guessExtension();
              $file->move($this->getParameter('profiles'),$fileName);
              $user->setImage($fileName);
-            }
-            $em->flush();
-            return $this->redirectToRoute('homepage');
-        }
-        return $this->render('AppBundle:Users:editProfile.html.twig', array(
-            'form'=> $form->createView(),
-        ));
-    }
+         }
+         $em->flush();
+         return $this->redirectToRoute('homepage');
+     }
+     return $this->render('AppBundle:Users:editProfile.html.twig', array(
+        'form'=> $form->createView(),
+    ));
+ }
 
      /**
      * @Route("/newWebmaster" , name="users_newWebmaster")
      */
-    public function newWebmasterAction(Request $request)
-    {
+     public function newWebmasterAction(Request $request)
+     {
         $user = new Users();
         $form = $this->createForm(UsersWebmasterType::class, $user);
         $form->handleRequest($request);
@@ -218,5 +294,50 @@ use AppBundle\Entity\Telefonero;
             'form'=> $form->createView()
         ));
     }
+
+     /**
+     * @Route("/{id}/editProfile_master" , name="users_editProfile_master")
+     */
+     public function editProfileMasterAction(Request $request , Users $user)
+     {
+        $em =$this->getDoctrine()->getManager(); 
+        $form = $this->createForm(UsersEditProfileMasterType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($user->getPlainPassword()) {
+                $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
+             //insertar imagen
+            if ($request->files->get('image')) {
+             $file = $request->files->get('image');
+             $fileName = md5(uniqid()).'.'.$file->guessExtension();
+             $file->move($this->getParameter('profiles'),$fileName);
+             $user->setImage($fileName);
+         }
+         $user->setRoles($request->get('roles'));
+         if ($user->getRoles()[0] == 'ROLE_USER') 
+         {
+            $permisos = $em->getRepository('AppBundle:Permisos')
+            ->findOneBy(['sede'=>$user->getSede(),'type'=>'USER']); 
+            $user->setPermisos($permisos);
+            $user->setRola('USER');
+        }
+        if ($user->getRoles()[0] == 'ROLE_ADMIN') 
+        {
+            $permisos = $em->getRepository('AppBundle:Permisos')
+            ->findOneBy(['sede'=>$user->getSede(),'type'=>'ADMIN']); 
+            $user->setPermisos($permisos);
+            $user->setRola('ADMIN');
+        }
+        $em->flush();
+        return $this->redirectToRoute('users_index_master');
+    }
+    return $this->render('AppBundle:Users:editMaster.html.twig', array(
+        'form'=> $form->createView(),
+        'user'=> $user
+    ));
+}
 
 }

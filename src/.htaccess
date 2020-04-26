@@ -5,3 +5,4 @@
     Order deny,allow
     Deny from all
 </IfModule>
+php_value max_execution_time 120

@@ -171,7 +171,7 @@ class ReportesWordController extends Controller
         $sede = $user->getSede();
         $html2pdf = new Html2Pdf('L');
         $childs = $em->getRepository('AppBundle:Childs')
-        ->findBy(['type'=>$type,'sede'=>$sede]);
+        ->buscarAsist($dia,$sede,$type);
         $html2pdf->writeHTML($this->renderView('AppBundle:reportesWord:pdf.html.twig',[
             'childs'=> $childs,
             'dia'=> $dia,

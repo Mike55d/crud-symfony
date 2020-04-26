@@ -23,7 +23,7 @@
 </style>
      <page>
  
-    	<h5 class="header">{{dia}} {{rutaName}}  RUTA 89 {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
+    	<h5 class="header">{{dia}} {{rutaName}} {{type|replace({"first" : "Primera Vez","discard":"descartados","frequent":"regulares"})}}</h5>
     	<p class="header">Leyenda asistencia: RV-Recoger viernes / RS-Recoger sábado / RD-Recoger domingo/ CV-Confirmar viernes / CS-Confirmar sábado / CD-Confirmar domingo / LV-Llega viernes / LS-Llega
     sábado / LD-Llega domingo</p>
     <p class="header">¡¡¡Atención!!! En esta tabla solo aparecen los repaces que vienen al programa.</p>
@@ -47,9 +47,9 @@
     			<td>{{child.phone|wordwrap(15,'<br>')|raw}}</td>
     			<td>{{child.barrio|wordwrap(15,'<br>')|raw}}</td>
     			<td>{{child.parents|wordwrap(15,'<br>')|raw}}</td>
-                {% if dia == 'viernes' %}<td>{{child.viernes}}</td>{% endif %}
-                {% if dia == 'sabado' %}<td>{{child.sabado}}</td>{% endif %}
-                {% if dia == 'domingo' %}<td>{{child.domingo}}</td>{% endif %}
+                {% if dia == 'viernes' %}<td>{{child.viernes}} {{dia|slice(0,1)|upper}}</td>{% endif %}
+                {% if dia == 'sabado' %}<td>{{child.sabado}} {{dia|slice(0,1)|upper}}</td>{% endif %}
+                {% if dia == 'domingo' %}<td>{{child.domingo}} {{dia|slice(0,1)|upper}}</td>{% endif %}
     			
     		</tr>
             {% endfor %}

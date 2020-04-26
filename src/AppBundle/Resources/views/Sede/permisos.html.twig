@@ -30,6 +30,9 @@
           <label class="m-r-10" for="">Reporte de Rutas</label><input {% if 'reporteRutas' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="reporteRutas" name="permisosUser[]"><br>
           <label class="m-r-10" for="">Reporte de Telefoneros</label><input {% if 'reporteTelefoneros' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="reporteTelefoneros" name="permisosUser[]"><br>
           <label class="m-r-10" for="">Control de Puntos</label><input {% if 'controlPuntos' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="controlPuntos" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Limpiar Registros</label><input {% if 'limpiarRegistro' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="limpiarRegistro" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Limpiar Calendario</label><input {% if 'limpiarCalendario' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="limpiarCalendario" name="permisosUser[]"><br>
+          <label class="m-r-10" for="">Listado de Fotos</label><input {% if 'listadoFotos' in permisosUser.permisos %} checked {% endif %} type="checkbox" value="listadoFotos" name="permisosUser[]"><br>
 
         </div>
         <div class="col-md-6">
@@ -47,7 +50,9 @@
           <label class="m-r-10" for="">Reporte de Rutas</label><input {% if 'reporteRutas' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="reporteRutas" name="permisosAdmin[]"><br>
           <label class="m-r-10" for="">Reporte de Telefoneros</label><input {% if 'reporteTelefoneros' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="reporteTelefoneros" name="permisosAdmin[]"><br>
           <label class="m-r-10" for="">Control de Puntos</label><input {% if 'controlPuntos' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="controlPuntos" name="permisosAdmin[]"><br>
-
+          <label class="m-r-10" for="">limpiar Registros</label><input {% if 'limpiarRegistro' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="limpiarRegistro" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Limpiar Calendario</label><input {% if 'limpiarCalendario' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="limpiarCalendario" name="permisosAdmin[]"><br>
+          <label class="m-r-10" for="">Listado de Fotos</label><input {% if 'listadoFotos' in permisosAdmin.permisos %} checked {% endif %} type="checkbox" value="listadoFotos" name="permisosAdmin[]"><br>
         </div>
       </div>
       <button class="btn btn-success mt-10">Guardar</button>

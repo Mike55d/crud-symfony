@@ -35,7 +35,9 @@
                 <th style="width:100px">Direccion</th>
                 <th style="width:100px">Barrio</th>
                 <th style="width:100px">N. padres</th>
+                {% if foto %}
                 <th style="width:80px">Foto</th>
+                {% endif %}
                 <th style="width:80px">Asistencia</th>
             </tr>
             {% for key , child in dato.childs %}

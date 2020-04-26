@@ -37,23 +37,24 @@ td{
 }
 </style>
 <page>
-	<table>
+	
+	<p class="header">Listado de puntos {{grupo}}</p>
+	<table style="margin-left:275px;">
 		<tr>
-			<td style="width:120px">
+			<td style="width:65px">
 				<img height="40" src="img/stars/starbronce.png" alt="">
 			</td>
-			<td style="width:200px">
+			<td style="width:80px">
 				<img height="40" src="img/stars/starplata.png" alt="">
 			</td>
-			<td style="width:200px">
+			<td style="width:80px">
 				<img height="40" src="img/stars/staroro.png" alt="">
 			</td>
-			<td style="width:200px">
+			<td style="width:80px">
 				<img height="40" src="img/stars/starnegro.png" alt="">
 			</td>
 		</tr>
 	</table>
-	<p class="header">Listado de puntos {{grupo}}</p>
 	<table class="border tabla" >
 		<tr >
 			<th class="border" style="width:100px">nombre</th>
@@ -67,7 +68,7 @@ td{
 		</tr>
 		{% for child in childs %}
 		<tr>
-			<td class="border">{{child.child.name}}</td>
+			<td class="border">{{child.child.name|wordwrap(15,'<br>')|raw}}</td>
 			<td class="border">{{child.positivos}}</td>
 			<td class="border">{{child.negativos}}</td>
 			<td class="border">{{child.bronce}}</td>

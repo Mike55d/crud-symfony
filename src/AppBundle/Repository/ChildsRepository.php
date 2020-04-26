@@ -10,7 +10,7 @@ namespace AppBundle\Repository;
  */
 class ChildsRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function nextId($id,$sede,$lista,$telefonero){
+	public function nextId($id,$sede,$lista,$telefonero,$grupo){
 
 		$em = $this->getEntityManager(); 
 		$qb = $em->createQueryBuilder();
@@ -26,6 +26,10 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		   	$qb->andWhere('c.telefonero = :telefonero')
 		   	->setParameter('telefonero',$telefonero);
 		   }
+		   if ($grupo) {
+		   	$qb->andWhere('c.grupo = :grupo')
+		   	->setParameter('grupo',$grupo);
+		   }
 		   if ($sede) {
 		   	$qb->andWhere('c.sede = :sede')
 		   	->setParameter('sede',$sede);
@@ -34,7 +38,7 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 	  return $query->getResult();
 	}
 
-	public function backId($id,$sede,$lista,$telefonero){
+	public function backId($id,$sede,$lista,$telefonero,$grupo){
 
 		$em = $this->getEntityManager(); 
 		$qb = $em->createQueryBuilder();
@@ -50,6 +54,10 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		   	$qb->andWhere('c.telefonero = :telefonero')
 		   	->setParameter('telefonero',$telefonero);
 		   }
+		   if ($grupo) {
+		   	$qb->andWhere('c.grupo = :grupo')
+		   	->setParameter('grupo',$grupo);
+		   }
 		   if ($sede) {
 		   	$qb->andWhere('c.sede = :sede')
 		   	->setParameter('sede',$sede);
@@ -58,7 +66,7 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 	  return $query->getResult();
 	}
 
-	public function buscarRuta($ruta,$dia,$sede,$type){
+	public function buscarRuta($ruta,$dia,$sede,$type,$extra){
 
 		$em = $this->getEntityManager(); 
 		$qb = $em->createQueryBuilder();
@@ -69,24 +77,27 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		   ->setParameter('sede', $sede)
 		   ->setParameter('type', $type)
 		   ->orderBy('c.id', 'ASC');
+		    if ($extra) {
+		   	$qb->andWhere('c.extra = 1');
+		   }
 		    if ($ruta != 'todas') {
 		   	$qb->andWhere('c.route = :ruta')
 		   ->setParameter('ruta', $ruta);
 		   }
 		   if ($dia == 'viernes') {
-		   	$qb->andWhere('c.viernes IS NOT NULL AND c.viernes != :x AND c.viernes != :l')
-		   ->setParameter('x', 'X')
-		   ->setParameter('l', 'L');
+		   	$qb->andWhere('c.viernes IS NOT NULL AND c.viernes != :x  AND c.viernes != :l')
+		   ->setParameter('l', 'L')
+		   ->setParameter('x', 'X');
 		   }
 		   if ($dia == 'sabado') {
-		   	$qb->andWhere('c.sabado IS NOT NULL AND c.sabado != :x AND c.sabado != :l')
-		   ->setParameter('x', 'X')
-		   ->setParameter('l', 'L');
+		   	$qb->andWhere('c.sabado IS NOT NULL AND c.sabado != :x  AND c.sabado != :l')
+		   ->setParameter('l', 'L')
+		   ->setParameter('x', 'X');
 		   }
 		   if ($dia == 'domingo') {
-		   	$qb->andWhere('c.domingo IS NOT NULL AND c.domingo != :x AND c.domingo != :l')
-		   ->setParameter('x', 'X')
-		   ->setParameter('l', 'L');
+		   	$qb->andWhere('c.domingo IS NOT NULL AND c.domingo != :x  AND c.domingo != :l')
+		   ->setParameter('l', 'L')
+		   ->setParameter('x', 'X');
 		   }
 	  $query = $qb->getQuery();
 	  return $query->getResult();
@@ -104,19 +115,16 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		   ->setParameter('type', $type)
 		   ->orderBy('c.id', 'ASC');
 		   if ($dia == 'viernes') {
-		   	$qb->andWhere('c.viernes IS NOT NULL AND c.viernes != :x AND c.viernes != :l')
-		   ->setParameter('x', 'X')
-		   ->setParameter('l', 'L');
+		   	$qb->andWhere('c.viernes IS NOT NULL AND c.viernes != :x  ')
+		   ->setParameter('x', 'X');
 		   }
 		   if ($dia == 'sabado') {
-		   	$qb->andWhere('c.sabado IS NOT NULL AND c.sabado != :x AND c.sabado != :l')
-		   ->setParameter('x', 'X')
-		   ->setParameter('l', 'L');
+		   	$qb->andWhere('c.sabado IS NOT NULL AND c.sabado != :x  ')
+		   ->setParameter('x', 'X');
 		   }
 		   if ($dia == 'domingo') {
-		   	$qb->andWhere('c.domingo IS NOT NULL AND c.domingo != :x AND c.domingo != :l')
-		   ->setParameter('x', 'X')
-		   ->setParameter('l', 'L');
+		   	$qb->andWhere('c.domingo IS NOT NULL AND c.domingo != :x  ')
+		   ->setParameter('x', 'X');
 		   }
 	  $query = $qb->getQuery();
 	  return $query->getResult();
@@ -127,7 +135,7 @@ class ChildsRepository extends \Doctrine\ORM\EntityRepository
 		$qb = $em->createQueryBuilder();
 		$qb->select('c')
 		   ->from('AppBundle:Childs', 'c')
-		   ->where('c.type = :first OR c.type = :frequent AND c.sede = :sede')
+		   ->where('(c.type = :first OR c.type = :frequent) AND c.sede = :sede')
 		   //->andWhere('c.id > :id')
 		   ->setParameter('sede', $sede)
 		   ->setParameter('first', 'first')

@@ -32,7 +32,7 @@ class UsersWebmasterType extends AbstractType
         ->add('active',CheckboxType::class,['data'=>true,'label'=>'Activo'])
         ->add('phone',TextType::class,['label'=>'Telefono'])
         ->add('image',FileType::class,['label'=>'Imagen'])
-        ->add('sede')
+        ->add('sede',null,['required'=>true])
         ;
     }/**
      * {@inheritdoc}

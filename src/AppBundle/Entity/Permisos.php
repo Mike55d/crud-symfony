@@ -31,7 +31,7 @@ class Permisos
 
     /**
     * @ORM\ManyToOne(targetEntity="Sede")
-    * @ORM\JoinColumn(name="sede", referencedColumnName="id")
+    * @ORM\JoinColumn(name="sede", referencedColumnName="id" , onDelete="CASCADE")
     */
 
     private $sede;

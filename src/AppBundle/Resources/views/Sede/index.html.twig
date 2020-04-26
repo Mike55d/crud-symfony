@@ -6,7 +6,11 @@
 <link href="{{ asset ('sb-admin/vendor/datatables-responsive/dataTables.responsive.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
-
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success" role="alert">
+  <h6>{{ flash_message }}</h6>
+</div>
+{% endfor %}
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Listado de Grupos
